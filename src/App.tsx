@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Auth from './components/authentication/Auth'
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface AppProps{}
+interface AppState{
+  sessionToken:string
 }
 
-export default App;
+
+export default class App extends React.Component <AppProps,AppState>{
+  constructor(props:AppProps){
+    super(props)
+    this.state={
+    sessionToken:''
+  }
+  this.updateToken=this.updateToken.bind(this)
+  this.clearToken=this.clearToken.bind(this)
+
+}
+updateToken=(newToken:string)=>{
+  localStorage.setItem('token',newToken)
+  this.setState({sessionToken:newToken})
+}
+clearToken=()=>{
+  localStorage.clear()
+  this.setState({sessionToken:''})
+}
+
+render(){
+  return (
+    <div className="App">
+      <h1>Outfitter</h1>
+      <Auth sessionToken={this.state.sessionToken} updateToken={this.updateToken} clearToken={this.clearToken}/>
+    </div>
+  )
+}
+}
+  
+
