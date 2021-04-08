@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
+
 // const useStyles = makeStyles((theme: Theme) =>
 //   createStyles({
 //     root: {
@@ -18,10 +19,11 @@ import TextField from '@material-ui/core/TextField';
 //     },
 //   })
 // );
+
 interface LoginProps {
-  clearToken: () => void;
   updateToken: (newToken: string) => void;
 }
+
 interface LoginState {
     password: string;
     zipCode: string;

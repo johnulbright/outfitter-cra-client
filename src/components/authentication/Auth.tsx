@@ -27,12 +27,10 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
       <div>
         {this.state.hasAccount ? (
           <Login
-            clearToken={this.props.clearToken}
             updateToken={this.props.updateToken}
           />
         ) : (
           <Signup
-          clearToken={this.props.clearToken}
           updateToken={this.props.updateToken}
         />
         )}
