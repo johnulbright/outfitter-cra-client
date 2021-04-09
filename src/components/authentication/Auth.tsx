@@ -4,8 +4,6 @@ import Login from "./Login";
 import Signup from "./Signup";
 
 interface AuthProps {
-  sessionToken: string;
-  clearToken: () => void;
   updateToken: (newToken: string) => void;
 }
 
@@ -37,7 +35,7 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
         <Button variant="contained" color = "primary"
           onClick={() => this.setState({ hasAccount: !this.state.hasAccount })}
         >
-          Click
+          toggle
         </Button>
       </div>
     );

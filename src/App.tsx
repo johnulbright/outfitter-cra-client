@@ -1,5 +1,6 @@
 import React from 'react'
 import Auth from './components/authentication/Auth'
+import Home from './components/home/Home'
 import './App.css'
 
 interface AppProps{}
@@ -31,7 +32,7 @@ render(){
   return (
     <div className="App">
       <h1>Outfitter</h1>
-      <Auth sessionToken={this.state.sessionToken} updateToken={this.updateToken} clearToken={this.clearToken}/>
+      {this.state.sessionToken===localStorage.getItem('token')?<Home clearToken={this.clearToken}/>:<Auth updateToken={this.updateToken} />}
     </div>
   )
 }
