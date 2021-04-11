@@ -9,14 +9,36 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from "@material-ui/core/Button"
+import { createStyles,WithStyles,withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types'
+
 
 
 import APIURL from '../../helpers/environment.js'
 
-interface LoginProps {
+const styles = createStyles({
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 48,
+    padding: '0 30px',
+  },
+  paper:{},
+  button:{}
+})
+
+interface LoginProps extends WithStyles<typeof styles> {
   updateToken: (newToken: string) => void;
-  setLatLon:(latutide:number|null,longitude:number|null)=>void;
-  setWeather:(weather:object)=>void;
+  setLatLon: (latutide: number | null, longitude: number | null) => void;
+  setWeather: (weather: object) => void;
+  classes:{
+    root:string;
+    paper:string;
+    button:string
+  };
 }
 
 interface LoginState {
@@ -25,12 +47,18 @@ interface LoginState {
   showPassword: boolean;
   badEmail: boolean;
   badPassword: boolean;
-  parentId:number|null;
-  clicked:boolean
+  parentId: number | null;
+  clicked: boolean
 
 }
 
-export default class Login extends React.Component<LoginProps, LoginState>{
+
+
+class Login extends React.Component<LoginProps, LoginState>{
+
+  // public static propTypes = {
+  //   classes: PropTypes.object.isRequired,
+  // }
   constructor(props: LoginProps) {
     super(props)
     this.state = {
@@ -39,8 +67,8 @@ export default class Login extends React.Component<LoginProps, LoginState>{
       showPassword: false,
       badEmail: false,
       badPassword: false,
-      parentId:null,
-      clicked:false
+      parentId: null,
+      clicked: false
     }
   }
 
@@ -53,63 +81,71 @@ export default class Login extends React.Component<LoginProps, LoginState>{
   };
 
 
-  
 
-  findParent=async()=>{
-    const result = await fetch(`${APIURL}/parent/login`,{
-      method:'POST',
-      body:JSON.stringify({parent:{
-        email:this.state.email,
-        password:this.state.password,
-      }}),
+  findParent = async () => {
+    const result = await fetch(`${APIURL}/parent/login`, {
+      method: 'POST',
+      body: JSON.stringify({
+        parent: {
+          email: this.state.email,
+          password: this.state.password,
+        }
+      }),
       headers: new Headers({
-        'Content-Type':"application/json"
+        'Content-Type': "application/json"
       })
     });
-    const res = await result.json();
+    const {result:res} = await result.json();
     console.log(res);
     this.props.updateToken(res.sessionToken);
-    this.props.setLatLon(res.lat,res.log);
-    this.getWeather(res.lat,res.lon)
-    console.log("ST=",res.sessionToken)
-    
-}
-getWeather=async (lat:number,lon:number)=>{
-  const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon} &exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
+    // this.props.setLatLon(res.lat, res.log);
+    this.getWeather(res.lat, res.lon)
+    // console.log("ST=", res.sessionToken)
+    // return {lat:res.lat,lon:res.lon}
+  }
+  getWeather = async (lat: number, lon: number) => {
+    const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
   `)
-  console.log("weather result",result)
-  console.log(process.env.REACT_APP_WEATHER_API_KEY)
-}
-handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  this.setState({clicked:true})
-  this.findParent();
+    const weatherObject=await result.json();
+    console.log(weatherObject);
+  }
+
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    this.setState({ clicked: true })
+    this.findParent()
+    // .then(({lat,lon})=>{
+    //   this.getWeather(lat,lon)
+    // })
   }
 
 
   render() {
+    const { classes } = this.props;
+
     return (
 
       <div>
         <h1>Signup</h1>
         <form autoComplete="off" onSubmit={this.handleSubmit}>
-        
+
           <TextField
-             error={this.state.badEmail&&this.state.clicked}
-             helperText={this.state.badEmail&&this.state.clicked?"Must be a valid email":''}
+            className={classes.root}
+            error={this.state.badEmail && this.state.clicked}
+            helperText={this.state.badEmail && this.state.clicked ? "Must be a valid email" : ''}
             id="standard-basic"
             label="Email"
-            onChange={(e) => this.setState({ email: e.target.value})}
+            onChange={(e) => this.setState({ email: e.target.value })}
           />
           <FormControl className='textField'>
-            <InputLabel error={this.state.badPassword&&this.state.clicked} htmlFor="standard-adornment-password">Password</InputLabel>
+            <InputLabel error={this.state.badPassword && this.state.clicked} htmlFor="standard-adornment-password">Password</InputLabel>
             <Input
-               error={this.state.badPassword&&this.state.clicked}
-               
+              error={this.state.badPassword && this.state.clicked}
+
               id="standard-adornment-password"
               type={this.state.showPassword ? 'text' : 'password'}
               value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value})}
+              onChange={(e) => this.setState({ password: e.target.value })}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -122,12 +158,16 @@ handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
                 </InputAdornment>
               }
             />
-            <FormHelperText error={this.state.badPassword&&this.state.clicked}>{this.state.badPassword&&this.state.clicked?"Minimum 5 characters":''}</FormHelperText>
+            <FormHelperText error={this.state.badPassword && this.state.clicked}>{this.state.badPassword && this.state.clicked ? "Minimum 5 characters" : ''}</FormHelperText>
           </FormControl>
-          
+
           <Button type="submit" variant="contained" color='primary'>Submit</Button>
         </form>
       </div>
     )
   }
 }
+
+
+
+export default withStyles(styles)(Login);

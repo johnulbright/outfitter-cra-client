@@ -23,8 +23,9 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
   }
 
   render() {
+
     return (
-      <div>
+      <div >
         {this.state.hasAccount ? (
           <Login
             updateToken={this.props.updateToken}
@@ -49,3 +50,4 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
     );
   }
 }
+
