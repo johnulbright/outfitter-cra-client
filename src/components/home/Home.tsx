@@ -3,17 +3,22 @@ import Button from '@material-ui/core/Button'
 
 interface HomeProps{
     clearToken:()=> void;
+    lat:number|null,
+    lon:number|null,
+    weather:object
 }
 interface HomeState{
-
 }
 
 export default class Home extends React.Component <HomeProps,HomeState>{
     constructor(props:HomeProps){
         super(props)
         this.state={
-
         }
+    }
+    
+    componentWillMount(){
+        console.log(this.props.weather)
     }
     render(){
         return(

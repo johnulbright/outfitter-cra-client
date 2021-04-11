@@ -5,6 +5,8 @@ import Signup from "./Signup";
 
 interface AuthProps {
   updateToken: (newToken: string) => void;
+  setLatLon:(latutide:number|null,longitude:number|null)=>void;
+  setWeather:(weather:object)=>void;
 }
 
 interface AuthState {
@@ -26,10 +28,16 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
         {this.state.hasAccount ? (
           <Login
             updateToken={this.props.updateToken}
+            setLatLon={this.props.setLatLon}
+            setWeather={this.props.setWeather}
+
+
           />
         ) : (
           <Signup
           updateToken={this.props.updateToken}
+          setLatLon={this.props.setLatLon}
+          setWeather={this.props.setWeather}
         />
         )}
         <Button variant="contained" color = "primary"

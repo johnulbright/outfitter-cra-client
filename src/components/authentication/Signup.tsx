@@ -14,7 +14,10 @@ import Button from "@material-ui/core/Button"
 import APIURL from '../../helpers/environment.js'
 
 interface SignupProps {
-  updateToken: (newToken: string) => void
+  updateToken: (newToken: string) => void;
+  setLatLon:(latutide:number|null,longitude:number|null)=>void;
+  setWeather:(weather:object)=>void;
+
 }
 interface SignupState {
   password: string;
@@ -79,7 +82,10 @@ export default class Signup extends React.Component<SignupProps, SignupState>{
         timeZone:json.records[0].fields.timezone
       })
     })
-    .then(()=>this.createParent())
+    .then(()=>{
+      console.log(this.state.lat);
+      this.createParent()
+    })
   }
 
   createParent=async()=>{
@@ -100,8 +106,10 @@ export default class Signup extends React.Component<SignupProps, SignupState>{
       })
     });
     const res = await result.json();
+    this.props.setLatLon(this.state.lat,this.state.lon);
     console.log(res);
     this.props.updateToken(res.sessionToken)
+    this.props.setWeather({no:"no"})
 }
 
 handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
