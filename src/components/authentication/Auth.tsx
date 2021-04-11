@@ -5,7 +5,6 @@ import Signup from "./Signup";
 
 interface AuthProps {
   updateToken: (newToken: string) => void;
-  setLatLon:(latutide:number|null,longitude:number|null)=>void;
   setWeather:(weather:object)=>void;
 }
 
@@ -18,7 +17,7 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
   constructor(props: AuthProps) {
     super(props);
     this.state = {
-      hasAccount: false,
+      hasAccount: true,
     };
   }
 
@@ -29,7 +28,6 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
         {this.state.hasAccount ? (
           <Login
             updateToken={this.props.updateToken}
-            setLatLon={this.props.setLatLon}
             setWeather={this.props.setWeather}
 
 
@@ -37,7 +35,6 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
         ) : (
           <Signup
           updateToken={this.props.updateToken}
-          setLatLon={this.props.setLatLon}
           setWeather={this.props.setWeather}
         />
         )}

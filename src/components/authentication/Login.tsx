@@ -10,7 +10,6 @@ import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from "@material-ui/core/Button"
 import { createStyles,WithStyles,withStyles } from '@material-ui/styles';
-import PropTypes from 'prop-types'
 
 
 
@@ -32,7 +31,6 @@ const styles = createStyles({
 
 interface LoginProps extends WithStyles<typeof styles> {
   updateToken: (newToken: string) => void;
-  setLatLon: (latutide: number | null, longitude: number | null) => void;
   setWeather: (weather: object) => void;
   classes:{
     root:string;
@@ -56,9 +54,6 @@ interface LoginState {
 
 class Login extends React.Component<LoginProps, LoginState>{
 
-  // public static propTypes = {
-  //   classes: PropTypes.object.isRequired,
-  // }
   constructor(props: LoginProps) {
     super(props)
     this.state = {
@@ -95,28 +90,21 @@ class Login extends React.Component<LoginProps, LoginState>{
         'Content-Type': "application/json"
       })
     });
-    const {result:res} = await result.json();
-    console.log(res);
-    this.props.updateToken(res.sessionToken);
-    // this.props.setLatLon(res.lat, res.log);
+    const {result:res,sessionToken:token} = await result.json();
+    console.log(res,token);
+    this.props.updateToken(token);
     this.getWeather(res.lat, res.lon)
-    // console.log("ST=", res.sessionToken)
-    // return {lat:res.lat,lon:res.lon}
   }
   getWeather = async (lat: number, lon: number) => {
     const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
   `)
-    const weatherObject=await result.json();
-    console.log(weatherObject);
+    this.props.setWeather(result.json())
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.setState({ clicked: true })
     this.findParent()
-    // .then(({lat,lon})=>{
-    //   this.getWeather(lat,lon)
-    // })
   }
 
 
@@ -126,7 +114,7 @@ class Login extends React.Component<LoginProps, LoginState>{
     return (
 
       <div>
-        <h1>Signup</h1>
+        <h1>Login</h1>
         <form autoComplete="off" onSubmit={this.handleSubmit}>
 
           <TextField

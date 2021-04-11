@@ -15,7 +15,6 @@ import APIURL from '../../helpers/environment.js'
 
 interface SignupProps {
   updateToken: (newToken: string) => void;
-  setLatLon:(latutide:number|null,longitude:number|null)=>void;
   setWeather:(weather:object)=>void;
 
 }
@@ -83,7 +82,6 @@ export default class Signup extends React.Component<SignupProps, SignupState>{
       })
     })
     .then(()=>{
-      console.log(this.state.lat);
       this.createParent()
     })
   }
@@ -106,10 +104,9 @@ export default class Signup extends React.Component<SignupProps, SignupState>{
       })
     });
     const res = await result.json();
-    this.props.setLatLon(this.state.lat,this.state.lon);
-    console.log(res);
+    console.log(res)
+    // this.props.setLatLon(this.state.lat,this.state.lon);
     this.props.updateToken(res.sessionToken)
-    this.props.setWeather({no:"no"})
 }
 
 handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,12 +114,6 @@ handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   this.setState({clicked:true})
   let ready=!this.state.badFirstName&&!this.state.badLastName&&!this.state.badZip&&!this.state.badEmail&&!this.state.badPassword
   if (ready){
-    console.log(this.state.badFirstName);
-    console.log(this.state.badLastName);
-    console.log(this.state.badZip);
-    console.log(this.state.badEmail);
-    console.log(this.state.badPassword);
-    console.log('ready')
     this.getLatLong();
   }
 }
