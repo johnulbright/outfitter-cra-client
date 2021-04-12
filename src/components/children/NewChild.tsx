@@ -109,21 +109,8 @@ export default class NewChild extends React.Component<
     });
     return unique;
   }
-  handleNameChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    console.log(e.target.value);
-    if (e.target.value.length > 0) {
-      this.setState({
-        name: e.target.value,
-        badName: e.target.value.length === 0,
-      });
-    }
-  }
-  handleUsernameChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    //   this.setState({
-    //     username: e.target.value,
-    //     badUsername: !this.goodUsername(e.target.value),
-    //   })
-  }
+
+
   render(): JSX.Element {
     return (
       <div>
@@ -136,7 +123,12 @@ export default class NewChild extends React.Component<
               this.state.badName && this.state.clicked ? "Required" : ""
             }
             label="Name"
-            onChange={this.handleNameChange}
+            onChange={(e) => {
+              this.setState({
+                name: e.target.value,
+                badName: e.target.value.length === 0,
+              });
+            }}
           />
           <TextField
             value={this.state.username}
@@ -148,7 +140,12 @@ export default class NewChild extends React.Component<
             }
             label="User name"
             defaultValue=""
-            // onChange={this.handleUsernameChange}
+            onChange={(e)=>{
+              this.setState({
+                username: e.target.value,
+                badUsername: !this.goodUsername(e.target.value),
+              });
+            }}
           />
           <Checkbox
             checked={this.state.underwearRemind}
