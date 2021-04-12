@@ -103,12 +103,15 @@ export default class Signup extends React.Component<SignupProps, SignupState>{
         'Content-Type':"application/json"
       })
     });
-    const res = await result.json();
-    console.log(res)
-    // this.props.setLatLon(this.state.lat,this.state.lon);
-    this.props.updateToken(res.sessionToken)
+    const {result:res,sessionToken:token} = await result.json();
+    this.props.updateToken(token);
+    this.getWeather(res.lat, res.lon)
 }
-
+getWeather = async (lat: number, lon: number) => {
+  const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
+`)
+  this.props.setWeather(result.json())
+}
 handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   this.setState({clicked:true})

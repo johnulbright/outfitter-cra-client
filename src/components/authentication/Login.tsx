@@ -91,7 +91,6 @@ class Login extends React.Component<LoginProps, LoginState>{
       })
     });
     const {result:res,sessionToken:token} = await result.json();
-    console.log(res,token);
     this.props.updateToken(token);
     this.getWeather(res.lat, res.lon)
   }
