@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
 
 import NewChild from "../children/NewChild";
 import Child from "../children/Child";
@@ -20,10 +19,7 @@ interface ChildIndexState {
   takenUsernames: string[];
 }
 
-export default class ChidlIndex extends React.Component<
-  ChildIndexProps,
-  ChildIndexState
-> {
+export default class ChidlIndex extends React.Component<ChildIndexProps,ChildIndexState> {
   constructor(props: ChildIndexProps) {
     super(props);
     this.state = {
@@ -40,11 +36,10 @@ export default class ChidlIndex extends React.Component<
       }),
     });
     const allChildren = await result.json();
-    console.log("my kids", allChildren);
     this.setState({ children: allChildren });
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.getMyChildren();
     this.getAllUsernames();
   }
@@ -60,7 +55,6 @@ export default class ChidlIndex extends React.Component<
     const allChildren = await result.json();
     let usernamesOnly=allChildren.map((child:any)=>child.username)
     // Is this a problem? Better soln?-------^^^
-    console.log("all usernames", usernamesOnly);
     this.setState({ takenUsernames: usernamesOnly });
   };
   render() {
@@ -73,7 +67,7 @@ export default class ChidlIndex extends React.Component<
           takenUsernames={this.state.takenUsernames} 
         />
         {this.state.children?.map((child) => (
-          <Child key={child.id} child={child} />
+          <Child sessionToken={this.props.sessionToken} key={child.id} child={child} />
         ))}
       </div>
     );

@@ -1,15 +1,8 @@
 import React from "react";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import APIURL from "../../helpers/environment.js";
 
@@ -67,8 +60,6 @@ export default class NewChild extends React.Component<
         Authorization: this.props.sessionToken,
       }),
     });
-    const res = await result.json();
-    console.log(res);
     this.props.getMyChildren();
     this.setState({
       allUsernames: [...this.state.allUsernames, this.state.username],
@@ -87,10 +78,6 @@ export default class NewChild extends React.Component<
     let ready = !this.state.badName && !this.state.badUsername;
     if (ready) {
       this.createChild();
-
-      this.setState({
-        allUsernames: [...this.state.allUsernames, this.state.username],
-      });
       this.setState({
         name: "",
         username: "",
@@ -109,7 +96,6 @@ export default class NewChild extends React.Component<
     });
     return unique;
   }
-
 
   render(): JSX.Element {
     return (
@@ -140,21 +126,29 @@ export default class NewChild extends React.Component<
             }
             label="User name"
             defaultValue=""
-            onChange={(e)=>{
+            onChange={(e): void => {
               this.setState({
                 username: e.target.value,
                 badUsername: !this.goodUsername(e.target.value),
               });
             }}
           />
-          <Checkbox
-            checked={this.state.underwearRemind}
-            color="primary"
-            inputProps={{ "aria-label": "secondary checkbox" }}
-            onChange={(event) =>
-              this.setState({ underwearRemind: event.target.checked })
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.underwearRemind}
+                color="primary"
+                inputProps={{ "aria-label": "secondary checkbox" }}
+                onChange={(event): void =>
+                  {
+                    return this.setState({ underwearRemind: event.target.checked });
+                  }
+                }
+              />
             }
+            label="Remind to change underwear"
           />
+
           <Button
             onClick={(e) => this.handleSubmit(e)}
             type="submit"
