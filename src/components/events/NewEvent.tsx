@@ -1,30 +1,26 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
-import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
-import TimePicker from '@material-ui/lab/TimePicker';
-
-
+import { KeyboardTimePicker,MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/date-fns';
+import DateFnsAdapter from "@date-io/date-fns";
 import APIURL from "../../helpers/environment.js";
 
 interface NewEventProps {
   sessionToken: string;
   getEvents: () => void;
-  child:{
-    id:number,
-    name:string,
-    username:string,
-    deviceId?:string,
-    parentId:number,
-};
-  }
+  child: {
+    id: number;
+    name: string;
+    username: string;
+    deviceId?: string;
+    parentId: number;
+  };
+}
 
 interface NewEventState {
   eventName: string;
-  eventTime: Date|null;
+  eventTime: Date | null;
   badName: boolean;
   badTime: boolean;
   clicked: boolean;
@@ -45,20 +41,23 @@ export default class NewEvent extends React.Component<
     };
   }
 
-  createEvent = async (): Promise<void> => {
-    const result = await fetch(`${APIURL}/event/${this.props.child.id}`, {
+  createEvent = async (hours:number,minutes:number): Promise<void> => {
+    const result =await fetch(`${APIURL}/event/create/${this.props.child.id}`, {
       method: "POST",
       body: JSON.stringify({
         event: {
           name: this.state.eventName,
-          time: this.state.eventTime,
+          hours: hours,
+          minutes:minutes
         },
       }),
       headers: new Headers({
         "Content-Type": "application/json",
-        Authorization: this.props.sessionToken,
+        "Authorization": this.props.sessionToken,
       }),
     });
+    const json=result.json()
+    console.log(json)
     this.props.getEvents();
     this.setState({
       eventName: "",
@@ -68,12 +67,20 @@ export default class NewEvent extends React.Component<
 
   handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const dateFns=new DateFnsAdapter();
+    const initialDateFnsDate = dateFns.date(this.state.eventTime);
+    // const formattedTime=dateFns.format(updatedDateFnsDate,'fullTime24h')
+    const hh=dateFns.getHours(initialDateFnsDate)
+    const mm=dateFns.getMinutes(initialDateFnsDate)
+    console.log(hh,typeof hh)
+    console.log(mm,typeof mm)
+    // console.log('this',formattedTime)
     this.setState({ clicked: true });
-    let ready = !this.state.badName && !this.state.badTime;
+    let ready = !this.state.badName && this.state.eventTime;
     if (ready) {
-      this.createEvent();
-      };
+      this.createEvent(hh,mm);
     }
+  };
 
   render(): JSX.Element {
     return (
@@ -86,7 +93,7 @@ export default class NewEvent extends React.Component<
             helperText={
               this.state.badName && this.state.clicked ? "Required" : ""
             }
-            label="Name"
+            label="What's happening?"
             onChange={(e) => {
               this.setState({
                 eventName: e.target.value,
@@ -94,16 +101,16 @@ export default class NewEvent extends React.Component<
               });
             }}
           />
-           <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <TimePicker
-        label="Basic example"
-        value={this.state.eventTime}
-        onChange={(time:Date) => {
-          this.setState({eventTime:time});
-        }}
-        renderInput={(params) => <TextField {...params} />}
-      />
-    </LocalizationProvider>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+             <KeyboardTimePicker
+            label="What time?"
+            placeholder="08:00 AM"
+            mask="__:__ _M"
+            value={this.state.eventTime}
+            onChange={(date) => this.setState({ eventTime: date })}
+          />
+          </MuiPickersUtilsProvider>
+         
 
           <Button
             onClick={(e) => this.handleSubmit(e)}

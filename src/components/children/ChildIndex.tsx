@@ -65,9 +65,10 @@ export default class ChidlIndex extends React.Component<ChildIndexProps,ChildInd
           sessionToken={this.props.sessionToken}
           getMyChildren={this.getMyChildren}
           takenUsernames={this.state.takenUsernames} 
+          getAllUsernames={this.getAllUsernames}
         />
         {this.state.children?.map((child) => (
-          <Child sessionToken={this.props.sessionToken} key={child.id} child={child} />
+          <Child  sessionToken={this.props.sessionToken} key={child.id} child={child} />
         ))}
       </div>
     );

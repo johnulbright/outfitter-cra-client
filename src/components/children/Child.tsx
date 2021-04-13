@@ -1,15 +1,10 @@
 import React from 'react'
 
 import EventIndex from '../events/EventIndex'
+import {ChildKeys} from './types'
 
 interface ChildProps{
-    child:{
-        id:number,
-        name:string,
-        username:string,
-        deviceId?:string,
-        parentId:number
-    };
+    child:ChildKeys;
     sessionToken:string;
 }
 interface ChildState{

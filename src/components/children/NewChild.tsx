@@ -9,6 +9,7 @@ import APIURL from "../../helpers/environment.js";
 interface NewChildProps {
   sessionToken: string;
   getMyChildren: () => void;
+  getAllUsernames: () => void;
   takenUsernames: string[];
 }
 
@@ -20,7 +21,6 @@ interface NewChildState {
   badName: boolean;
   badUsername: boolean;
   clicked: boolean;
-  allUsernames: string[];
 }
 
 export default class NewChild extends React.Component<
@@ -37,7 +37,6 @@ export default class NewChild extends React.Component<
       badName: true,
       badUsername: true,
       clicked: false,
-      allUsernames: this.props.takenUsernames,
     };
     this.createChild = this.createChild.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,7 +44,7 @@ export default class NewChild extends React.Component<
   }
 
   createChild = async (): Promise<void> => {
-    const result = await fetch(`${APIURL}/child/create`, {
+    await fetch(`${APIURL}/child/create`, {
       method: "POST",
       body: JSON.stringify({
         child: {
@@ -61,9 +60,7 @@ export default class NewChild extends React.Component<
       }),
     });
     this.props.getMyChildren();
-    this.setState({
-      allUsernames: [...this.state.allUsernames, this.state.username],
-    });
+    this.props.getAllUsernames();
     this.setState({
       name: "",
       username: "",
@@ -78,12 +75,6 @@ export default class NewChild extends React.Component<
     let ready = !this.state.badName && !this.state.badUsername;
     if (ready) {
       this.createChild();
-      this.setState({
-        name: "",
-        username: "",
-        underwearRemind: false,
-        clicked: false,
-      });
     }
   };
 
