@@ -36,7 +36,7 @@ clearToken=()=>{
   localStorage.clear()
   this.setState({sessionToken:''})
 }
-setWeather=(weatherObj:any):void=>{
+setWeather=(weatherObj:Weather):void=>{
   this.setState({weather:weatherObj})
 }
 setCity=(city:string):void=>{
