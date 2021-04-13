@@ -5,17 +5,13 @@ import { KeyboardTimePicker,MuiPickersUtilsProvider } from "@material-ui/pickers
 import DateFnsUtils from '@date-io/date-fns';
 import DateFnsAdapter from "@date-io/date-fns";
 import APIURL from "../../helpers/environment.js";
+import {ChildKeys} from '../../types'
+
 
 interface NewEventProps {
   sessionToken: string;
   getEvents: () => void;
-  child: {
-    id: number;
-    name: string;
-    username: string;
-    deviceId?: string;
-    parentId: number;
-  };
+  child: ChildKeys
 }
 
 interface NewEventState {

@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from "@material-ui/core/Button"
 import { createStyles,WithStyles,withStyles } from '@material-ui/styles';
-
+import {Weather} from '../../types'
 
 
 import APIURL from '../../helpers/environment.js'
@@ -31,7 +31,8 @@ const styles = createStyles({
 
 interface LoginProps extends WithStyles<typeof styles> {
   updateToken: (newToken: string) => void;
-  setWeather: (weather: object) => void;
+  setWeather: (weather: Weather) => void;
+  setCity:(city:string)=>void;
   classes:{
     root:string;
     paper:string;
@@ -93,11 +94,13 @@ class Login extends React.Component<LoginProps, LoginState>{
     const {result:res,sessionToken:token} = await result.json();
     this.props.updateToken(token);
     this.getWeather(res.lat, res.lon)
+    this.props.setCity(res.city)
   }
   getWeather = async (lat: number, lon: number) => {
     const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
   `)
-    this.props.setWeather(result.json())
+    const json=await result.json()
+    this.props.setWeather(json)
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

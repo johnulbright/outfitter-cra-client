@@ -1,6 +1,6 @@
 import React from "react";
 
-import NewChild from "../children/NewChild";
+import CreateChild from "../children/CreateChild";
 import Child from "../children/Child";
 import APIURL from "../../helpers/environment.js";
 
@@ -19,7 +19,7 @@ interface ChildIndexState {
   takenUsernames: string[];
 }
 
-export default class ChidlIndex extends React.Component<ChildIndexProps,ChildIndexState> {
+export default class ChildIndex extends React.Component<ChildIndexProps,ChildIndexState> {
   constructor(props: ChildIndexProps) {
     super(props);
     this.state = {
@@ -60,15 +60,21 @@ export default class ChidlIndex extends React.Component<ChildIndexProps,ChildInd
   render() {
     return (
       <div>
-        <h2>Home</h2>
-        <NewChild
+        <CreateChild
           sessionToken={this.props.sessionToken}
           getMyChildren={this.getMyChildren}
           takenUsernames={this.state.takenUsernames} 
           getAllUsernames={this.getAllUsernames}
         />
         {this.state.children?.map((child) => (
-          <Child  sessionToken={this.props.sessionToken} key={child.id} child={child} />
+          <Child 
+            sessionToken={this.props.sessionToken} 
+            key={child.id} 
+            child={child}
+            getMyChildren={this.getMyChildren}
+            getAllUsernames={this.getAllUsernames}
+
+          />
         ))}
       </div>
     );

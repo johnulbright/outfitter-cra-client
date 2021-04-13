@@ -8,6 +8,7 @@ import APIURL from "../../helpers/environment.js";
 
 interface NewChildProps {
   sessionToken: string;
+  handleNext: () => void;
   getMyChildren: () => void;
   getAllUsernames: () => void;
   takenUsernames: string[];
@@ -75,6 +76,7 @@ export default class NewChild extends React.Component<
     let ready = !this.state.badName && !this.state.badUsername;
     if (ready) {
       this.createChild();
+      this.props.handleNext();
     }
   };
 
@@ -146,7 +148,7 @@ export default class NewChild extends React.Component<
             variant="contained"
             color="primary"
           >
-            Submit
+            Next
           </Button>
         </form>
       </div>

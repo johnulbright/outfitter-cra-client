@@ -4,11 +4,11 @@ import NewEvent from './NewEvent'
 
 interface EventIndexProps{
     child:{
-        id:number,
-        name:string,
-        username:string,
+        id:number|null,
+        name:string|null,
+        username:string|null,
         deviceId?:string,
-        parentId:number
+        parentId:number|null
     };
     sessionToken:string;
 }

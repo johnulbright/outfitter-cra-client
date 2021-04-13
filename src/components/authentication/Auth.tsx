@@ -2,10 +2,12 @@ import React from "react";
 import Button from "@material-ui/core/Button"
 import Login from "./Login";
 import Signup from "./Signup";
+import {Weather} from '../../types'
 
 interface AuthProps {
   updateToken: (newToken: string) => void;
-  setWeather:(weather:object)=>void;
+  setWeather:(weather:Weather)=>void;
+  setCity:(city:string)=>void;
 }
 
 interface AuthState {
@@ -29,13 +31,15 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
           <Login
             updateToken={this.props.updateToken}
             setWeather={this.props.setWeather}
-
+            setCity={this.props.setCity}
 
           />
         ) : (
           <Signup
           updateToken={this.props.updateToken}
           setWeather={this.props.setWeather}
+          setCity={this.props.setCity}
+
         />
         )}
         <Button variant="contained" color = "primary"

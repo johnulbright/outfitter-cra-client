@@ -2,11 +2,13 @@ import React from 'react'
 import Auth from './components/authentication/Auth'
 import Home from './components/home/Home'
 import './App.css'
+import {Weather} from './types'
 
 interface AppProps{}
 interface AppState{
-  sessionToken:string,
-  weather:object;
+  sessionToken:string;
+  weather:Weather;
+  city:string|null;
 }
 
 
@@ -15,7 +17,12 @@ export default class App extends React.Component <AppProps,AppState>{
     super(props)
     this.state={
     sessionToken:'',
-    weather:{}
+    weather:{
+      current:{
+        weather:[]
+      }
+    },
+    city:''
     }
   this.updateToken=this.updateToken.bind(this)
   this.clearToken=this.clearToken.bind(this)
@@ -29,18 +36,21 @@ clearToken=()=>{
   localStorage.clear()
   this.setState({sessionToken:''})
 }
-setWeather=(weatherObj:object):void=>{
+setWeather=(weatherObj:any):void=>{
   this.setState({weather:weatherObj})
+}
+setCity=(city:string):void=>{
+  this.setState({city:city})
 }
 
 render(){
   return (
     <div className="App">
-      <h1>Outfitter</h1>
       {
       this.state.sessionToken===localStorage.getItem('token')
       ?
       <Home 
+        city={this.state.city}
         weather={this.state.weather} 
         clearToken={this.clearToken}
         sessionToken={this.state.sessionToken}
@@ -49,6 +59,7 @@ render(){
       <Auth 
         updateToken={this.updateToken}
         setWeather={this.setWeather} 
+        setCity={this.setCity}
       />
       }
     </div>
