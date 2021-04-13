@@ -19,8 +19,16 @@ export default class App extends React.Component <AppProps,AppState>{
     sessionToken:'',
     weather:{
       current:{
-        weather:[]
-      }
+        temp:0,
+        weather:[
+          {
+            description:'',
+            icon:''
+          }
+        ]
+      },
+      hourly:[],
+      daily:[]
     },
     city:''
     }
@@ -37,6 +45,7 @@ clearToken=()=>{
   this.setState({sessionToken:''})
 }
 setWeather=(weatherObj:Weather):void=>{
+  console.log(weatherObj)
   this.setState({weather:weatherObj})
 }
 setCity=(city:string):void=>{
