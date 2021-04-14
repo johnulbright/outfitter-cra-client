@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import Dialog from "@material-ui/core/Dialog";
 
+import {ChildKeys} from '../../types'
 import NewChild from "./NewChild";
 import EventIndex from "../events/EventIndex";
 
@@ -31,23 +32,20 @@ interface CreateChildProps {
   getAllUsernames: () => void;
   takenUsernames: string[];
 }
-interface ChildObjectState {
-  id: number | null;
-  name: string | null;
-  username: string | null;
-  deviceId?: string;
-  parentId: number | null;
-}
+// interface ChildObjectState {
+//   id: number | null;
+//   name: string | null;
+//   username: string | null;
+//   deviceId?: string;
+//   parentId: number | null;
+// }
 interface CreateChildState {
   activeStep: number;
   open: boolean;
-  child: ChildObjectState;
+  child: ChildKeys;
 }
 
-export default class CreateChild extends React.Component<
-  CreateChildProps,
-  CreateChildState
-> {
+export default class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
   constructor(props: CreateChildProps) {
     super(props);
     this.state = {
@@ -60,8 +58,9 @@ export default class CreateChild extends React.Component<
         parentId: null,
       },
     };
+    this.setChild=this.setChild.bind(this)
   }
-  setChild(childObject: ChildObjectState): void {
+  setChild(childObject: ChildKeys): void {
     this.setState({ child: childObject });
   }
   handleNext = () => {
@@ -89,6 +88,7 @@ export default class CreateChild extends React.Component<
             takenUsernames={this.props.takenUsernames}
             getAllUsernames={this.props.getAllUsernames}
             handleNext={this.handleNext}
+            setChild={this.setChild}
           />
         );
       case 1:
@@ -141,7 +141,7 @@ export default class CreateChild extends React.Component<
                 <Typography>
                   {this.getStepContent(this.state.activeStep)}
                 </Typography>
-                <div>
+                {/* <div>
                   <Button
                     disabled={this.state.activeStep === 0}
                     onClick={this.handleBack}
@@ -157,7 +157,7 @@ export default class CreateChild extends React.Component<
                       ? "Finish"
                       : "Next"}
                   </Button>
-                </div>
+                </div> */}
               </div>
             )}
           </div>

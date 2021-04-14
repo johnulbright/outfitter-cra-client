@@ -5,11 +5,13 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import APIURL from "../../helpers/environment.js";
+import { ChildKeys } from "../../types.js";
 
 interface NewChildProps {
   sessionToken: string;
   handleNext: () => void;
   getMyChildren: () => void;
+  setChild: (child:ChildKeys) => void;
   getAllUsernames: () => void;
   takenUsernames: string[];
 }
@@ -45,7 +47,7 @@ export default class NewChild extends React.Component<
   }
 
   createChild = async (): Promise<void> => {
-    await fetch(`${APIURL}/child/create`, {
+    const result = await fetch(`${APIURL}/child/create`, {
       method: "POST",
       body: JSON.stringify({
         child: {
@@ -60,7 +62,9 @@ export default class NewChild extends React.Component<
         Authorization: this.props.sessionToken,
       }),
     });
+    const child=await result.json()
     this.props.getMyChildren();
+    this.props.setChild(child.result)
     this.props.getAllUsernames();
     this.setState({
       name: "",

@@ -19,7 +19,7 @@ export default class App extends React.Component <AppProps,AppState>{
     sessionToken:'',
     weather:{
       current:{
-        temp:0,
+        temp:999,
         weather:[
           {
             description:'',

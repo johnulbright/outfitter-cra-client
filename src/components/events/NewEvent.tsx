@@ -38,6 +38,7 @@ export default class NewEvent extends React.Component<
   }
 
   createEvent = async (hours:number,minutes:number): Promise<void> => {
+    console.log(this.props.child)
     const result =await fetch(`${APIURL}/event/create/${this.props.child.id}`, {
       method: "POST",
       body: JSON.stringify({
@@ -58,22 +59,22 @@ export default class NewEvent extends React.Component<
     this.setState({
       eventName: "",
       eventTime: null,
+      clicked:false
     });
   };
 
   handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const dateFns=new DateFnsAdapter();
-    const initialDateFnsDate = dateFns.date(this.state.eventTime);
-    // const formattedTime=dateFns.format(updatedDateFnsDate,'fullTime24h')
-    const hh=dateFns.getHours(initialDateFnsDate)
-    const mm=dateFns.getMinutes(initialDateFnsDate)
-    console.log(hh,typeof hh)
-    console.log(mm,typeof mm)
-    // console.log('this',formattedTime)
-    this.setState({ clicked: true });
+    this.setState({ clicked: true,badTime:this.state.eventTime===undefined||this.state.eventTime===null});
+    
+    console.log(this.state.badName,this.state.badTime,this.state.clicked)
     let ready = !this.state.badName && this.state.eventTime;
     if (ready) {
+      console.log('create')
+      const dateFns=new DateFnsAdapter();
+    const initialDateFnsDate = dateFns.date(this.state.eventTime);
+    const hh=dateFns.getHours(initialDateFnsDate)
+    const mm=dateFns.getMinutes(initialDateFnsDate)
       this.createEvent(hh,mm);
     }
   };
@@ -100,6 +101,10 @@ export default class NewEvent extends React.Component<
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
              <KeyboardTimePicker
             label="What time?"
+            error={this.state.badTime&&this.state.clicked}
+            helperText={
+              this.state.eventTime===null && this.state.clicked ? "Required" : ""
+            }
             placeholder="08:00 AM"
             mask="__:__ _M"
             value={this.state.eventTime}
