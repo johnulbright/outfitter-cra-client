@@ -92,18 +92,16 @@ class Login extends React.Component<LoginProps, LoginState>{
       })
     });
     const {result:res,sessionToken:token} = await result.json();
-    console.log(res,token)
-    this.props.updateToken(token);
-    this.getWeather(res.lat, res.lon)
+    this.getWeather(res.lat, res.lon,token)
     this.props.setCity(res.city)
   }
-  getWeather = async (lat: number, lon: number) => {
+  getWeather = async (lat: number, lon: number,token:string) => {
     const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
   `)
-    console.log("i fired",lat,lon)
     const json=await result.json()
     this.props.setWeather(json)
-    console.log(json);
+    this.props.updateToken(token);
+
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

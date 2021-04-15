@@ -39,7 +39,8 @@ export default class EventIndex extends React.Component<EventIndexProps,EventInd
         this.setState({ events: events });
       };
       componentDidMount(){
-          this.getEvents();
+        //   this.getEvents();
+        // revisit this for editing children
       }
     render(){
         return(

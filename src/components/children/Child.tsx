@@ -1,6 +1,6 @@
 import React from 'react'
 
-import EventIndex from '../events/EventIndex'
+import NewClothes from '../clothes/NewClothes'
 import ChangeChild from './ChangeChild'
 import {ChildKeys} from '../../types'
 
@@ -32,7 +32,7 @@ export default class Child extends React.Component<ChildProps,ChildState>{
                 getAllUsernames={this.props.getAllUsernames}
 
             />
-            <EventIndex sessionToken={this.props.sessionToken} child={this.props.child}/>
+            <NewClothes/>
             </div>
         )
         }

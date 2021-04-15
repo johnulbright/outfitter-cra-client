@@ -10,7 +10,7 @@ import Dialog from "@material-ui/core/Dialog";
 import {ChildKeys} from '../../types'
 import NewChild from "./NewChild";
 import EventIndex from "../events/EventIndex";
-
+import APIURL from '../../helpers/environment'
 // const useStyles = makeStyles((theme: Theme) =>
 //   createStyles({
 //     root: {
@@ -43,12 +43,14 @@ interface CreateChildState {
   activeStep: number;
   open: boolean;
   child: ChildKeys;
+  submitted:boolean;
 }
 
 export default class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
   constructor(props: CreateChildProps) {
     super(props);
     this.state = {
+      submitted:false,
       activeStep: 0,
       open: false,
       child: {
@@ -59,7 +61,21 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
       },
     };
     this.setChild=this.setChild.bind(this)
+    this.deleteChild=this.deleteChild.bind(this)
+    this.handleClose=this.handleClose.bind(this)
+    this.handleFinish=this.handleFinish.bind(this)
+    
   }
+  deleteChild=async():Promise<void>=>{
+    await fetch(`${APIURL}/child/delete/${this.state.child.id}`, {
+        method: "DELETE",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: this.props.sessionToken,
+        }),
+      });
+    }
+  
   setChild(childObject: ChildKeys): void {
     this.setState({ child: childObject });
   }
@@ -84,7 +100,6 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
         return (
           <NewChild
             sessionToken={this.props.sessionToken}
-            getMyChildren={this.props.getMyChildren}
             takenUsernames={this.props.takenUsernames}
             getAllUsernames={this.props.getAllUsernames}
             handleNext={this.handleNext}
@@ -105,14 +120,24 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
     }
   }
 
-  handleOpen = () => {
-    this.setState({ open: true, activeStep: 0 });
+  handleOpen = ():void => {
+    this.setState({ open: true, activeStep: 0 ,submitted:false});
   };
 
-  handleClose = () => {
+  handleClose = ():void => {
+    console.log('close and submitted state',this.state.submitted)
+    if (!this.state.submitted&&this.state.activeStep>0){
+      this.deleteChild();
+      console.log(this.state.child.name,"deleted")
+    }
     this.setState({ open: false, activeStep: 0 });
-  };
+    this.props.getMyChildren();
+    console.log('end of handle close')
 
+  };
+  handleFinish=():void=>{
+    this.setState({submitted:true},this.handleClose)
+  }
   render() {
     return (
       <div>
@@ -122,6 +147,7 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
           onClose={this.handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
+          style={{padding:"50px"}}
         >
           <Stepper activeStep={this.state.activeStep} alternativeLabel>
             {this.getSteps().map((label) => (
@@ -137,27 +163,24 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
                 <Button onClick={this.handleReset}>Reset</Button>
               </div>
             ) : (
-              <div>
-                <Typography>
+              <div style={{margin:"20px"}}>
                   {this.getStepContent(this.state.activeStep)}
-                </Typography>
-                {/* <div>
+                
                   <Button
-                    disabled={this.state.activeStep === 0}
-                    onClick={this.handleBack}
+                    onClick={this.handleClose}
                   >
-                    Back
-                  </Button>
-                  <Button
+                    Cancel
+                </Button>
+                  {this.state.activeStep>=1&&<Button
                     variant="contained"
                     color="primary"
-                    onClick={this.handleNext}
+                    onClick={this.state.activeStep===1?this.handleNext:this.handleFinish}
                   >
-                    {this.state.activeStep === this.getSteps().length - 1
-                      ? "Finish"
-                      : "Next"}
-                  </Button>
-                </div> */}
+                    {this.state.activeStep === 1
+                      ? "Next"
+                      : "Finish"}
+                  </Button>}
+                
               </div>
             )}
           </div>

@@ -10,7 +10,6 @@ import { ChildKeys } from "../../types.js";
 interface NewChildProps {
   sessionToken: string;
   handleNext: () => void;
-  getMyChildren: () => void;
   setChild: (child:ChildKeys) => void;
   getAllUsernames: () => void;
   takenUsernames: string[];
@@ -63,7 +62,6 @@ export default class NewChild extends React.Component<
       }),
     });
     const child=await result.json()
-    this.props.getMyChildren();
     this.props.setChild(child.result)
     this.props.getAllUsernames();
     this.setState({
