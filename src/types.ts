@@ -101,3 +101,66 @@ export interface Weather{
     
   daily: DailyWeather[];          
 }
+
+export const marks = [
+  {
+    value: -30,
+    label: '-30°F'
+  },
+  {
+    value: -20,
+    label: '-20°F'
+  },
+  {
+    value: -10,
+    label: '-10°F'
+  },
+  {
+    value: 0,
+    label: '0°F'
+  },
+  {
+    value: 10,
+    label: '10°F'
+  },
+  {
+    value: 20,
+    label: '20°F'
+  },
+  {
+    value: 30,
+    label: '30°F'
+  },
+  {
+    value: 40,
+    label: '40°F'
+  },
+  {
+    value: 50,
+    label: '50°F'
+  },
+  {
+    value: 60,
+    label: '60°F'
+  },
+  {
+    value: 70,
+    label: '70°F'
+  },
+  {
+    value: 80,
+    label: '80°F'
+  },
+  {
+    value: 90,
+    label: '90°F'
+  },
+  {
+    value: 100,
+    label: '100°F'
+  },
+  {
+    value: 110,
+    label: '110°F'
+  },
+]

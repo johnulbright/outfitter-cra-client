@@ -10,7 +10,9 @@ import Dialog from "@material-ui/core/Dialog";
 import {ChildKeys} from '../../types'
 import NewChild from "./NewChild";
 import EventIndex from "../events/EventIndex";
+import NewClothes from '../clothes/NewClothes'
 import APIURL from '../../helpers/environment'
+
 // const useStyles = makeStyles((theme: Theme) =>
 //   createStyles({
 //     root: {
@@ -114,7 +116,7 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
           />
         );
       case 2:
-        return "This is the bit I really care about!";
+        return <NewClothes sessionToken={this.props.sessionToken} child = {this.state.child}/>;
       default:
         return "Unknown stepIndex";
     }

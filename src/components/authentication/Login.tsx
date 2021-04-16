@@ -79,6 +79,7 @@ class Login extends React.Component<LoginProps, LoginState>{
 
 
   findParent = async () => {
+    this.setState({clicked:true})
     const result = await fetch(`${APIURL}/parent/login`, {
       method: 'POST',
       body: JSON.stringify({
@@ -91,9 +92,17 @@ class Login extends React.Component<LoginProps, LoginState>{
         'Content-Type': "application/json"
       })
     });
-    const {result:res,sessionToken:token} = await result.json();
-    this.getWeather(res.lat, res.lon,token)
-    this.props.setCity(res.city)
+      if(result.status===200){
+        const {result:res,sessionToken:token} = await result.json();
+        console.log(result)
+        this.getWeather(res.lat, res.lon,token)
+        this.props.setCity(res.city)
+      } else if(result.status===404){
+        this.setState({badEmail:true})
+      } else if(result.status===401){
+        this.setState({badPassword:true})
+      }
+  
   }
   getWeather = async (lat: number, lon: number,token:string) => {
     const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
@@ -123,7 +132,7 @@ class Login extends React.Component<LoginProps, LoginState>{
           <TextField
             className={classes.root}
             error={this.state.badEmail && this.state.clicked}
-            helperText={this.state.badEmail && this.state.clicked ? "Must be a valid email" : ''}
+            helperText={this.state.badEmail && this.state.clicked ? "Account not found" : ''}
             id="standard-basic"
             label="Email"
             onChange={(e) => this.setState({ email: e.target.value })}
@@ -149,7 +158,7 @@ class Login extends React.Component<LoginProps, LoginState>{
                 </InputAdornment>
               }
             />
-            <FormHelperText error={this.state.badPassword && this.state.clicked}>{this.state.badPassword && this.state.clicked ? "Minimum 5 characters" : ''}</FormHelperText>
+            <FormHelperText error={this.state.badPassword && this.state.clicked}>{this.state.badPassword && this.state.clicked ? "Incorrect password" : ''}</FormHelperText>
           </FormControl>
 
           <Button type="submit" variant="contained" color='primary'>Submit</Button>
