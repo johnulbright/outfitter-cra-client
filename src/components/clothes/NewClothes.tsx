@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { createStyles,WithStyles,withStyles } from '@material-ui/styles';
 
 
 import {marks} from '../../types'
@@ -10,58 +11,107 @@ import {ChildKeys} from '../../types'
 import APIURL from '../../helpers/environment'
 import ShowClothes from './ShowClothes'
 
-interface NewClothesProps {
+const styles0 = createStyles({
+  root: {
+    // background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    // border: 0,
+    // borderRadius: 3,
+    // boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    // color: 'white',
+    // height: 48,
+    // padding: '0 30px',
+  },
+  track:{
+    color:'red',
+    opacity:1
+  },
+  rail:{
+    color:'green',
+    opacity:1
+  }
+})
+interface NewClothesProps extends WithStyles<typeof styles0>{
   child:ChildKeys
   sessionToken:string
+  classes:{
+    root:string;
+    track:string;
+    rail:string
+  }
 }
 
 interface NewClothesState {
   requiredValues: number[];
   optionalValues: number[];
+  step0values: number[];
+  step1value:number;
   name:string;
   category:string;
   requiredMinTemp:number|null;
   requiredMaxTemp:number|null;
   optionalMinTemp:number|null;
   optionalMaxTemp:number|null;
+  minTemp:number;
+  maxTemp:number;
   icon:string;
   required:boolean;
   optional:boolean;
   clothes:any[];
   clicked:boolean;
+  step:number;
+  badName:boolean;
+  flipped:boolean;
 }
 
 type NewType = Promise<void>;
 
-export default class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
+class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
   constructor(props: NewClothesProps) {
     super(props)
     this.state = {
-      requiredValues: [30, 70],
-      optionalValues: [30, 70],
+      requiredValues: [],
+      optionalValues: [],
+      step0values:[30,70],
+      step1value:40,
       name:'',
       category:'',
       requiredMinTemp:null,
       requiredMaxTemp:null,
       optionalMinTemp:null,
       optionalMaxTemp:null,
+      minTemp:30,
+      maxTemp:70,
       icon:'',
       required:true,
       optional:false,
       clothes:[],
-      clicked:false
+      clicked:false,
+      step:0,
+      badName:false,
+      flipped:false,
     }
   }
    
-  handleRequiredChange = (event: any, newValue: number | number[]) => {
-    this.setState({requiredValues:newValue as number[]});
+  handleStep0Change = (event: any, newValue: number|number[]) => {
+    this.setState({step0values:newValue as number[]});
   };
-  handleOptionalChange = (event: any, newValue: number | number[]) => {
-    this.setState({optionalValues:newValue as number[]});
+  handleStep1Change = (event: any, newValue: number|number[]): void => {
+    this.setState({step1value:newValue as number});
   };
 
   handleSubmit=():void=>{
     this.setState({clicked:true})
+    switch (this.state.step){
+      case 0:
+        this.setState({
+          clicked:false,
+          minTemp:Math.min(...this.state.step0values),
+          maxTemp:Math.max(...this.state.step0values),
+          step1value:Math.round((Math.min(...this.state.step0values)+Math.max(...this.state.step0values))/2),
+          step:1,
+
+        })
+    }
     this.addClothes(true,this.state.requiredValues)
     this.addClothes(false,this.state.optionalValues)
 
@@ -105,47 +155,58 @@ export default class NewClothes extends React.Component<NewClothesProps, NewClot
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         <div>
         <TextField
-            error={this.state.name.length===0 && this.state.clicked}
-            helperText={this.state.name.length===0  && this.state.clicked ? "Required" : ''}
+            error={this.state.badName&& this.state.clicked}
+            helperText={this.state.badName && this.state.clicked ? "Required" : ''}
             id="standard-basic"
             label="Item of clothing"
             placeholder={`like "pants"`}
-            onChange={(e) => this.setState({ name: e.target.value })}
+            onChange={(e): void => this.setState({clicked:false,badName:e.target.value.length===0,name: e.target.value })}
           />  
-        <Typography id="range-slider" gutterBottom>
-          Required temperature range:
-        </Typography>
-        <Slider
-          style={{ width: "80%" }}
-          onChange={this.handleRequiredChange}
-          aria-labelledby="range-slider"
-          getAriaValueText={this.valuetext}
-          valueLabelFormat={this.valuetext}
-          valueLabelDisplay="on"
-          marks={marks}
-          min={-30}
-          max={110}
-          defaultValue={[30,70]}
-        />
-        <Typography id="range-slider" gutterBottom>
-          Optional temperature range:
-        </Typography>
-        <Slider
-          style={{ width: "80%" }}
-          onChange={this.handleOptionalChange}
-          aria-labelledby="range-slider"
-          getAriaValueText={this.valuetext}
-          valueLabelFormat={this.valuetext}
-          valueLabelDisplay="on"
-          marks={marks}
-          min={-30}
-          max={110}
-          defaultValue={[30,70]}
-        />
+        {this.state.step===0?
+          (<div>
+            <Typography id="range-slider" gutterBottom>
+            In what range of temperatures would {this.props.child.name} wear {this.state.name}?:
+          </Typography>
+          <Slider
+            value={this.state.step0values}
+            style={{ width: "80%" }}
+            onChange={this.handleStep0Change}
+            aria-labelledby="range-slider"
+            getAriaValueText={this.valuetext}
+            valueLabelFormat={this.valuetext}
+            valueLabelDisplay="on"
+            marks={marks}
+            min={-30}
+            max={110}
+            defaultValue={[30,70]}
+          />
+          </div>):(
+            <div>
+          <Typography id="range-slider" gutterBottom>
+            In what ranges should {this.state.name} be <span style={{fontWeight:"bold",color:"red"}}>required</span> or <span style={{fontWeight:"bold",color:"green"}}>optional</span>?:
+          </Typography>
+          <Slider
+           classes={this.state.flipped?{root: classes.root,track: classes.track,rail:classes.rail}:{root: classes.root,track: classes.rail,rail:classes.track}}
+            onClick={()=>this.setState({flipped:!this.state.flipped})}
+            value={this.state.step1value}
+            style={{ width: "80%"}}
+            onChange={this.handleStep1Change}
+            aria-labelledby="range-slider"
+            getAriaValueText={this.valuetext}
+            valueLabelFormat={this.valuetext}
+            valueLabelDisplay="on"
+            marks={[{value: this.state.minTemp,label: `${this.state.minTemp}°F`},{value: this.state.maxTemp,label: `${this.state.maxTemp}°F`}]}
+            min={this.state.minTemp}
+            max={this.state.maxTemp}
+            // defaultValue={}
+          />
+          </div>)
+        }
       </div>
         <Button onClick={this.handleSubmit}>Add clothes</Button>
       <ShowClothes clothes={this.state.clothes}/>
@@ -156,3 +217,4 @@ export default class NewClothes extends React.Component<NewClothesProps, NewClot
 }
 
 
+export default withStyles(styles0)(NewClothes);

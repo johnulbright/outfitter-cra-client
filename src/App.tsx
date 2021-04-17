@@ -51,7 +51,12 @@ setWeather=(weatherObj:Weather):void=>{
 setCity=(city:string):void=>{
   this.setState({city:city})
 }
-
+// componentDidMount(){
+//   const localToken=localStorage.getItem('token');
+//   if (localToken){
+//     this.setState({sessionToken:localToken})
+//   }
+// }
 render(){
   return (
     <div className="App">

@@ -149,7 +149,8 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
           onClose={this.handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          style={{padding:"50px"}}
+          // style={{padding:"50px"}}
+          fullScreen={true}
         >
           <Stepper activeStep={this.state.activeStep} alternativeLabel>
             {this.getSteps().map((label) => (
