@@ -8,6 +8,7 @@ import { createStyles,WithStyles,withStyles } from '@material-ui/styles';
 
 import {marks} from '../../types'
 import {ChildKeys} from '../../types'
+import {Clothes} from '../../types'
 import APIURL from '../../helpers/environment'
 import ShowClothes from './ShowClothes'
 
@@ -41,8 +42,6 @@ interface NewClothesProps extends WithStyles<typeof styles0>{
 }
 
 interface NewClothesState {
-  requiredValues: number[];
-  optionalValues: number[];
   step0values: number[];
   step1value:number;
   name:string;
@@ -56,11 +55,12 @@ interface NewClothesState {
   icon:string;
   required:boolean;
   optional:boolean;
-  clothes:any[];
+  clothes:Clothes[];
   clicked:boolean;
   step:number;
   badName:boolean;
   flipped:boolean;
+  tempValue:number|null
 }
 
 type NewType = Promise<void>;
@@ -69,8 +69,6 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
   constructor(props: NewClothesProps) {
     super(props)
     this.state = {
-      requiredValues: [],
-      optionalValues: [],
       step0values:[30,70],
       step1value:40,
       name:'',
@@ -88,7 +86,8 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
       clicked:false,
       step:0,
       badName:false,
-      flipped:false,
+      flipped:true,
+      tempValue:null
     }
   }
    
@@ -109,18 +108,54 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           maxTemp:Math.max(...this.state.step0values),
           step1value:Math.round((Math.min(...this.state.step0values)+Math.max(...this.state.step0values))/2),
           step:1,
-
         })
-    }
-    this.addClothes(true,this.state.requiredValues)
-    this.addClothes(false,this.state.optionalValues)
-
-    
+        break;
+      case 1:
+        let oMin,oMax,rMin,rMax:number|null;
+        if(!this.state.flipped){
+          if(this.state.step1value===this.state.minTemp){
+              rMin=this.state.minTemp;
+              rMax=this.state.maxTemp;
+              oMin=null;
+              oMax=null;
+            } else if (this.state.step1value===this.state.maxTemp){
+              oMin=this.state.minTemp;
+              oMax=this.state.maxTemp;
+              rMin=null;
+              rMax=null;
+            } else {
+              oMin=this.state.minTemp;
+              oMax=this.state.step1value;
+              rMin=this.state.step1value;
+              rMax=this.state.maxTemp;
+            }
+        } else {
+          if(this.state.step1value===this.state.minTemp){
+            oMin=this.state.minTemp;
+            oMax=this.state.maxTemp;
+            rMin=null;
+            rMax=null;
+          } else if (this.state.step1value===this.state.maxTemp){
+            rMin=this.state.minTemp;
+            rMax=this.state.maxTemp;
+            oMin=null;
+            oMax=null;
+          } else {
+            rMin=this.state.minTemp;
+            rMax=this.state.step1value;
+            oMin=this.state.step1value;
+            oMax=this.state.maxTemp;
+          }
+        }
+        this.addClothes(rMin,rMax,oMin,oMax)
+        break;
+      default: break;
+    }     
   }
   valuetext(value: number) {
     return `${value}°F`;
   }
-  addClothes=async(required:boolean,values:number[]): Promise<void>=>{
+  addClothes=async(rMin:number|null,rMax:number|null,oMin:number|null,oMax:number|null): Promise<void>=>{
     await fetch(`${APIURL}/clothing/create/${this.props.child.id}`,{
       method: "POST",
       body: JSON.stringify({
@@ -128,9 +163,10 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           name: this.state.name,
           icon: this.state.icon,
           category: this.state.category,
-          minTemp:Math.min(...values),
-          maxTemp:Math.max(...values),
-          required:required
+          requiredMin:rMin,
+          requiredMax:rMax,
+          optionalMin:oMin,
+          optionalMax:oMax,
         },
       }),
       headers: new Headers({
@@ -192,7 +228,8 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           </Typography>
           <Slider
            classes={this.state.flipped?{root: classes.root,track: classes.track,rail:classes.rail}:{root: classes.root,track: classes.rail,rail:classes.track}}
-            onClick={()=>this.setState({flipped:!this.state.flipped})}
+            onMouseDown={()=>this.setState({tempValue:this.state.step1value})}
+            onMouseUp={()=>{this.state.step1value===this.state.tempValue&&this.setState({flipped:!this.state.flipped})}}
             value={this.state.step1value}
             style={{ width: "80%"}}
             onChange={this.handleStep1Change}

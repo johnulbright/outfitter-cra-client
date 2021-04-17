@@ -5,7 +5,17 @@ export interface ChildKeys{
     deviceId?:string;
     parentId:number|null;
 }
-
+export interface Clothes{
+  id:number;
+  name:string;
+  requiredMin:number|null;
+  requiredMax:number|null;
+  optionalMin:number|null;
+  optionalMax:number|null;
+  category:string;
+  icon:string|null;
+  parentId:number;
+}
 
 export interface HourlyWeather{
     dt:number;

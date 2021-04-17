@@ -32,7 +32,7 @@ export default class Child extends React.Component<ChildProps,ChildState>{
                 getAllUsernames={this.props.getAllUsernames}
 
             />
-            <NewClothes child={this.props.child} sessionToken={this.props.sessionToken}/>
+            {/* <NewClothes child={this.props.child} sessionToken={this.props.sessionToken}/> */}
             </div>
         )
         }
