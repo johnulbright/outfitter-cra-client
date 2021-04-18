@@ -25,7 +25,23 @@ export default class DisplayEvents extends React.Component<DisplayEventsProps,Di
             
             <div>
                 {this.props.events?.map((event)=>{
-                    return(<p>{event.name}</p>)
+                    let displayHours:number;
+                    let AorP:string;
+                    if (event.hours==0){
+                            displayHours=12;
+                            AorP="A";
+                    } else if (event.hours>12){
+                        displayHours=event.hours-12;
+                        AorP="P";
+                    } else if (event.hours==12){
+                        displayHours=12;
+                        AorP="P"
+                    } else {
+                        displayHours=event.hours;
+                        AorP="A"
+                    }
+                    
+                    return(<p>{event.name} {displayHours}:{event.minutes} {AorP}M</p>)
                 })}
             </div>
         )

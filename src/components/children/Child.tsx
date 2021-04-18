@@ -9,6 +9,7 @@ interface ChildProps{
     sessionToken:string;
     getAllUsernames: () => void;
     getMyChildren: () => void;
+    setActiveChild:(child:ChildKeys)=>void
 
 }
 interface ChildState{
@@ -30,7 +31,7 @@ export default class Child extends React.Component<ChildProps,ChildState>{
                 child={this.props.child}
                 getMyChildren={this.props.getMyChildren}
                 getAllUsernames={this.props.getAllUsernames}
-
+                setActiveChild={this.props.setActiveChild}
             />
             {/* <NewClothes child={this.props.child} sessionToken={this.props.sessionToken}/> */}
             </div>

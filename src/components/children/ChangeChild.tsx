@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import Delete from '@material-ui/icons/DeleteOutline'
 import Pencil from '@material-ui/icons/EditOutlined'
 import Button from '@material-ui/core/Button';
@@ -15,6 +16,7 @@ interface ChangeChildProps{
     sessionToken:string;
     getMyChildren: () => void;
     getAllUsernames: () => void;
+    setActiveChild:(child:ChildKeys)=>void
 
 
 }
@@ -58,7 +60,7 @@ export default class ChangeChild extends React.Component<ChangeChildProps,Change
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Are you sure you want to remove this child?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{`Are you sure you want to remove ${this.props.child.name}?`}</DialogTitle>
        
         <DialogActions>
           <Button onClick={this.deleteChild} color="secondary">
@@ -69,7 +71,7 @@ export default class ChangeChild extends React.Component<ChangeChildProps,Change
           </Button>
         </DialogActions>
       </Dialog>
-                <Pencil/>
+                <Link to="/editchild"><Pencil onClick={()=>this.props.setActiveChild(this.props.child)}/></Link>
             </div>
         )
         }

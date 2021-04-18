@@ -1,11 +1,10 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
-import Dialog from "@material-ui/core/Dialog";
 
 import {ChildKeys} from '../../types'
 import NewChild from "./NewChild";
@@ -34,13 +33,7 @@ interface CreateChildProps {
   getAllUsernames: () => void;
   takenUsernames: string[];
 }
-// interface ChildObjectState {
-//   id: number | null;
-//   name: string | null;
-//   username: string | null;
-//   deviceId?: string;
-//   parentId: number | null;
-// }
+
 interface CreateChildState {
   activeStep: number;
   open: boolean;
@@ -134,24 +127,14 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
     }
     this.setState({ open: false, activeStep: 0 });
     this.props.getMyChildren();
-    console.log('end of handle close')
-
   };
   handleFinish=():void=>{
     this.setState({submitted:true},this.handleClose)
   }
+  
   render() {
     return (
       <div>
-        <PersonAddOutlinedIcon type="button" onClick={this.handleOpen} />
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          // style={{padding:"50px"}}
-          fullScreen={true}
-        >
           <Stepper activeStep={this.state.activeStep} alternativeLabel>
             {this.getSteps().map((label) => (
               <Step key={label}>
@@ -169,25 +152,19 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
               <div style={{margin:"20px"}}>
                   {this.getStepContent(this.state.activeStep)}
                 
-                  <Button
-                    onClick={this.handleClose}
-                  >
-                    Cancel
-                </Button>
-                  {this.state.activeStep>=1&&<Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.state.activeStep===1?this.handleNext:this.handleFinish}
-                  >
-                    {this.state.activeStep === 1
-                      ? "Next"
-                      : "Finish"}
-                  </Button>}
+                  <Link to="/"><Button onClick={this.handleClose}>Cancel</Button></Link>
+                  {this.state.activeStep===1&&
+                  <Button variant="contained" color="primary" onClick={this.handleNext}>Next</Button>
+                  }
+                  {this.state.activeStep===2&&
+                  <Link to="/">
+                    <Button variant="contained" color="primary" onClick={this.handleFinish}>Finish</Button>
+                    </Link>
+                  }
                 
               </div>
             )}
           </div>
-        </Dialog>
       </div>
     );
   }

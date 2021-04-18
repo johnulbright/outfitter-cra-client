@@ -1,79 +1,48 @@
 import React from "react";
-
-import CreateChild from "../children/CreateChild";
+import {Link} from 'react-router-dom'
+import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
 import Child from "../children/Child";
 import APIURL from "../../helpers/environment.js";
+import {ChildKeys} from '../../types'
 
 interface ChildIndexProps {
   sessionToken: string;
   weather: object;
+  children: ChildKeys[];
+  // takenUsernames: string[];
+  getMyChildren:()=>void
+  getAllUsernames:()=>void
+  setActiveChild:(child:ChildKeys)=>void
 }
 interface ChildIndexState {
-  children: {
-    id:number
-    name: string;
-    username: string;
-    deviceId?: string;
-    parentId: number;
-  }[];
-  takenUsernames: string[];
 }
 
 export default class ChildIndex extends React.Component<ChildIndexProps,ChildIndexState> {
   constructor(props: ChildIndexProps) {
     super(props);
     this.state = {
-      children: [],
-      takenUsernames: [],
     };
   }
-  getMyChildren = async () => {
-    const result = await fetch(`${APIURL}/child/allofparent`, {
-      method: "GET",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        Authorization: this.props.sessionToken,
-      }),
-    });
-    const allChildren = await result.json();
-    this.setState({ children: allChildren });
-  };
+
 
   componentDidMount() {
-    this.getMyChildren();
-    this.getAllUsernames();
+    this.props.getMyChildren();
   }
 
-  getAllUsernames = async () => {
-   const result = await fetch(`${APIURL}/child/all`, {
-      method: "GET",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        Authorization: this.props.sessionToken,
-      }),
-    });
-    const allChildren = await result.json();
-    let usernamesOnly=allChildren.map((child:any)=>child.username)
-    // Is this a problem? Better soln?-------^^^
-    this.setState({ takenUsernames: usernamesOnly });
-  };
+  
   render() {
     return (
       <div>
-        <CreateChild
-          sessionToken={this.props.sessionToken}
-          getMyChildren={this.getMyChildren}
-          takenUsernames={this.state.takenUsernames} 
-          getAllUsernames={this.getAllUsernames}
-        />
-        {this.state.children?.map((child) => (
+        <Link to="/addchild"><PersonAddOutlinedIcon type="button"/></Link>
+
+        {this.props.children?.map((child:ChildKeys) => (
           <Child 
             sessionToken={this.props.sessionToken} 
             key={child.id} 
             child={child}
-            getMyChildren={this.getMyChildren}
-            getAllUsernames={this.getAllUsernames}
-
+            getMyChildren={this.props.getMyChildren}
+            getAllUsernames={this.props.getAllUsernames}
+            setActiveChild={this.props.setActiveChild}
           />
         ))}
       </div>

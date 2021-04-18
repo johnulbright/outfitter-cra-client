@@ -10,6 +10,7 @@ import Delete from '@material-ui/icons/DeleteOutline'
 import Pencil from '@material-ui/icons/EditOutlined'
 import './clothes.css'
 import {Clothes} from '../../types'
+import APIURL from '../../helpers/environment'
 
 // import Typography from '@material-ui/core/Typography';
 // import Slider from '@material-ui/core/Slider';
@@ -23,11 +24,14 @@ interface ShowClothesProps {
   //   child:ChildKeys
   //   sessionToken:string
   clothes: Clothes[];
+  sessionToken:string;
+  getAllClothes:()=>void
 }
 
 interface ShowClothesState {
 
 }
+
 
 export default class ShowClothes extends React.Component<ShowClothesProps, ShowClothesState>{
   constructor(props: ShowClothesProps) {
@@ -37,7 +41,17 @@ export default class ShowClothes extends React.Component<ShowClothesProps, ShowC
 
     }
   }
-
+  deleteClothes=async(event:any,id:number):Promise<void>=>{
+    event.preventDefault();
+    await fetch(`${APIURL}/clothing/delete/${id}`, {
+        method: "DELETE",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: this.props.sessionToken,
+        }),
+      });
+      this.props.getAllClothes();
+}
 
   render() {
     return (
@@ -71,7 +85,7 @@ export default class ShowClothes extends React.Component<ShowClothesProps, ShowC
               </div>
               </TableCell>
               <TableCell><Pencil/></TableCell>
-              <TableCell><Delete/></TableCell>
+              <TableCell><Delete onClick={(e)=>this.deleteClothes(e,item.id)}/></TableCell>
             </TableRow>
           )
         })}

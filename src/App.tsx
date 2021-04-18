@@ -1,4 +1,5 @@
 import React from "react";
+
 import Auth from "./components/authentication/Auth";
 import Home from "./components/home/Home";
 import "./App.css";
@@ -66,7 +67,7 @@ export default class App extends React.Component<AppProps, AppState> {
       const parent = await result.json();
       console.log(parent)
       this.getWeather(parent.lat, parent.lon,token)
-    //   this.props.setCity(res.city)
+      this.setCity(parent.city)
     // } else if(result.status===404){
     //   this.setState({badEmail:true})
     // } else if(result.status===401){
@@ -91,12 +92,6 @@ export default class App extends React.Component<AppProps, AppState> {
       console.log("found a token");
       console.log(localToken);
       this.checkToken(localToken);
-      // const result = fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
-      // `)
-      //   const json=result.json()
-      //   this.setWeather(json)
-
-      //   this.setState({sessionToken:localToken})
     } else {
       console.log("no token");
     }

@@ -99,7 +99,8 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
   };
 
   handleSubmit=():void=>{
-    this.setState({clicked:true})
+
+    this.setState({clicked:true,badName:this.state.name.length===0})
     switch (this.state.step){
       case 0:
         this.setState({
@@ -148,6 +149,15 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           }
         }
         this.addClothes(rMin,rMax,oMin,oMax)
+        this.setState({
+          name:'',
+          clicked:false,
+          step:0,
+          category:'',
+          icon:'',
+          step0values:[30,70],
+          step1value:40
+        })
         break;
       default: break;
     }     
@@ -245,8 +255,8 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           </div>)
         }
       </div>
-        <Button onClick={this.handleSubmit}>Add clothes</Button>
-      <ShowClothes clothes={this.state.clothes}/>
+        <Button onClick={this.handleSubmit}>{this.state.step==0?"Next":"Add clothes"}</Button>
+      {this.state.clothes.length>0&&<ShowClothes getAllClothes={this.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
         </div>
     );
 
