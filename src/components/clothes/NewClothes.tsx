@@ -53,8 +53,6 @@ interface NewClothesState {
   minTemp:number;
   maxTemp:number;
   icon:string;
-  required:boolean;
-  optional:boolean;
   clothes:Clothes[];
   clicked:boolean;
   step:number;
@@ -80,8 +78,6 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
       minTemp:30,
       maxTemp:70,
       icon:'',
-      required:true,
-      optional:false,
       clothes:[],
       clicked:false,
       step:0,
@@ -177,6 +173,11 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           requiredMax:rMax,
           optionalMin:oMin,
           optionalMax:oMax,
+          minTemp:this.state.minTemp,
+          maxTemp:this.state.maxTemp,
+          step0values:this.state.step0values,
+          step1value:this.state.step1value,
+          flipped:this.state.flipped,
         },
       }),
       headers: new Headers({
@@ -256,7 +257,8 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
         }
       </div>
         <Button onClick={this.handleSubmit}>{this.state.step==0?"Next":"Add clothes"}</Button>
-      {this.state.clothes.length>0&&<ShowClothes getAllClothes={this.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
+      {this.state.clothes.length>0&&<ShowClothes setActiveClothes={()=>{}} setOpenClothes={()=>{}} delete={false} child={this.props.child} getAllClothes={this.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
+      
         </div>
     );
 

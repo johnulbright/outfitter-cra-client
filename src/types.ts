@@ -15,6 +15,11 @@ export interface Clothes{
   category:string;
   icon:string|null;
   parentId:number;
+  minTemp:number;
+  maxTemp:number;
+  step0values:number[];
+  step1value:number;
+  flipped:boolean;
 }
 
 export interface HourlyWeather{

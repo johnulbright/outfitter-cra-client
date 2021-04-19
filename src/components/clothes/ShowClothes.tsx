@@ -12,24 +12,28 @@ import './clothes.css'
 import {Clothes} from '../../types'
 import APIURL from '../../helpers/environment'
 
+
 // import Typography from '@material-ui/core/Typography';
 // import Slider from '@material-ui/core/Slider';
 // import Button from '@material-ui/core/Button';
 
 // import {marks} from '../../types'
-// import {ChildKeys} from '../../types'
+import EditClothes from './EditClothes'
+ import {ChildKeys} from '../../types'
 // import APIURL from '../../helpers/environment'
 
 interface ShowClothesProps {
-  //   child:ChildKeys
+     child:ChildKeys
   //   sessionToken:string
   clothes: Clothes[];
   sessionToken:string;
   getAllClothes:()=>void
+  setOpenClothes:(TorF:boolean)=>void
+  setActiveClothes:(clothes:Clothes)=>void
+  delete:boolean
 }
 
 interface ShowClothesState {
-
 }
 
 
@@ -37,7 +41,7 @@ export default class ShowClothes extends React.Component<ShowClothesProps, ShowC
   constructor(props: ShowClothesProps) {
     super(props)
     this.state = {
-
+      open:false
 
     }
   }
@@ -52,10 +56,17 @@ export default class ShowClothes extends React.Component<ShowClothesProps, ShowC
       });
       this.props.getAllClothes();
 }
+handlePencilClick=(event:any,clothes:Clothes): void=>{
+  event.preventDefault();
+  console.log(clothes);
+  this.props.setOpenClothes(true);
+  this.props.setActiveClothes(clothes);
+
+}
 
   render() {
     return (
-
+      <div>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -68,7 +79,8 @@ export default class ShowClothes extends React.Component<ShowClothesProps, ShowC
           </TableHead>
           <TableBody>
         {this.props.clothes?.map((item) => {
-          const requiredLow = (item.optionalMin===null)||(item.requiredMin!==null&&item.requiredMin<item.optionalMin);
+          console.log("item",item)
+          const requiredLow = item.optionalMin===null||(item.requiredMin!==null&&item.requiredMin<item.optionalMin);
           const requiredProportion = item.requiredMin&&item.requiredMax?Math.floor(100 * (item.requiredMax - item.requiredMin) / 140):0
           const optionalProportion = item.optionalMin&&item.optionalMax?Math.floor(100 * (item.optionalMax - item.optionalMin) / 140):0
           const unusedLeft = Math.floor(100 * (Math.min((item.requiredMin===null?110:item.requiredMin), (item.optionalMin===null?110:item.optionalMin)) + 30) / 140);
@@ -84,7 +96,7 @@ export default class ShowClothes extends React.Component<ShowClothesProps, ShowC
                 <div className="clothesLineSegment unused" style={{ flex: `${unusedRight} 0 auto` }}></div>
               </div>
               </TableCell>
-              <TableCell><Pencil/></TableCell>
+              {this.props.delete&& <TableCell><Pencil onClick={(e)=>this.handlePencilClick(e,item)}/></TableCell>}
               <TableCell><Delete onClick={(e)=>this.deleteClothes(e,item.id)}/></TableCell>
             </TableRow>
           )
@@ -92,6 +104,7 @@ export default class ShowClothes extends React.Component<ShowClothesProps, ShowC
         </TableBody>
         </Table>
       </TableContainer>
+      </div>
     );
 
   }

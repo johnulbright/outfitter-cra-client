@@ -14,7 +14,7 @@ import Header from "./Header";
 import CreateChild from "../children/CreateChild";
 import EditChild from '../children/EditChild'
 
-import { Weather,ChildKeys } from "../../types";
+import { Weather,ChildKeys,Clothes } from "../../types";
 import APIURL from '../../helpers/environment'
 
 interface HomeProps {
@@ -41,7 +41,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
             parentId:-1
         },
         takenUsernames:[],
-        children:[]
+        children:[],
     };
   }
   setActiveChild=(child:ChildKeys): void=>{
