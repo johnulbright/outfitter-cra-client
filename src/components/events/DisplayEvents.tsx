@@ -6,6 +6,7 @@ import {ChildKeys} from '../../types'
 interface DisplayEventsProps{
     child:ChildKeys
     events:any[]
+    showEdit:boolean
 }
 
 interface DisplayEventsState{
@@ -26,6 +27,7 @@ export default class DisplayEvents extends React.Component<DisplayEventsProps,Di
             <div>
                 {this.props.events?.map((event)=>{
                     let displayHours:number;
+                    let displayMinutes:string=event.minutes<10?`0${event.minutes}`:`${event.minutes}`;
                     let AorP:string;
                     if (event.hours==0){
                             displayHours=12;
@@ -40,8 +42,9 @@ export default class DisplayEvents extends React.Component<DisplayEventsProps,Di
                         displayHours=event.hours;
                         AorP="A"
                     }
+
                     
-                    return(<p>{event.name} {displayHours}:{event.minutes} {AorP}M</p>)
+                    return(<p>{event.name} {displayHours}:{displayMinutes} {AorP}M</p>)
                 })}
             </div>
         )

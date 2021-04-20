@@ -103,13 +103,13 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
         );
       case 1:
         return (
-          <EventIndex
+          <EventIndex showEdit={false}
             sessionToken={this.props.sessionToken}
             child={this.state.child}
           />
         );
       case 2:
-        return <NewClothes sessionToken={this.props.sessionToken} child = {this.state.child}/>;
+        return <NewClothes closeNewClothes={()=>{}} showClothes={true} sessionToken={this.props.sessionToken} child = {this.state.child}/>;
       default:
         return "Unknown stepIndex";
     }

@@ -1,6 +1,5 @@
 import React from 'react'
 
-import NewClothes from '../clothes/NewClothes'
 import ChangeChild from './ChangeChild'
 import {ChildKeys} from '../../types'
 

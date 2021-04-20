@@ -32,6 +32,7 @@ const styles0 = createStyles({
   }
 })
 interface NewClothesProps extends WithStyles<typeof styles0>{
+  showClothes:boolean
   child:ChildKeys
   sessionToken:string
   classes:{
@@ -39,9 +40,11 @@ interface NewClothesProps extends WithStyles<typeof styles0>{
     track:string;
     rail:string
   }
+  closeNewClothes:()=>void;
 }
 
 interface NewClothesState {
+
   step0values: number[];
   step1value:number;
   name:string;
@@ -80,7 +83,7 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
       icon:'',
       clothes:[],
       clicked:false,
-      step:0,
+      step:-1,
       badName:false,
       flipped:true,
       tempValue:null
@@ -98,6 +101,9 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
 
     this.setState({clicked:true,badName:this.state.name.length===0})
     switch (this.state.step){
+      case -1:
+        this.setState({step:0})
+        break;
       case 0:
         this.setState({
           clicked:false,
@@ -148,12 +154,13 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
         this.setState({
           name:'',
           clicked:false,
-          step:0,
+          step:-1,
           category:'',
           icon:'',
           step0values:[30,70],
           step1value:40
         })
+        this.props.closeNewClothes();
         break;
       default: break;
     }     
@@ -206,16 +213,16 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
     return (
       <div>
         <div>
-        <TextField
+        {this.state.step==-1&&<TextField
             error={this.state.badName&& this.state.clicked}
             helperText={this.state.badName && this.state.clicked ? "Required" : ''}
             id="standard-basic"
             label="Item of clothing"
             placeholder={`like "pants"`}
             onChange={(e): void => this.setState({clicked:false,badName:e.target.value.length===0,name: e.target.value })}
-          />  
-        {this.state.step===0?
-          (<div>
+        /> } 
+        {this.state.step===0&&
+          <div>
             <Typography id="range-slider" gutterBottom>
             In what range of temperatures would {this.props.child.name} wear {this.state.name}?:
           </Typography>
@@ -232,7 +239,8 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
             max={110}
             defaultValue={[30,70]}
           />
-          </div>):(
+          </div>}
+          {this.state.step==1&&
             <div>
           <Typography id="range-slider" gutterBottom>
             In what ranges should {this.state.name} be <span style={{fontWeight:"bold",color:"red"}}>required</span> or <span style={{fontWeight:"bold",color:"green"}}>optional</span>?:
@@ -253,11 +261,10 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
             max={this.state.maxTemp}
             // defaultValue={}
           />
-          </div>)
-        }
+          </div>}
       </div>
-        <Button onClick={this.handleSubmit}>{this.state.step==0?"Next":"Add clothes"}</Button>
-      {this.state.clothes.length>0&&<ShowClothes setActiveClothes={()=>{}} setOpenClothes={()=>{}} delete={false} child={this.props.child} getAllClothes={this.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
+        <Button onClick={this.handleSubmit}>{this.state.step<=0?"Next":"Add clothes"}</Button>
+      {this.state.clothes.length>0&&this.props.showClothes&&<ShowClothes setActiveClothes={()=>{}} setOpenClothes={()=>{}} delete={false} child={this.props.child} getAllClothes={this.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
       
         </div>
     );

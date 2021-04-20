@@ -33,7 +33,7 @@ export default class ChildIndex extends React.Component<ChildIndexProps,ChildInd
   render() {
     return (
       <div>
-        <Link to="/addchild"><PersonAddOutlinedIcon type="button"/></Link>
+        <Link to="/addchild"><PersonAddOutlinedIcon fontSize="large" type="button"/></Link>
 
         {this.props.children?.map((child:ChildKeys) => (
           <Child 

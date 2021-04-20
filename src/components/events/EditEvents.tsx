@@ -2,26 +2,21 @@ import React from "react";
 
 import DisplayEvents from './DisplayEvents'
 import NewEvent from './NewEvent'
+import {ChildKeys,Event} from '../../types'
 import APIURL from '../../helpers/environment'
 
-interface EventIndexProps{
-    child:{
-        id:number|null,
-        name:string|null,
-        username:string|null,
-        deviceId?:string,
-        parentId:number|null
-    };
+interface EditEventsProps{
+    child:ChildKeys;
     sessionToken:string;
     showEdit:boolean
 }
 
-interface EventIndexState{
-    events:object[]
+interface EditEventsState{
+    events:Event[]
 }
 
-export default class EventIndex extends React.Component<EventIndexProps,EventIndexState>{
-    constructor(props:EventIndexProps){
+export default class EditEvents extends React.Component<EditEventsProps,EditEventsState>{
+    constructor(props:EditEventsProps){
         super(props);
         this.state={
             events:[]
@@ -35,12 +30,18 @@ export default class EventIndex extends React.Component<EventIndexProps,EventInd
             Authorization: this.props.sessionToken,
           }),
         });
-        const events = await result.json();
+        let events = await result.json();
+        console.log(events)
+        events.sort((a:Event,b:Event):number=>{
+            return (a.hours*60+a.minutes)-(b.hours*60+b.minutes)
+        })
         console.log(events)
         this.setState({ events: events });
       };
+  
+     
       componentDidMount(){
-        //   this.getEvents();
+           this.getEvents();
         // revisit this for editing children
       }
     render(){

@@ -5,6 +5,14 @@ export interface ChildKeys{
     deviceId?:string;
     parentId:number|null;
 }
+export interface Event{
+  childId: number;
+  hours: number;
+  id: number;
+  minutes: number;
+  name: string;
+}
+
 export interface Clothes{
   id:number;
   name:string;
