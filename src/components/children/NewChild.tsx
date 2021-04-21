@@ -91,7 +91,7 @@ export default class NewChild extends React.Component<
     });
     return unique;
   }
-
+ 
   render(): JSX.Element {
     return (
       <div>

@@ -1,4 +1,9 @@
 import React from "react";
+import Dialog from '@material-ui/core/Dialog'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Add from '@material-ui/icons/Add'
+import EventIcon from '@material-ui/icons/Event';
 
 import DisplayEvents from './DisplayEvents'
 import NewEvent from './NewEvent'
@@ -12,14 +17,19 @@ interface EditEventsProps{
 }
 
 interface EditEventsState{
-    events:Event[]
+    events:Event[];
+    openNewEvent: boolean;
+    openEditEvent: boolean;
+
 }
 
 export default class EditEvents extends React.Component<EditEventsProps,EditEventsState>{
     constructor(props:EditEventsProps){
         super(props);
         this.state={
-            events:[]
+            events:[],
+            openNewEvent: false,
+            openEditEvent: false,
         }
     }
     getEvents = async () => {
@@ -38,18 +48,36 @@ export default class EditEvents extends React.Component<EditEventsProps,EditEven
         console.log(events)
         this.setState({ events: events });
       };
-  
-     
+      
       componentDidMount(){
            this.getEvents();
         // revisit this for editing children
       }
+      setOpenNewEvent = (TorF: boolean) => {
+        this.setState({ openNewEvent: TorF })
+    }
+
+    setOpenEditEvent = (TorF: boolean) => {
+        this.setState({ openEditEvent: TorF })
+    }
     render(){
         return(
             <div>
-                Event index
-                <NewEvent sessionToken={this.props.sessionToken} child={this.props.child} getEvents={this.getEvents}/>
-                {this.state.events.length>0&&<DisplayEvents showEdit={this.props.showEdit} child={this.props.child} events={this.state.events}/>}
+                Edit Events
+                <Card onClick={() => this.setState({ openNewEvent: true })}>
+                            <CardContent>
+                                <Add fontSize='large' /><EventIcon fontSize='large' />
+                            </CardContent>
+                        </Card>
+                <Dialog open={this.state.openNewEvent}>
+                    <NewEvent 
+                        sessionToken={this.props.sessionToken} 
+                        child={this.props.child} 
+                        getEvents={this.getEvents}
+                        setOpenNewEvent={this.setOpenNewEvent}/>
+
+                </Dialog>
+                {this.state.events.length>0&&<DisplayEvents getEvents={this.getEvents} sessionToken={this.props.sessionToken} showEdit={this.props.showEdit} child={this.props.child} events={this.state.events}/>}
             </div>
         )
     }

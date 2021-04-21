@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Event} from '../../types'
 import DisplayEvents from './DisplayEvents'
 import NewEvent from './NewEvent'
 import APIURL from '../../helpers/environment'
@@ -17,7 +17,7 @@ interface EventIndexProps{
 }
 
 interface EventIndexState{
-    events:object[]
+    events:Event[]
 }
 
 export default class EventIndex extends React.Component<EventIndexProps,EventIndexState>{
@@ -35,7 +35,11 @@ export default class EventIndex extends React.Component<EventIndexProps,EventInd
             Authorization: this.props.sessionToken,
           }),
         });
-        const events = await result.json();
+        let events = await result.json();
+        console.log(events)
+        events.sort((a:Event,b:Event):number=>{
+            return (a.hours*60+a.minutes)-(b.hours*60+b.minutes)
+        })
         console.log(events)
         this.setState({ events: events });
       };
@@ -47,8 +51,8 @@ export default class EventIndex extends React.Component<EventIndexProps,EventInd
         return(
             <div>
                 Event index
-                <NewEvent sessionToken={this.props.sessionToken} child={this.props.child} getEvents={this.getEvents}/>
-                {this.state.events.length>0&&<DisplayEvents showEdit={this.props.showEdit} child={this.props.child} events={this.state.events}/>}
+                <NewEvent setOpenNewEvent={(TorF:boolean)=>{}} sessionToken={this.props.sessionToken} child={this.props.child} getEvents={this.getEvents}/>
+                {this.state.events.length>0&&<DisplayEvents getEvents={this.getEvents} sessionToken={this.props.sessionToken} showEdit={this.props.showEdit} child={this.props.child} events={this.state.events}/>}
             </div>
         )
     }

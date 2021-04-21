@@ -11,6 +11,7 @@ export interface Event{
   id: number;
   minutes: number;
   name: string;
+  eventTime:any;
 }
 
 export interface Clothes{

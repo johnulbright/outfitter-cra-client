@@ -181,6 +181,7 @@ class EditClothes extends React.Component<EditClothesProps, EditClothesState> {
     });
     this.props.setOpenClothes(false);
     this.props.getAllClothes();
+
   };
   getValues = () => {
     console.log("component mounting", this.props.clothes);
@@ -200,7 +201,10 @@ class EditClothes extends React.Component<EditClothesProps, EditClothesState> {
     return (
       <Dialog
         onEnter={this.getValues}
-        onExit={() => this.setState({ name: "" })}
+        onExit={() => {
+          this.setState({ name: "" })
+          this.props.getAllClothes()
+        }}
         fullWidth={true}
         open={this.props.open}
       >

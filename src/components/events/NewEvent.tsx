@@ -11,7 +11,8 @@ import {ChildKeys} from '../../types'
 interface NewEventProps {
   sessionToken: string;
   getEvents: () => void;
-  child: ChildKeys
+  child: ChildKeys;
+  setOpenNewEvent:(TorF:boolean)=>void;
 }
 
 interface NewEventState {
@@ -45,7 +46,8 @@ export default class NewEvent extends React.Component<
         event: {
           name: this.state.eventName,
           hours: hours,
-          minutes:minutes
+          minutes:minutes,
+          eventTime:this.state.eventTime,
         },
       }),
       headers: new Headers({
@@ -61,6 +63,7 @@ export default class NewEvent extends React.Component<
       eventTime: null,
       clicked:false
     });
+    this.props.setOpenNewEvent(false);
   };
 
   handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
@@ -82,7 +85,7 @@ export default class NewEvent extends React.Component<
   render(): JSX.Element {
     return (
       <div>
-        <h1>New event</h1>
+        New event
         <form autoComplete="off">
           <TextField
             value={this.state.eventName}

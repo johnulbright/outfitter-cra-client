@@ -109,7 +109,7 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
           />
         );
       case 2:
-        return <NewClothes closeNewClothes={()=>{}} showClothes={true} sessionToken={this.props.sessionToken} child = {this.state.child}/>;
+        return <NewClothes getAllClothes={()=>{}} closeNewClothes={()=>{}} showClothes={true} sessionToken={this.props.sessionToken} child = {this.state.child}/>;
       default:
         return "Unknown stepIndex";
     }

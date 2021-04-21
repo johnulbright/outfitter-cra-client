@@ -41,6 +41,7 @@ interface NewClothesProps extends WithStyles<typeof styles0>{
     rail:string
   }
   closeNewClothes:()=>void;
+  getAllClothes:()=>void
 }
 
 interface NewClothesState {
@@ -56,12 +57,12 @@ interface NewClothesState {
   minTemp:number;
   maxTemp:number;
   icon:string;
-  clothes:Clothes[];
   clicked:boolean;
   step:number;
   badName:boolean;
   flipped:boolean;
   tempValue:number|null
+  clothes:Clothes[];
 }
 
 type NewType = Promise<void>;
@@ -192,21 +193,9 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
         Authorization: this.props.sessionToken,
       }),
     });
-    // const res=await result.json()
-    this.getAllClothes();
+    this.props.getAllClothes();
   }
-  getAllClothes=async()=>{
-    const result = await fetch(`${APIURL}/clothing/all/${this.props.child.id}`,{
-      method:"GET",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        Authorization: this.props.sessionToken,
-      })
-    })
-    const clothes=await result.json();
-    console.log(clothes)
-    this.setState({clothes:clothes})
-  }
+
 
   render() {
     const { classes } = this.props;
@@ -264,7 +253,7 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           </div>}
       </div>
         <Button onClick={this.handleSubmit}>{this.state.step<=0?"Next":"Add clothes"}</Button>
-      {this.state.clothes.length>0&&this.props.showClothes&&<ShowClothes setActiveClothes={()=>{}} setOpenClothes={()=>{}} delete={false} child={this.props.child} getAllClothes={this.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
+      {this.state.clothes.length>0&&this.props.showClothes&&<ShowClothes setActiveClothes={()=>{}} setOpenClothes={()=>{}} delete={false} child={this.props.child} getAllClothes={this.props.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
       
         </div>
     );

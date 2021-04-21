@@ -23,8 +23,7 @@ import EditClothes from './EditClothes'
 // import APIURL from '../../helpers/environment'
 
 interface ShowClothesProps {
-     child:ChildKeys
-  //   sessionToken:string
+  child:ChildKeys
   clothes: Clothes[];
   sessionToken:string;
   getAllClothes:()=>void
@@ -34,6 +33,8 @@ interface ShowClothesProps {
 }
 
 interface ShowClothesState {
+  open:boolean
+
 }
 
 
