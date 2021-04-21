@@ -108,7 +108,7 @@ export default class EditChild extends React.Component<EditChildProps, EditChild
                     </Grid>
 
                 </Grid>
-                <Link to="/"><Button>Back</Button></Link>
+                <Link to="/"><Button>Done</Button></Link>
             </div>
 
         )

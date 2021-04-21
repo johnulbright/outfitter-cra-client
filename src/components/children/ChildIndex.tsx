@@ -3,11 +3,11 @@ import {Link} from 'react-router-dom'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
 import Child from "../children/Child";
 import APIURL from "../../helpers/environment.js";
-import {ChildKeys} from '../../types'
+import {ChildKeys,Weather} from '../../types'
 
 interface ChildIndexProps {
   sessionToken: string;
-  weather: object;
+  weather: Weather;
   children: ChildKeys[];
   // takenUsernames: string[];
   getMyChildren:()=>void
@@ -37,6 +37,7 @@ export default class ChildIndex extends React.Component<ChildIndexProps,ChildInd
 
         {this.props.children?.map((child:ChildKeys) => (
           <Child 
+            weather={this.props.weather}
             sessionToken={this.props.sessionToken} 
             key={child.id} 
             child={child}

@@ -1,9 +1,11 @@
 import React from 'react'
 
 import ChangeChild from './ChangeChild'
-import {ChildKeys} from '../../types'
+import Outfit from './Outfit'
+import {ChildKeys,Weather} from '../../types'
 
 interface ChildProps{
+    weather:Weather;
     child:ChildKeys;
     sessionToken:string;
     getAllUsernames: () => void;
@@ -32,7 +34,7 @@ export default class Child extends React.Component<ChildProps,ChildState>{
                 getAllUsernames={this.props.getAllUsernames}
                 setActiveChild={this.props.setActiveChild}
             />
-            {/* <NewClothes child={this.props.child} sessionToken={this.props.sessionToken}/> */}
+            <Outfit weather={this.props.weather} child={this.props.child} sessionToken={this.props.sessionToken}/>
             </div>
         )
         }
