@@ -1,4 +1,13 @@
 import React from "react";
+import Grid from '@material-ui/core/Grid'
+import Card from '@material-ui/core/Card'
+import Paper from '@material-ui/core/Paper'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
+
 import { Weather, ChildKeys, Clothes, Event, HourlyWeather } from "../../types";
 import APIURL from "../../helpers/environment";
 
@@ -31,6 +40,14 @@ interface OutfitState {
       }[];
     };
   };
+  todaysClothes: {
+    required: Clothes[],
+    optional: Clothes[]
+  };
+  tomorrowsClothes: {
+    required: Clothes[],
+    optional: Clothes[]
+  };
 }
 
 export default class Outfit extends React.Component<OutfitProps, OutfitState> {
@@ -54,6 +71,14 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
           byEvent: [],
         },
       },
+      todaysClothes: {
+        required: [],
+        optional: []
+      },
+      tomorrowsClothes: {
+        required: [],
+        optional: []
+      }
     };
   }
   componentDidMount() {
@@ -94,71 +119,73 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
     this.setState({ clothes: clothes });
   };
   getRelevantWeather = (): void => {
-    let todaysEvents=[];
-    let tomorrowsEvents=[];
+    let todaysEvents = [];
+    let tomorrowsEvents = [];
     let todaysLow: number = this.props.weather.current.temp;
     let todaysHigh: number = this.props.weather.current.temp;
     let tomorrowsHigh: number = this.props.weather.daily[1].temp.max;
     let tomorrowsLow: number = this.props.weather.daily[1].temp.min;
-    let todaysWeather = this.props.weather.hourly.filter(item=>{
+    let todaysWeather = this.props.weather.hourly.filter(item => {
       const day = new Date(item.dt * 1000).getDay();
-      return(day==this.state.currentTime.getDay())
+      return (day == this.state.currentTime.getDay())
     });
-    let todaysTemps=todaysWeather.map(i=>i.temp);
-    if(todaysTemps&&Math.min(...todaysTemps)<todaysLow){
-      todaysLow=Math.min(...todaysTemps);
+    let todaysTemps = todaysWeather.map(i => i.temp);
+    if (todaysTemps && Math.min(...todaysTemps) < todaysLow) {
+      todaysLow = Math.min(...todaysTemps);
     }
-    if(todaysTemps&&Math.max(...todaysTemps)>todaysLow){
-      todaysHigh=Math.max(...todaysTemps);
+    if (todaysTemps && Math.max(...todaysTemps) > todaysLow) {
+      todaysHigh = Math.max(...todaysTemps);
     }
-    let tomorrowsWeather = this.props.weather.hourly.filter(item=>{
+    let tomorrowsWeather = this.props.weather.hourly.filter(item => {
       const day = new Date(item.dt * 1000).getDay();
-      return(day==this.state.currentTime.getDay()+1)
+      return (day == this.state.currentTime.getDay() + 1)
     });
-  
-     for (let i = 0; i < this.state.events.length; i++) {
-       if(this.state.events[i].hours*60+this.state.events[i].minutes>this.state.currentTimeInMinutes){
-         let closestTime: number = 48 * 60;
-         let closestTimeObject: HourlyWeather = this.props.weather.hourly[0];
-         for (let j=0;j<todaysWeather.length;j++){
+
+    for (let i = 0; i < this.state.events.length; i++) {
+      if (this.state.events[i].hours * 60 + this.state.events[i].minutes > this.state.currentTimeInMinutes) {
+        let closestTime: number = 48 * 60;
+        let closestTimeObject: HourlyWeather = this.props.weather.hourly[0];
+        for (let j = 0; j < todaysWeather.length; j++) {
           const readableWeatherTime = new Date(todaysWeather[j].dt);
           const timeDistance = Math.abs(
             this.state.events[i].hours * 60 +
-              this.state.events[i].minutes -
-              readableWeatherTime.getHours() * 24 -
-              readableWeatherTime.getMinutes()
+            this.state.events[i].minutes -
+            readableWeatherTime.getHours() * 24 -
+            readableWeatherTime.getMinutes()
           );
           if (timeDistance < closestTime) {
             closestTime = timeDistance;
             closestTimeObject = todaysWeather[j];
           }
 
-         }
-         todaysEvents.push({"name":this.state.events[i].name,"weather":closestTimeObject})
-       }
-     }
-
-     for (let i = 0; i < this.state.events.length; i++) {
-        let closestTime: number = 48 * 60;
-        let closestTimeObject: HourlyWeather = this.props.weather.hourly[0];
-        for (let j=0;j<tomorrowsWeather.length;j++){
-         const readableWeatherTime = new Date(tomorrowsWeather[j].dt);
-         const timeDistance = Math.abs(
-           this.state.events[i].hours * 60 +
-             this.state.events[i].minutes -
-             readableWeatherTime.getHours() * 24 -
-             readableWeatherTime.getMinutes()
-         );
-         if (timeDistance < closestTime) {
-           closestTime = timeDistance;
-           closestTimeObject = tomorrowsWeather[j];
-         }
-
         }
-        tomorrowsEvents.push({"name":this.state.events[i].name,"weather":closestTimeObject})
+        todaysEvents.push({ "name": this.state.events[i].name, "weather": closestTimeObject })
+      }
     }
-  
-    this.setState({relevantWeather:{today: {
+
+    for (let i = 0; i < this.state.events.length; i++) {
+      let closestTime: number = 48 * 60;
+      let closestTimeObject: HourlyWeather = this.props.weather.hourly[0];
+      for (let j = 0; j < tomorrowsWeather.length; j++) {
+        const readableWeatherTime = new Date(tomorrowsWeather[j].dt);
+        const timeDistance = Math.abs(
+          this.state.events[i].hours * 60 +
+          this.state.events[i].minutes -
+          readableWeatherTime.getHours() * 24 -
+          readableWeatherTime.getMinutes()
+        );
+        if (timeDistance < closestTime) {
+          closestTime = timeDistance;
+          closestTimeObject = tomorrowsWeather[j];
+        }
+
+      }
+      tomorrowsEvents.push({ "name": this.state.events[i].name, "weather": closestTimeObject })
+    }
+
+    this.setState({
+      relevantWeather: {
+        today: {
           high: todaysHigh,
           low: todaysLow,
           byEvent: todaysEvents,
@@ -168,32 +195,179 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
           low: tomorrowsLow,
           byEvent: tomorrowsEvents,
         },
-      },},(): void=>console.log(this.state.relevantWeather))
+      },
+    }, (): void => {
+      this.getTodaysOutfits()
+      this.getTomorrowsOutfits()
+    }
+      )
 
   }
+  getTodaysOutfits = () => {
+    let required: Clothes[] = [];
+    let optional: Clothes[] = [];
+    for (const clothes of this.state.clothes) {
+      if (this.state.relevantWeather.today.byEvent.length === 0) {
+        let highTemp = Math.floor((this.state.relevantWeather.today.high - 273.15) * 1.8 + 32)
+        let lowTemp = Math.floor((this.state.relevantWeather.today.low - 273.15) * 1.8 + 32)
+        console.log(lowTemp,highTemp)
+        if(clothes.requiredMin!=null){console.log(clothes.name,"test1",clothes.requiredMin,lowTemp,clothes.requiredMin<lowTemp)}
+        if(clothes.requiredMax!=null){console.log(clothes.name,"test2",clothes.requiredMax,highTemp,clothes.requiredMax>highTemp)}
+
+        if (clothes.requiredMin !== null && clothes.requiredMin < lowTemp && clothes.requiredMax !== null && clothes.requiredMax > highTemp) {
+          console.log("this should run for",clothes.name)
+          required.push(clothes)
+        } else if (clothes.optionalMin !== null && clothes.optionalMin < lowTemp && clothes.optionalMax !== null && clothes.optionalMax > highTemp) {
+          optional.push(clothes);
+        }
+      } else {
+        for (const element of this.state.relevantWeather.today.byEvent) {
+          const temp = Math.floor((element.weather.temp - 273.15) * 1.8 + 32)
+          console.log(temp)
+          if (clothes.requiredMin !== null && clothes.requiredMin < temp && clothes.requiredMax !== null && clothes.requiredMax > temp) {
+            required.push(clothes)
+          } else if (clothes.optionalMin !== null && clothes.optionalMin < temp && clothes.optionalMax !== null && clothes.optionalMax > temp) {
+            optional.push(clothes);
+          }
+        }
+      }
+
+    }
+    required = required.filter(this.onlyUnique)
+    optional = optional.filter(this.onlyUnique)
+    console.log(this.props.child.name, "required", required)
+    console.log(this.props.child.name, "optional", optional)
+    this.setState({ todaysClothes: { required: required, optional: optional } })
+  }
+  getTomorrowsOutfits = () => {
+    let required: Clothes[] = [];
+    let optional: Clothes[] = [];
+    for (const clothes of this.state.clothes) {
+      if (this.state.relevantWeather.tomorrow.byEvent.length === 0) {
+        let highTemp = Math.floor((this.state.relevantWeather.tomorrow.high - 273.15) * 1.8 + 32)
+        let lowTemp = Math.floor((this.state.relevantWeather.tomorrow.low - 273.15) * 1.8 + 32)
+        if (clothes.requiredMin !== null && clothes.minTemp < lowTemp && clothes.requiredMax !== null && clothes.requiredMax > highTemp) {
+          required.push(clothes)
+        } else if (clothes.optionalMin !== null && clothes.optionalMin < lowTemp && clothes.optionalMax !== null && clothes.optionalMax > highTemp) {
+          optional.push(clothes);
+        }
+      } else {
+        for (const element of this.state.relevantWeather.tomorrow.byEvent) {
+          const temp = Math.floor((element.weather.temp - 273.15) * 1.8 + 32)
+          console.log(temp)
+          if (clothes.requiredMin !== null && clothes.requiredMin < temp && clothes.requiredMax !== null && clothes.requiredMax > temp) {
+            required.push(clothes)
+          } else if (clothes.optionalMin !== null && clothes.optionalMin < temp && clothes.optionalMax !== null && clothes.optionalMax > temp) {
+            optional.push(clothes);
+          }
+        }
+      }
+
+    }
+    required = required.filter(this.onlyUnique)
+    optional = optional.filter(this.onlyUnique)
+    console.log(this.props.child.name, "required", required)
+    console.log(this.props.child.name, "optional", optional)
+    this.setState({ tomorrowsClothes: { required: required, optional: optional } })
+  }
+  onlyUnique(value: any, index: any, self: any) {
+    return self.indexOf(value) === index;
+  }
+
   render() {
     return (
-      <div>
-        Outfit Time: {Math.floor(this.state.currentUnixTime / 1000)} and{" "}
-        {this.state.currentTimeInMinutes} and {this.state.currentTime.getDay()}
-        {this.state.events?.map((event) => {
-          return (
-            <p key={event.id}>
-              {event.name} at {event.hours * 60 + event.minutes} and{" "}
-              {(event.hours + 24) * 60 + event.minutes}
-            </p>
-          );
-        })}
-        {this.props.weather.hourly.map((time) => {
-          const t = new Date(time.dt * 1000);
-          return (
-            <p key={time.dt}>
-              {time.dt} date {t.getDate()} day {t.getDay()} HH:MM {t.getHours()}
-              :{t.getMinutes()} {t.getHours() * 60 + t.getMinutes()}
-            </p>
-          );
-        })}
-      </div>
+      <Grid container>
+        <Grid item xs={6}>
+          <Paper>
+            <Typography variant="h5">
+              Today's Clothes:
+            </Typography>
+            <Grid container>
+              <Grid item xs={6}>
+                <Typography variant="h6">Required</Typography>
+                <List>
+                  {this.state.todaysClothes.required?.map((item) => {
+                    return (
+                      <ListItem>
+                        <ListItemIcon>
+                          {item.icon !== null && item.icon !== "" && <img src={item.icon} alt={`icon for ${item.name}`} />}
+                        </ListItemIcon>
+                        <ListItemText>{item.name}
+                        </ListItemText>
+                      </ListItem>
+                    )
+                  })
+
+                  }
+                </List>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="h6">Optional</Typography>
+                <List>
+                  {this.state.todaysClothes.optional?.map((item) => {
+                    return (
+                      <ListItem>
+                        <ListItemIcon>
+                          {item.icon !== null && item.icon !== "" && <img src={item.icon} alt={`icon for ${item.name}`} />}
+                        </ListItemIcon>
+                        <ListItemText>{item.name}
+                        </ListItemText>
+                      </ListItem>
+                    )
+                  })
+
+                  }
+                </List>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper>
+            <Typography variant="h5">
+              Tomorrow's Clothes:
+            </Typography>
+            <Grid container>
+              <Grid item xs={6}>
+                <Typography variant="h6">Required</Typography>
+                <List>
+                  {this.state.tomorrowsClothes.required?.map((item) => {
+                    return (
+                      <ListItem>
+                        <ListItemIcon>
+                          {item.icon !== null && item.icon !== "" && <img src={item.icon} alt={`icon for ${item.name}`} />}
+                        </ListItemIcon>
+                        <ListItemText>{item.name}
+                        </ListItemText>
+                      </ListItem>
+                    )
+                  })
+
+                  }
+                </List>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="h6">Optional</Typography>
+                <List>
+                  {this.state.tomorrowsClothes.optional?.map((item) => {
+                    return (
+                      <ListItem>
+                        <ListItemIcon>
+                          {item.icon !== null && item.icon !== "" && <img src={item.icon} alt={`icon for ${item.name}`} />}
+                        </ListItemIcon>
+                        <ListItemText>{item.name}
+                        </ListItemText>
+                      </ListItem>
+                    )
+                  })
+
+                  }
+                </List>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
     );
   }
 }

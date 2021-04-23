@@ -193,9 +193,20 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
         Authorization: this.props.sessionToken,
       }),
     });
-    this.props.getAllClothes();
+    this.getAllClothes();
   }
-
+  getAllClothes = async () => {
+    const result = await fetch(`${APIURL}/clothing/all/${this.props.child.id}`, {
+        method: "GET",
+        headers: new Headers({
+            "Content-Type": "application/json",
+            Authorization: this.props.sessionToken,
+        })
+    })
+    const clothes = await result.json();
+    console.log(clothes)
+    this.setState({ clothes: clothes })
+}
 
   render() {
     const { classes } = this.props;
@@ -253,7 +264,7 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
           </div>}
       </div>
         <Button onClick={this.handleSubmit}>{this.state.step<=0?"Next":"Add clothes"}</Button>
-      {this.state.clothes.length>0&&this.props.showClothes&&<ShowClothes setActiveClothes={()=>{}} setOpenClothes={()=>{}} delete={false} child={this.props.child} getAllClothes={this.props.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
+      {this.state.clothes.length>0&&this.props.showClothes&&<ShowClothes setActiveClothes={()=>{}} setOpenClothes={()=>{}} delete={false} child={this.props.child} getAllClothes={this.getAllClothes} sessionToken={this.props.sessionToken} clothes={this.state.clothes}/>}
       
         </div>
     );
