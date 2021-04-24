@@ -11,6 +11,7 @@ import {ChildKeys} from '../../types'
 import {Clothes} from '../../types'
 import APIURL from '../../helpers/environment'
 import ShowClothes from './ShowClothes'
+import Icon from './Icon'
 
 const styles0 = createStyles({
   root: {
@@ -97,7 +98,9 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
   handleStep1Change = (event: any, newValue: number|number[]): void => {
     this.setState({step1value:newValue as number});
   };
-
+  setIcon=(iconString:string)=>{
+    this.setState({icon:iconString})
+  }
   handleSubmit=():void=>{
 
     this.setState({clicked:true,badName:this.state.name.length===0})
@@ -213,14 +216,17 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
     return (
       <div>
         <div>
-        {this.state.step==-1&&<TextField
+        {this.state.step==-1&&
+        <div><TextField
             error={this.state.badName&& this.state.clicked}
             helperText={this.state.badName && this.state.clicked ? "Required" : ''}
             id="standard-basic"
             label="Item of clothing"
             placeholder={`like "pants"`}
             onChange={(e): void => this.setState({clicked:false,badName:e.target.value.length===0,name: e.target.value })}
-        /> } 
+        /> 
+        <Icon icon={this.state.icon} setIcon={this.setIcon}/>
+        </div>} 
         {this.state.step===0&&
           <div>
             <Typography id="range-slider" gutterBottom>

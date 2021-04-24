@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
 
+import Icon from './Icon'
 import { marks } from "../../types";
 import { ChildKeys } from "../../types";
 import { Clothes } from "../../types";
@@ -89,7 +90,9 @@ class EditClothes extends React.Component<EditClothesProps, EditClothesState> {
       tempValue: null,
     };
   }
-
+  setIcon=(iconString:string):void=>{
+    this.setState({icon:iconString})
+  }
   handleStep0Change = (event: any, newValue: number | number[]) => {
     this.setState({
       step0values: newValue as number[],
@@ -225,8 +228,9 @@ class EditClothes extends React.Component<EditClothesProps, EditClothesState> {
                 name: e.target.value,
               })
             }
+          
           />
-
+          <Icon icon={this.state.icon} setIcon={this.setIcon}/>
           <Typography id="range-slider" gutterBottom>
             In what range of temperatures would {this.props.child.name} wear{" "}
             {this.state.name}?:
