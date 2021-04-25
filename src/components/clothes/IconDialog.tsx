@@ -1,7 +1,7 @@
 import React from "react";
 import Dialog from '@material-ui/core/Dialog'
 import Button from '@material-ui/core/Button'
-import {clothesArray} from './clothesIcons'
+import ClothesDictionary,{clothesArray} from './clothesIcons'
 import tshirt from '../../assets/icons/001-tshirt.png'
 interface IconProps {
     setIcon:(iconString:string)=>void;
@@ -28,6 +28,7 @@ export default class Icon extends React.Component<IconProps, IconState> {
     return (
       <div>
           <Button onClick={this.handleOpen}>Add/Change Icon</Button>
+          {clothesArray?.map()}
         <Dialog onClose={this.handleClose} open={this.state.open}>
             <img src={tshirt} alt={`tshirt`} onClick={()=>this.props.setIcon(tshirt)}/>
             <div>
