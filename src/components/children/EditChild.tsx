@@ -98,7 +98,9 @@ export default class EditChild extends React.Component<EditChildProps, EditChild
                 Edit Child
                 <h3>Editing {this.props.child.name}</h3>
                 <Pencil onClick={this.handleNameOpen}/>
-                <Dialog open={this.state.editNameOpen} onClose={this.handleNameClose}>Change names</Dialog>
+                <Dialog open={this.state.editNameOpen} onClose={this.handleNameClose}>
+                    
+                </Dialog>
                 <Grid container style={{ flexGrow: 1 }}>
                     <Grid item xs={6}>
     

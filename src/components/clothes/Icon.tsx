@@ -1,10 +1,6 @@
 //import all pngs individually
 import React from 'react'
-import tshirt from'../../assets/icons/001-tshirt.png'
 
-const ClothesDictionary={
-    tshirt,
-}
  export default class Icon extends React.Component{
      render(){
          return(
