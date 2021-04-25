@@ -15,6 +15,8 @@ import EditClothes from '../clothes/EditClothes'
 import EditEvents from '../events/EditEvents'
 import NewClothes from '../clothes/NewClothes'
 import APIURL from '../../helpers/environment'
+import Pencil from '@material-ui/icons/EditOutlined'
+
 
 interface EditChildProps {
     child: ChildKeys;
@@ -24,9 +26,12 @@ interface EditChildProps {
 
 interface EditChildState {
     openEditClothes: boolean;
-    openNewClothes: boolean
-    activeClothes: Clothes | null
-    clothes: Clothes[]
+    openNewClothes: boolean;
+    activeClothes: Clothes | null;
+    clothes: Clothes[];
+    newName:string;
+    newUsername:string;
+    editNameOpen:boolean;
 
 }
 
@@ -38,6 +43,9 @@ export default class EditChild extends React.Component<EditChildProps, EditChild
             openNewClothes: false,
             clothes: [],
             activeClothes: null,
+            newName:'',
+            newUsername:'',
+            editNameOpen:false,
         }
     }
     handleCloseNewClothes = () => {
@@ -70,6 +78,15 @@ export default class EditChild extends React.Component<EditChildProps, EditChild
     componentDidMount() {
         this.getAllClothes()
     }
+    handleNameOpen=()=>{
+
+        this.setState({newName:this.props.child.name===null?'':this.props.child.name})
+
+        this.setState({editNameOpen:true})
+    }
+    handleNameClose=()=>{
+        this.setState({editNameOpen:false})
+    }
     render() {
         if (this.props.child.id === -1) {
             return (
@@ -80,7 +97,8 @@ export default class EditChild extends React.Component<EditChildProps, EditChild
             <div>
                 Edit Child
                 <h3>Editing {this.props.child.name}</h3>
-
+                <Pencil onClick={this.handleNameOpen}/>
+                <Dialog open={this.state.editNameOpen} onClose={this.handleNameClose}>Change names</Dialog>
                 <Grid container style={{ flexGrow: 1 }}>
                     <Grid item xs={6}>
     

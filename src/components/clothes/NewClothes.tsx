@@ -11,7 +11,7 @@ import {ChildKeys} from '../../types'
 import {Clothes} from '../../types'
 import APIURL from '../../helpers/environment'
 import ShowClothes from './ShowClothes'
-import Icon from './Icon'
+import IconDialog from './IconDialog'
 
 const styles0 = createStyles({
   root: {
@@ -225,7 +225,7 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState>{
             placeholder={`like "pants"`}
             onChange={(e): void => this.setState({clicked:false,badName:e.target.value.length===0,name: e.target.value })}
         /> 
-        <Icon icon={this.state.icon} setIcon={this.setIcon}/>
+        <IconDialog icon={this.state.icon} setIcon={this.setIcon}/>
         </div>} 
         {this.state.step===0&&
           <div>
