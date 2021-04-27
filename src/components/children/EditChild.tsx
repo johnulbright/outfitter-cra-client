@@ -61,8 +61,10 @@ export default class EditChild extends React.Component<EditChildProps, EditChild
             })
         })
         const clothes = await result.json();
-        console.log(clothes)
-        this.setState({ clothes: clothes })
+        const sortedClothes:Clothes[]=clothes.sort((a:Clothes,b:Clothes)=>{
+            return (a.id-b.id)
+        })
+        this.setState({ clothes: sortedClothes })
     }
     setActiveClothes = (clothes: Clothes) => {
         this.setState({ activeClothes: clothes })
@@ -101,7 +103,7 @@ export default class EditChild extends React.Component<EditChildProps, EditChild
                 <Dialog open={this.state.editNameOpen} onClose={this.handleNameClose}>
                     
                 </Dialog>
-                <Grid container style={{ flexGrow: 1 }}>
+                <Grid container style={{ flexGrow: 2 }}>
                     <Grid item xs={6}>
     
                         <EditEvents 

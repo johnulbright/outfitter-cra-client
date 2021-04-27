@@ -1,20 +1,35 @@
 import React from "react";
-
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+import Typography from '@material-ui/core/Typography'
 import Auth from "./components/authentication/Auth";
 import Home from "./components/home/Home";
-import "./App.css";
+// import "./App.css";
 import { Weather } from "./types";
 
 import APIURL from "./helpers/environment.js";
+const styles = createStyles({
+  root: {
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
+    height:'100vh',
+    textAlign:'center',
+    backgroundColor: '#fff8e1'
 
-interface AppProps {}
+  },
+});
+interface AppProps extends WithStyles<typeof styles> {
+  classes:{
+    root:string
+  }
+}
 interface AppState {
   sessionToken: string;
   weather: Weather;
   city: string | null;
 }
 
-export default class App extends React.Component<AppProps, AppState> {
+class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.state = {
@@ -97,8 +112,10 @@ export default class App extends React.Component<AppProps, AppState> {
     }
   }
   render() {
+    const { classes } = this.props;
+
     return (
-      <div className="App">
+      <div className={classes.root}>
         {this.state.sessionToken === localStorage.getItem("token") ? (
           <Home
             city={this.state.city}
@@ -107,13 +124,17 @@ export default class App extends React.Component<AppProps, AppState> {
             sessionToken={this.state.sessionToken}
           />
         ) : (
+          <div>
+            <Typography variant='h1'>Outfitter</Typography>
           <Auth
             updateToken={this.updateToken}
             setWeather={this.setWeather}
             setCity={this.setCity}
           />
+          </div>
         )}
       </div>
     );
   }
 }
+export default withStyles(styles)(App);

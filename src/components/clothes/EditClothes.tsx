@@ -194,6 +194,7 @@ class EditClothes extends React.Component<EditClothesProps, EditClothesState> {
         step1value: this.props.clothes.step1value,
         flipped: this.props.clothes.flipped,
         name: this.props.clothes.name,
+        icon:this.props.clothes.icon!==null?this.props.clothes.icon:''
       });
     }
   };

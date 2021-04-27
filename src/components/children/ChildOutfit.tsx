@@ -13,7 +13,6 @@ import { Weather, ChildKeys, Clothes, Event, HourlyWeather } from "../../types";
 import APIURL from "../../helpers/environment";
 
 interface OutfitProps {
-  sessionToken: string;
   weather: Weather;
   child: ChildKeys;
 }
@@ -41,8 +40,8 @@ interface OutfitState {
       }[];
     };
   };
-  todaysClothes: {clothes:Clothes,points:number}[];
-  tomorrowsClothes: {clothes:Clothes,points:number}[];
+  todaysClothes: { clothes: Clothes; points: number }[];
+  tomorrowsClothes: { clothes: Clothes; points: number }[];
 }
 
 export default class Outfit extends React.Component<OutfitProps, OutfitState> {
@@ -80,13 +79,15 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
     });
   }
   getAllEvents = async () => {
-    const result = await fetch(`${APIURL}/event/all/${this.props.child.id}`, {
-      method: "GET",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        Authorization: this.props.sessionToken,
-      }),
-    });
+    const result = await fetch(
+      `${APIURL}/event/childLogin/all/${this.props.child.id}`,
+      {
+        method: "GET",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      }
+    );
     let list = await result.json();
     let sortedEvents = list.sort((a: Event, b: Event): number => {
       return a.hours * 60 + a.minutes - (b.hours * 60 + b.minutes);
@@ -95,12 +96,11 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
   };
   getAllClothes = async () => {
     const result = await fetch(
-      `${APIURL}/clothing/all/${this.props.child.id}`,
+      `${APIURL}/clothing/childLogin/all/${this.props.child.id}`,
       {
         method: "GET",
         headers: new Headers({
           "Content-Type": "application/json",
-          Authorization: this.props.sessionToken,
         }),
       }
     );
@@ -201,201 +201,220 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
     );
   };
   getTodaysOutfits = () => {
-    let outfits=[];
+    let outfits = [];
     for (const clothes of this.state.clothes) {
       let points = 0;
-      let possiblePoints = 4+2*this.state.relevantWeather.today.byEvent.length;
-        let highTemp = Math.floor(
-          (this.state.relevantWeather.today.high - 273.15) * 1.8 + 32
-        );
-        let lowTemp = Math.floor(
-          (this.state.relevantWeather.today.low - 273.15) * 1.8 + 32
-        );
-        console.log(lowTemp, highTemp);
-        if (
-          clothes.requiredMin !== null &&
-          clothes.requiredMin < lowTemp &&
-          clothes.requiredMax !== null &&
-          clothes.requiredMax > lowTemp
-        ) {
-          points += 2;
-        } else if (
-          clothes.optionalMin !== null &&
-          clothes.optionalMin < lowTemp &&
-          clothes.optionalMax !== null &&
-          clothes.optionalMax > lowTemp
-        ) {
-          points += 1;
-        }
-        if (
-          clothes.requiredMin !== null &&
-          clothes.requiredMin < highTemp &&
-          clothes.requiredMax !== null &&
-          clothes.requiredMax > highTemp
-        ) {
-          points += 2;
-        } else if (
-          clothes.optionalMin !== null &&
-          clothes.optionalMin < highTemp &&
-          clothes.optionalMax !== null &&
-          clothes.optionalMax > highTemp
-        ) {
-          points += 1;
-        }
-        for (const element of this.state.relevantWeather.today.byEvent) {
-          const temp = Math.floor((element.weather.temp - 273.15) * 1.8 + 32);
-          if (
-            clothes.requiredMin !== null &&
-            clothes.requiredMin < temp &&
-            clothes.requiredMax !== null &&
-            clothes.requiredMax > temp
-          ) {
-            points+=2;
-          } else if (
-            clothes.optionalMin !== null &&
-            clothes.optionalMin < temp &&
-            clothes.optionalMax !== null &&
-            clothes.optionalMax > temp
-          ) {
-            points+=1;
-          }
-        }
-         if(points>0){outfits.push({clothes:clothes,points:points/possiblePoints})}
- 
+      let possiblePoints =
+        4 + 2 * this.state.relevantWeather.today.byEvent.length;
+      let highTemp = Math.floor(
+        (this.state.relevantWeather.today.high - 273.15) * 1.8 + 32
+      );
+      let lowTemp = Math.floor(
+        (this.state.relevantWeather.today.low - 273.15) * 1.8 + 32
+      );
+      console.log(lowTemp, highTemp);
+      if (
+        clothes.requiredMin !== null &&
+        clothes.requiredMin < lowTemp &&
+        clothes.requiredMax !== null &&
+        clothes.requiredMax > lowTemp
+      ) {
+        points += 2;
+      } else if (
+        clothes.optionalMin !== null &&
+        clothes.optionalMin < lowTemp &&
+        clothes.optionalMax !== null &&
+        clothes.optionalMax > lowTemp
+      ) {
+        points += 1;
       }
-      outfits.sort((a:{clothes:Clothes,points:number},b:{clothes:Clothes,points:number}):number=>{
-        return (b.points-a.points)
-    })
-    console.log(outfits)
-    this.setState({todaysClothes: outfits});
-  };
-  
-  getTomorrowsOutfits = () => {
-      let outfits=[];
-      for (const clothes of this.state.clothes) {
-        let points = 0;
-        let possiblePoints = 4+2*this.state.relevantWeather.tomorrow.byEvent.length;
-          let highTemp = Math.floor(
-            (this.state.relevantWeather.tomorrow.high - 273.15) * 1.8 + 32
-          );
-          let lowTemp = Math.floor(
-            (this.state.relevantWeather.tomorrow.low - 273.15) * 1.8 + 32
-          );
-          console.log(lowTemp, highTemp);
-          if (
-            clothes.requiredMin !== null &&
-            clothes.requiredMin < lowTemp &&
-            clothes.requiredMax !== null &&
-            clothes.requiredMax > lowTemp
-          ) {
-            points += 2;
-          } else if (
-            clothes.optionalMin !== null &&
-            clothes.optionalMin < lowTemp &&
-            clothes.optionalMax !== null &&
-            clothes.optionalMax > lowTemp
-          ) {
-            points += 1;
-          }
-          if (
-            clothes.requiredMin !== null &&
-            clothes.requiredMin < highTemp &&
-            clothes.requiredMax !== null &&
-            clothes.requiredMax > highTemp
-          ) {
-            points += 2;
-          } else if (
-            clothes.optionalMin !== null &&
-            clothes.optionalMin < highTemp &&
-            clothes.optionalMax !== null &&
-            clothes.optionalMax > highTemp
-          ) {
-            points += 1;
-          }
-          for (const element of this.state.relevantWeather.tomorrow.byEvent) {
-            const temp = Math.floor((element.weather.temp - 273.15) * 1.8 + 32);
-            if (
-              clothes.requiredMin !== null &&
-              clothes.requiredMin < temp &&
-              clothes.requiredMax !== null &&
-              clothes.requiredMax > temp
-            ) {
-              points+=2;
-            } else if (
-              clothes.optionalMin !== null &&
-              clothes.optionalMin < temp &&
-              clothes.optionalMax !== null &&
-              clothes.optionalMax > temp
-            ) {
-              points+=1;
-            }
-          }
-         if(points>0){outfits.push({clothes:clothes,points:points/possiblePoints})}
+      if (
+        clothes.requiredMin !== null &&
+        clothes.requiredMin < highTemp &&
+        clothes.requiredMax !== null &&
+        clothes.requiredMax > highTemp
+      ) {
+        points += 2;
+      } else if (
+        clothes.optionalMin !== null &&
+        clothes.optionalMin < highTemp &&
+        clothes.optionalMax !== null &&
+        clothes.optionalMax > highTemp
+      ) {
+        points += 1;
+      }
+      for (const element of this.state.relevantWeather.today.byEvent) {
+        const temp = Math.floor((element.weather.temp - 273.15) * 1.8 + 32);
+        if (
+          clothes.requiredMin !== null &&
+          clothes.requiredMin < temp &&
+          clothes.requiredMax !== null &&
+          clothes.requiredMax > temp
+        ) {
+          points += 2;
+        } else if (
+          clothes.optionalMin !== null &&
+          clothes.optionalMin < temp &&
+          clothes.optionalMax !== null &&
+          clothes.optionalMax > temp
+        ) {
+          points += 1;
         }
-        outfits.sort((a:{clothes:Clothes,points:number},b:{clothes:Clothes,points:number}):number=>{
-          return (b.points-a.points)
-      })
-      console.log(outfits)
-      this.setState({tomorrowsClothes: outfits});
-    };
+      }
+      if (points > 0) {
+        outfits.push({ clothes: clothes, points: points / possiblePoints });
+      }
+    }
+    outfits.sort(
+      (
+        a: { clothes: Clothes; points: number },
+        b: { clothes: Clothes; points: number }
+      ): number => {
+        return b.points - a.points;
+      }
+    );
+    console.log(outfits);
+    this.setState({ todaysClothes: outfits });
+  };
 
-
+  getTomorrowsOutfits = () => {
+    let outfits = [];
+    for (const clothes of this.state.clothes) {
+      let points = 0;
+      let possiblePoints =
+        4 + 2 * this.state.relevantWeather.tomorrow.byEvent.length;
+      let highTemp = Math.floor(
+        (this.state.relevantWeather.tomorrow.high - 273.15) * 1.8 + 32
+      );
+      let lowTemp = Math.floor(
+        (this.state.relevantWeather.tomorrow.low - 273.15) * 1.8 + 32
+      );
+      console.log(lowTemp, highTemp);
+      if (
+        clothes.requiredMin !== null &&
+        clothes.requiredMin < lowTemp &&
+        clothes.requiredMax !== null &&
+        clothes.requiredMax > lowTemp
+      ) {
+        points += 2;
+      } else if (
+        clothes.optionalMin !== null &&
+        clothes.optionalMin < lowTemp &&
+        clothes.optionalMax !== null &&
+        clothes.optionalMax > lowTemp
+      ) {
+        points += 1;
+      }
+      if (
+        clothes.requiredMin !== null &&
+        clothes.requiredMin < highTemp &&
+        clothes.requiredMax !== null &&
+        clothes.requiredMax > highTemp
+      ) {
+        points += 2;
+      } else if (
+        clothes.optionalMin !== null &&
+        clothes.optionalMin < highTemp &&
+        clothes.optionalMax !== null &&
+        clothes.optionalMax > highTemp
+      ) {
+        points += 1;
+      }
+      for (const element of this.state.relevantWeather.tomorrow.byEvent) {
+        const temp = Math.floor((element.weather.temp - 273.15) * 1.8 + 32);
+        if (
+          clothes.requiredMin !== null &&
+          clothes.requiredMin < temp &&
+          clothes.requiredMax !== null &&
+          clothes.requiredMax > temp
+        ) {
+          points += 2;
+        } else if (
+          clothes.optionalMin !== null &&
+          clothes.optionalMin < temp &&
+          clothes.optionalMax !== null &&
+          clothes.optionalMax > temp
+        ) {
+          points += 1;
+        }
+      }
+      if (points > 0) {
+        outfits.push({ clothes: clothes, points: points / possiblePoints });
+      }
+    }
+    outfits.sort(
+      (
+        a: { clothes: Clothes; points: number },
+        b: { clothes: Clothes; points: number }
+      ): number => {
+        return b.points - a.points;
+      }
+    );
+    console.log(outfits);
+    this.setState({ tomorrowsClothes: outfits });
+  };
 
   render() {
     return (
-      <Grid container>
-        <Grid item xs={6}>
-          <Paper>
-            <Typography variant="h5">Today's Clothes:</Typography>
+      <div>
+        <h1>Child Outfit: {this.props.child.name}</h1>
+        <Grid container>
+          <Grid item xs={6}>
+            <Paper>
+              <Typography variant="h5">Today's Clothes:</Typography>
 
-                <List>
-                  {this.state.todaysClothes?.map((item) => {
-                    return (
-                      <ListItem>
-                        <ListItemIcon>
-                          {item.clothes.icon !== null && item.clothes.icon !== "" && (
+              <List>
+                {this.state.todaysClothes?.map((item) => {
+                  return (
+                    <ListItem>
+                      <ListItemIcon>
+                        {item.clothes.icon !== null &&
+                          item.clothes.icon !== "" && (
                             <Icon
-                            size={2*item.points}
-
+                              size={2 * item.points}
                               isSelected={false}
                               setIcon={() => {}}
                               icon={item.clothes.icon}
                             />
                           )}
-                        </ListItemIcon>
-                        <ListItemText>{item.clothes.name} {item.points}</ListItemText>
-                      </ListItem>
-                    );
-                  })}
-                </List>
-             </Paper>
-             </Grid>
-             <Grid item xs={6}>
-          <Paper>
-            <Typography variant="h5">Tomorrow's Clothes:</Typography>
+                      </ListItemIcon>
+                      <ListItemText>
+                        {item.clothes.name} {item.points}
+                      </ListItemText>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={6}>
+            <Paper>
+              <Typography variant="h5">Tomorrow's Clothes:</Typography>
 
-                <List>
-                  {this.state.tomorrowsClothes?.map((item) => {
-                    return (
-                      <ListItem>
-                        <ListItemIcon>
-                          {item.clothes.icon !== null && item.clothes.icon !== "" && (
+              <List>
+                {this.state.tomorrowsClothes?.map((item) => {
+                  return (
+                    <ListItem>
+                      <ListItemIcon>
+                        {item.clothes.icon !== null &&
+                          item.clothes.icon !== "" && (
                             <Icon
-                              size={2*item.points}
+                              size={2 * item.points}
                               isSelected={false}
                               setIcon={() => {}}
                               icon={item.clothes.icon}
                             />
                           )}
-                        </ListItemIcon>
-                        <ListItemText>{item.clothes.name}</ListItemText>
-                      </ListItem>
-                    );
-                  })}
-                </List>
-             </Paper>
-             </Grid>
-      </Grid>
+                      </ListItemIcon>
+                      <ListItemText>{item.clothes.name}</ListItemText>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }

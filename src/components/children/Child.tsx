@@ -27,6 +27,7 @@ export default class Child extends React.Component<ChildProps,ChildState>{
         return(
             <div>
             <h2>I'm {this.props.child.name}</h2>
+            <div style={{flexWrap:"wrap"}}>
             <ChangeChild 
                 sessionToken={this.props.sessionToken} 
                 child={this.props.child}
@@ -35,6 +36,7 @@ export default class Child extends React.Component<ChildProps,ChildState>{
                 setActiveChild={this.props.setActiveChild}
             />
             <Outfit weather={this.props.weather} child={this.props.child} sessionToken={this.props.sessionToken}/>
+            </div>
             </div>
         )
         }

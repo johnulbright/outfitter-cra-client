@@ -11,6 +11,8 @@ import Pencil from '@material-ui/icons/EditOutlined'
 import './clothes.css'
 import {Clothes} from '../../types'
 import APIURL from '../../helpers/environment'
+import ClothesDictionary,{clothesArray} from './clothesIcons'
+import Icon from './Icon'
 
 
 // import Typography from '@material-ui/core/Typography';
@@ -73,6 +75,7 @@ handlePencilClick=(event:any,clothes:Clothes): void=>{
           <TableHead>
             <TableRow>
               <TableCell>Item of clothing</TableCell>
+              <TableCell>Icon</TableCell>
               <TableCell>Temperature range</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
@@ -89,6 +92,9 @@ handlePencilClick=(event:any,clothes:Clothes): void=>{
           return (
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
+              <TableCell>
+                          {item.icon !== null && item.icon !== "" && <Icon size={1} isSelected={false} setIcon={()=>{}} icon={item.icon} />}
+                        </TableCell>
               <TableCell>
               <div className="clothesLine">
                 <div className="clothesLineSegment unused" style={{ flex: `${unusedLeft} 0 auto` }}></div>

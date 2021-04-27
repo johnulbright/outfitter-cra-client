@@ -34,7 +34,7 @@ export default class ChildIndex extends React.Component<ChildIndexProps,ChildInd
     return (
       <div>
         <Link to="/addchild"><PersonAddOutlinedIcon fontSize="large" type="button"/></Link>
-
+        <div style={{flexWrap:"wrap"}}>
         {this.props.children?.map((child:ChildKeys) => (
           <Child 
             weather={this.props.weather}
@@ -46,6 +46,7 @@ export default class ChildIndex extends React.Component<ChildIndexProps,ChildInd
             setActiveChild={this.props.setActiveChild}
           />
         ))}
+        </div>
       </div>
     );
   }

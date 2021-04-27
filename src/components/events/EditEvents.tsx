@@ -41,11 +41,9 @@ export default class EditEvents extends React.Component<EditEventsProps,EditEven
           }),
         });
         const events = await result.json();
-        console.log(events)
         const sortedEvents:Event[]=events.sort((a:Event,b:Event)=>{
             return (a.hours*60+a.minutes)-(b.hours*60+b.minutes)
         })
-        console.log(sortedEvents)
         this.setState({ events: sortedEvents });
       };
       
