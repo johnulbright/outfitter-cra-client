@@ -1,4 +1,6 @@
 import React from "react";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import Paper from "@material-ui/core/Paper";
@@ -7,15 +9,25 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
-
+import GaugeChart from 'react-gauge-chart'
 import Icon from "../clothes/Icon";
 import { Weather, ChildKeys, Clothes, Event, HourlyWeather } from "../../types";
 import APIURL from "../../helpers/environment";
 
-interface OutfitProps {
+const styles = createStyles({
+  gauge: {
+    height:'100',
+  }
+})
+
+interface OutfitProps extends WithStyles<typeof styles> {
   sessionToken: string;
   weather: Weather;
   child: ChildKeys;
+  classes: {
+    gauge: string;
+    
+  };
 }
 interface OutfitState {
   currentTime: Date;
@@ -45,7 +57,7 @@ interface OutfitState {
   tomorrowsClothes: {clothes:Clothes,points:number}[];
 }
 
-export default class Outfit extends React.Component<OutfitProps, OutfitState> {
+class Outfit extends React.Component<OutfitProps, OutfitState> {
   constructor(props: OutfitProps) {
     super(props);
     this.state = {
@@ -342,20 +354,22 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
 
 
   render() {
+    const { classes } = this.props;
     return (
       <Grid container>
         <Grid item xs={6}>
           <Paper>
             <Typography variant="h5">Today's Clothes:</Typography>
 
-                <List>
+                <List >
                   {this.state.todaysClothes?.map((item) => {
                     return (
                       <ListItem>
+                        <ListItemText>{item.clothes.name}</ListItemText>
                         <ListItemIcon>
                           {item.clothes.icon !== null && item.clothes.icon !== "" && (
                             <Icon
-                            size={2*item.points}
+                            size={2}
 
                               isSelected={false}
                               setIcon={() => {}}
@@ -363,7 +377,19 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
                             />
                           )}
                         </ListItemIcon>
-                        <ListItemText>{item.clothes.name} {item.points}</ListItemText>
+                        <ListItem>
+                          <GaugeChart 
+                          marginInPercent={.1} 
+                          // style={chartStyle}
+                          className={classes.gauge} 
+                          nrOfLevels={80} 
+                          arcPadding={.00} 
+                          textColor='black' 
+                          colors={ ["red",'green']}  
+                          id={`${item.clothes.id}`} 
+                          percent={item.points}/>
+
+                        </ListItem>
                       </ListItem>
                     );
                   })}
@@ -399,3 +425,4 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
     );
   }
 }
+export default withStyles(styles)(Outfit);

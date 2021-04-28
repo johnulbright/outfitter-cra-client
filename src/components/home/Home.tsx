@@ -6,6 +6,8 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+
 
 import Button from "@material-ui/core/Button";
 
@@ -17,11 +19,20 @@ import EditChild from '../children/EditChild'
 import { Weather,ChildKeys,Clothes } from "../../types";
 import APIURL from '../../helpers/environment'
 
-interface HomeProps {
+const styles = createStyles({
+  body: {
+    padding:'-1000',
+    backgroundColor:"black"
+  }
+})
+interface HomeProps extends WithStyles<typeof styles> {
   clearToken: () => void;
   sessionToken: string;
   weather: Weather;
   city: string | null;
+  classes:{
+    body:string
+  }
 }
 interface HomeState {
     activeChild:ChildKeys;
@@ -30,7 +41,7 @@ interface HomeState {
     }
 
 
-export default class Home extends React.Component<HomeProps, HomeState> {
+class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props);
     this.state = {
@@ -77,8 +88,10 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     this.getMyChildren()
    }
   render() {
+    const { classes } = this.props;
+
     return (
-      <div>
+      <div className={classes.body}>
         <Header
           city={this.props.city}
           weather={this.props.weather}
@@ -101,3 +114,5 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     );
   }
 }
+export default withStyles(styles)(Home);
+ 

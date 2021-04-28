@@ -9,12 +9,14 @@ import { Weather } from "./types";
 import APIURL from "./helpers/environment.js";
 const styles = createStyles({
   root: {
+    backgroundSize:'cover',
     display:'flex',
     alignItems:'center',
     justifyContent:'center',
-    height:'100vh',
+    width:'100vw',
     textAlign:'center',
-    backgroundColor: '#fff8e1'
+    backgroundColor: '#fff8e1',
+    margin:'0px'
 
   },
 });
