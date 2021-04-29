@@ -13,6 +13,10 @@ import Button from "@material-ui/core/Button";
 
 import ChildIndex from "../children/ChildIndex";
 import Header from "./Header";
+
+import HeaderWithCollapse from "./HeaderWithCollapse";
+
+import WeatherConditions from "./WeatherConditions";
 import CreateChild from "../children/CreateChild";
 import EditChild from '../children/EditChild'
 
@@ -21,8 +25,7 @@ import APIURL from '../../helpers/environment'
 
 const styles = createStyles({
   body: {
-    padding:'-1000',
-    backgroundColor:"black"
+    backgroundColor:"pink"
   }
 })
 interface HomeProps extends WithStyles<typeof styles> {
@@ -92,15 +95,26 @@ class Home extends React.Component<HomeProps, HomeState> {
 
     return (
       <div className={classes.body}>
-        <Header
-          city={this.props.city}
-          weather={this.props.weather}
+        {/* <Header
           clearToken={this.props.clearToken}
         />
+         <WeatherConditions
+          city={this.props.city}
+          weather={this.props.weather}
+        /> */}
+       
         <Router>
           <Switch>
             <Route exact path="/">
-              <ChildIndex getAllUsernames={this.getAllUsernames} weather={this.props.weather} getMyChildren={this.getMyChildren} sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} children={this.state.children}/>
+            <HeaderWithCollapse
+              clearToken={this.props.clearToken}
+              city={this.props.city}
+              weather={this.props.weather}
+              getAllUsernames={this.getAllUsernames}
+              getMyChildren={this.getMyChildren} 
+              sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} 
+              children={this.state.children}/>
+              {/* <ChildIndex getAllUsernames={this.getAllUsernames} weather={this.props.weather} getMyChildren={this.getMyChildren} sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} children={this.state.children}/> */}
             </Route>
             <Route path="/addchild">
               <CreateChild getMyChildren={this.getMyChildren} getAllUsernames={this.getAllUsernames} takenUsernames={this.state.takenUsernames} sessionToken={this.props.sessionToken} />

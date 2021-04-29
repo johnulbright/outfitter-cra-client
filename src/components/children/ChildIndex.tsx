@@ -32,10 +32,11 @@ export default class ChildIndex extends React.Component<ChildIndexProps,ChildInd
   
   render() {
     return (
-      <div>
+      <div style={{width:'100%'}}>
         <Link to="/addchild"><PersonAddOutlinedIcon fontSize="large" type="button"/></Link>
         <div style={{flexWrap:"wrap"}}>
         {this.props.children?.map((child:ChildKeys) => (
+
           <Child 
             weather={this.props.weather}
             sessionToken={this.props.sessionToken} 

@@ -50,7 +50,6 @@ export default class EventIndex extends React.Component<EventIndexProps,EventInd
     render(){
         return(
             <div>
-                Event index
                 <NewEvent setOpenNewEvent={(TorF:boolean)=>{}} sessionToken={this.props.sessionToken} child={this.props.child} getEvents={this.getEvents}/>
                 {this.state.events.length>0&&<DisplayEvents getEvents={this.getEvents} sessionToken={this.props.sessionToken} showEdit={this.props.showEdit} child={this.props.child} events={this.state.events}/>}
             </div>

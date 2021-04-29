@@ -3,7 +3,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 import APIURL from "../../helpers/environment.js";
 import { ChildKeys } from "../../types.js";
 
@@ -95,8 +96,10 @@ export default class NewChild extends React.Component<
   render(): JSX.Element {
     return (
       <div>
+        <List style={{width:'100%'}}>
         <h1>New child</h1>
         <form autoComplete="off">
+          <ListItem>
           <TextField
             value={this.state.name}
             error={this.state.badName && this.state.clicked}
@@ -111,12 +114,14 @@ export default class NewChild extends React.Component<
               });
             }}
           />
-          <TextField
+          </ListItem>
+         <ListItem>
+         <TextField
             value={this.state.username}
             error={this.state.badUsername && this.state.clicked}
             helperText={
               this.state.badUsername && this.state.clicked
-                ? "Username is taken"
+                ? "Username is not available"
                 : ""
             }
             label="User name"
@@ -128,6 +133,8 @@ export default class NewChild extends React.Component<
               });
             }}
           />
+         </ListItem>
+          <ListItem>
           <FormControlLabel
             control={
               <Checkbox
@@ -143,7 +150,8 @@ export default class NewChild extends React.Component<
             }
             label="Remind to change underwear"
           />
-
+          </ListItem>
+          <ListItem>
           <Button
             onClick={(e) => this.handleSubmit(e)}
             type="submit"
@@ -152,7 +160,12 @@ export default class NewChild extends React.Component<
           >
             Next
           </Button>
+            </ListItem>
+
+         
         </form>
+        </List>
+        
       </div>
     );
   }

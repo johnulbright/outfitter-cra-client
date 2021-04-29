@@ -1,6 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 import { KeyboardTimePicker,MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import DateFnsAdapter from "@date-io/date-fns";
@@ -85,7 +86,9 @@ export default class NewEvent extends React.Component<
   render(): JSX.Element {
     return (
       <div>
-        New event
+        <Typography variant='body1'>
+          Enter the events that take place outside for your child 
+        </Typography>
         <form autoComplete="off">
           <TextField
             value={this.state.eventName}

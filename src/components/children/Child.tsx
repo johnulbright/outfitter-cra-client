@@ -1,5 +1,8 @@
 import React from 'react'
 
+import Typography from '@material-ui/core/Typography'
+
+import Paper from '@material-ui/core/Paper'
 import ChangeChild from './ChangeChild'
 import Outfit from './Outfit'
 import {ChildKeys,Weather} from '../../types'
@@ -25,9 +28,10 @@ export default class Child extends React.Component<ChildProps,ChildState>{
 
     render(){
         return(
-            <div>
-            <h2>I'm {this.props.child.name}</h2>
-            <div style={{flexWrap:"wrap"}}>
+            
+            <Paper style={{marginTop:'20px'}}>
+            <Typography variant="h2">{this.props.child.name}</Typography>
+            <div style={{alignItems:'left',justifyContent:'center',flexWrap:"wrap"}}>
             <ChangeChild 
                 sessionToken={this.props.sessionToken} 
                 child={this.props.child}
@@ -37,7 +41,7 @@ export default class Child extends React.Component<ChildProps,ChildState>{
             />
             <Outfit weather={this.props.weather} child={this.props.child} sessionToken={this.props.sessionToken}/>
             </div>
-            </div>
+            </Paper>
         )
         }
 }

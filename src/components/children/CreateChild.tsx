@@ -134,7 +134,7 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
   
   render() {
     return (
-      <div>
+      <div style={{width:'400px'}}>
           <Stepper activeStep={this.state.activeStep} alternativeLabel>
             {this.getSteps().map((label) => (
               <Step key={label}>
