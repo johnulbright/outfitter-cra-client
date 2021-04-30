@@ -1,39 +1,41 @@
 import React from "react";
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
+import Typography from "@material-ui/core/Typography";
 import TextField from '@material-ui/core/TextField';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from "@material-ui/core/Button"
 import { createStyles,WithStyles,withStyles } from '@material-ui/styles';
 import {Weather,ChildKeys} from '../../types'
 import ChildOutfit from '../children/ChildOutfit'
+import Paper from "@material-ui/core/Paper";
 
 import APIURL from '../../helpers/environment.js'
 
 const styles = createStyles({
   root: {
-    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-    border: 0,
-    borderRadius: 3,
-    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-    color: 'white',
-    height: 48,
-    padding: '0 30px',
+    alignItems:'center',
+    justifyContent:'center'
   },
-  paper:{},
-  button:{}
-})
+  input: {
+    width:'300px',
+    marginTop:'10px'
+  },
+  paper: {
+    margin:'auto',
+    display: "flex",
+    justifyContent: "center",
+    width: "400px",
+  },
+  button: {
+    marginTop:'10px',
+    marginBottom:'10px'
+  },
+});
 
 interface ChildLoginProps extends WithStyles<typeof styles> {
-  classes:{
-    root:string;
-    paper:string;
-    button:string
+  classes:{  
+    root: string;
+    input: string;
+    paper: string;
+    button: string;
   };
 }
 
@@ -130,27 +132,35 @@ class ChildLogin extends React.Component<ChildLoginProps, ChildLoginState>{
     const { classes } = this.props;
 
     return (
-<div>
+<div >
 {this.state.loggedIn?
        (<ChildOutfit weather={this.state.weather} child={this.state.child}/>)
           :
-          (<div>
+          (<div className={classes.root}>
+        <Paper className={classes.paper}>
 
-          <h1>Login</h1>
           <form autoComplete="off" onSubmit={this.handleSubmit}>
-  
-            <TextField
-              className={classes.root}
+  <div>
+  <Typography variant='h4'>
+               Child Login
+              </Typography> 
+  </div>
+  <div>
+  <TextField
+              className={classes.input}
               error={this.state.badUsername && this.state.clicked}
               helperText={this.state.badUsername && this.state.clicked ? "Username not found.  Check with your parent." : ''}
               id="standard-basic"
               label="Username"
               onChange={(e) => this.setState({ username: e.target.value })}
             />
+  </div>
+            
            
   
-            <Button type="submit" variant="contained" color='primary'>Submit</Button>
+            <Button className={classes.button} type="submit" variant="contained" color='primary'>Submit</Button>
           </form>
+          </Paper>
         </div>)
           }
 </div>

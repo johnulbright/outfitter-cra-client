@@ -4,18 +4,10 @@ import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
-import Paper from "@material-ui/core/Paper";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
-import GaugeChart from "react-gauge-chart";
 import ReactSpeedometer from "react-d3-speedometer";
 import Icon from "../clothes/Icon";
 import { Weather, ChildKeys, Clothes, Event, HourlyWeather } from "../../types";
@@ -159,9 +151,9 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
           const readableWeatherTime = new Date(todaysWeather[j].dt);
           const timeDistance = Math.abs(
             this.state.events[i].hours * 60 +
-              this.state.events[i].minutes -
-              readableWeatherTime.getHours() * 24 -
-              readableWeatherTime.getMinutes()
+            this.state.events[i].minutes -
+            readableWeatherTime.getHours() * 24 -
+            readableWeatherTime.getMinutes()
           );
           if (timeDistance < closestTime) {
             closestTime = timeDistance;
@@ -182,9 +174,9 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
         const readableWeatherTime = new Date(tomorrowsWeather[j].dt);
         const timeDistance = Math.abs(
           this.state.events[i].hours * 60 +
-            this.state.events[i].minutes -
-            readableWeatherTime.getHours() * 24 -
-            readableWeatherTime.getMinutes()
+          this.state.events[i].minutes -
+          readableWeatherTime.getHours() * 24 -
+          readableWeatherTime.getMinutes()
         );
         if (timeDistance < closestTime) {
           closestTime = timeDistance;
@@ -368,7 +360,6 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
         return b.points - a.points;
       }
     );
-    console.log(outfits);
     this.setState({ tomorrowsClothes: outfits });
   };
 
@@ -377,96 +368,96 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
     return (
       <Grid container>
         <Grid item>
-          <Card style={{margin:'10px'}}>
-          <Typography variant="h5">Today's Clothes:</Typography>
+          <Card style={{ margin: '10px' }}>
+            <Typography variant="h5">Today's Clothes:</Typography>
 
-<Table size="small">
-  <TableBody>
-    {this.state.todaysClothes?.map((item) => {
-      return (
-        <TableRow key={item.clothes.id}>
-          <TableCell>{item.clothes.name}</TableCell>
-          <TableCell>
-            {item.clothes.icon !== null &&
-              item.clothes.icon !== "" && (
-                <Icon
-                  size={1.3}
-                  isSelected={false}
-                  setIcon={() => {}}
-                  icon={item.clothes.icon}
-                />
-              )}
-          </TableCell>
-          <TableCell>
-            <ReactSpeedometer
-              width={160}
-              height={80}
-              minValue={0}
-              maxValue={1}
-              maxSegmentLabels={0}
-              segments={20}
-              ringWidth={30}
-              textColor="black"
-              startColor="red"
-              needleHeightRatio={0.7}
-              needleColor="black"
-              endColor="green"
-              valueTextFontSize="0px"
-              value={item.points}
-            />
-          </TableCell>
-        </TableRow>
-      );
-    })}
-  </TableBody>
-</Table>
+            <Table size="small">
+              <TableBody>
+                {this.state.todaysClothes?.map((item) => {
+                  return (
+                    <TableRow key={item.clothes.id}>
+                      <TableCell>{item.clothes.name}</TableCell>
+                      <TableCell>
+                        {item.clothes.icon !== null &&
+                          item.clothes.icon !== "" && (
+                            <Icon
+                              size={1.3}
+                              isSelected={false}
+                              setIcon={() => { }}
+                              icon={item.clothes.icon}
+                            />
+                          )}
+                      </TableCell>
+                      <TableCell>
+                        <ReactSpeedometer
+                          width={160}
+                          height={80}
+                          minValue={0}
+                          maxValue={1}
+                          maxSegmentLabels={0}
+                          segments={20}
+                          ringWidth={30}
+                          textColor="black"
+                          startColor="red"
+                          needleHeightRatio={0.7}
+                          needleColor="black"
+                          endColor="green"
+                          valueTextFontSize="0px"
+                          value={item.points}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </Card>
-          
+
         </Grid>
         <Grid item>
-        <Card style={{margin:'10px'}}>
-          <Typography variant="h5">Tomorrow's Clothes:</Typography>
+          <Card style={{ margin: '10px' }}>
+            <Typography variant="h5">Tomorrow's Clothes:</Typography>
 
-          <Table size="small">
-            <TableBody>
-              {this.state.tomorrowsClothes?.map((item) => {
-                return (
-                  <TableRow key={item.clothes.id}>
-                    <TableCell>{item.clothes.name}</TableCell>
-                    <TableCell>
-                      {item.clothes.icon !== null &&
-                        item.clothes.icon !== "" && (
-                          <Icon
-                            size={1.3}
-                            isSelected={false}
-                            setIcon={() => {}}
-                            icon={item.clothes.icon}
-                          />
-                        )}
-                    </TableCell>
-                    <TableCell>
-                      <ReactSpeedometer
-                        width={160}
-                        height={80}
-                        minValue={0}
-                        maxValue={1}
-                        maxSegmentLabels={0}
-                        segments={20}
-                        ringWidth={30}
-                        textColor="black"
-                        startColor="red"
-                        needleHeightRatio={0.7}
-                        needleColor="black"
-                        endColor="green"
-                        valueTextFontSize="0px"
-                        value={item.points}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+            <Table size="small">
+              <TableBody>
+                {this.state.tomorrowsClothes?.map((item) => {
+                  return (
+                    <TableRow key={item.clothes.id}>
+                      <TableCell>{item.clothes.name}</TableCell>
+                      <TableCell>
+                        {item.clothes.icon !== null &&
+                          item.clothes.icon !== "" && (
+                            <Icon
+                              size={1.3}
+                              isSelected={false}
+                              setIcon={() => { }}
+                              icon={item.clothes.icon}
+                            />
+                          )}
+                      </TableCell>
+                      <TableCell>
+                        <ReactSpeedometer
+                          width={160}
+                          height={80}
+                          minValue={0}
+                          maxValue={1}
+                          maxSegmentLabels={0}
+                          segments={20}
+                          ringWidth={30}
+                          textColor="black"
+                          startColor="red"
+                          needleHeightRatio={0.7}
+                          needleColor="black"
+                          endColor="green"
+                          valueTextFontSize="0px"
+                          value={item.points}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </Card>
         </Grid>
       </Grid>

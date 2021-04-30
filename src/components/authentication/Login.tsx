@@ -22,13 +22,8 @@ const styles = createStyles({
     justifyContent:'center'
   },
   input: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-    border: 0,
-    borderRadius: 3,
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-    color: "white",
-    height: 48,
-    padding: "0 30px",
+    width:'300px',
+    marginTop:'10px'
   },
   paper: {
     margin:'auto',
@@ -36,7 +31,10 @@ const styles = createStyles({
     justifyContent: "center",
     width: "400px",
   },
-  button: {},
+  button: {
+    marginTop:'10px',
+    marginBottom:'10px'
+  },
 });
 
 interface LoginProps extends WithStyles<typeof styles> {
@@ -130,8 +128,8 @@ class Login extends React.Component<LoginProps, LoginState> {
         <Paper className={classes.paper}>
           <form autoComplete="off" onSubmit={this.handleSubmit}>
             <div>
-              <Typography>
-                <h1>Login</h1>
+              <Typography variant='h4'>
+                Login
               </Typography>
             </div>
 
@@ -150,7 +148,7 @@ class Login extends React.Component<LoginProps, LoginState> {
               />
             </div>
             <div>
-              <FormControl className="textField">
+              <FormControl className={classes.input}>
                 <InputLabel
                   error={this.state.badPassword && this.state.clicked}
                   htmlFor="standard-adornment-password"
@@ -189,7 +187,7 @@ class Login extends React.Component<LoginProps, LoginState> {
               </FormControl>
             </div>
 
-            <Button type="submit" variant="contained" color="primary">
+            <Button className={classes.button} type="submit" variant="contained" color="primary">
               Submit
             </Button>
           </form>

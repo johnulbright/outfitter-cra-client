@@ -127,7 +127,7 @@ class App extends React.Component<AppProps, AppState> {
           />
         ) : (
           <div>
-            <Typography variant='h1'>Outfitter</Typography>
+   
           <Auth
             updateToken={this.updateToken}
             setWeather={this.setWeather}

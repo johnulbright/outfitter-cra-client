@@ -1,4 +1,5 @@
 import React from "react";
+import AppBar from '@material-ui/core/AppBar'
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,6 +12,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import ChildLogin from "./ChildLogin";
 import { Weather } from "../../types";
+import outfitterLogo from '../../assets/outfitter-logo.png'
 
 interface AuthProps {
   updateToken: (newToken: string) => void;
@@ -33,6 +35,9 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
   render() {
     return (
       <div>
+  
+        <img style={{marginTop:'50px',marginBottom:'50px',width:'300px'}}src={outfitterLogo} alt='outfitter logo'/>
+
 <Router>
       <Switch>
         <Route exact path="/">
@@ -59,11 +64,15 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
             {this.state.hasAccount?"Create new account":"I already have an account"}
           </Button>
         </div>
-        <Link to="/child">Child login</Link>
+        <Button >
+        <Link style={{color:'primary',textDecoration:'none'}} to="/child">Child login</Link>
+          </Button>
         </Route>
         <Route path="/child">
           <ChildLogin/>
-        <Link to="/">Parent login</Link>
+          <Button >
+        <Link style={{color:'primary',textDecoration:'none'}} to="/">Parent login</Link>
+          </Button>
 
         </Route>
         

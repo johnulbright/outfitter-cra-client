@@ -1,4 +1,6 @@
 import React from "react";
+import Paper from "@material-ui/core/Paper";
+
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
@@ -9,14 +11,43 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
 
 import APIURL from "../../helpers/environment.js";
 import {Weather} from '../../types'
 
-interface SignupProps {
+const styles = createStyles({
+  root: {
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  input: {
+    width:'300px',
+    marginTop:'10px'
+  },
+  paper: {
+    margin:'auto',
+    display: "flex",
+    justifyContent: "center",
+    width: "400px",
+  },
+  button: {
+    marginTop:'10px',
+    marginBottom:'10px'
+  },
+});
+
+interface SignupProps extends WithStyles<typeof styles> {
   updateToken: (newToken: string) => void;
   setWeather: (weather: Weather) => void;
   setCity:(city:string)=>void;
+  classes: {
+    root: string;
+    input: string;
+    paper: string;
+    button: string;
+}
 }
 interface SignupState {
   password: string;
@@ -38,7 +69,7 @@ interface SignupState {
   clicked: boolean;
 }
 
-export default class Signup extends React.Component<SignupProps, SignupState> {
+class Signup extends React.Component<SignupProps, SignupState> {
   constructor(props: SignupProps) {
     super(props);
     this.state = {
@@ -139,11 +170,22 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div>
-        <h1>Signup</h1>
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+
+ 
         <form autoComplete="off" onSubmit={this.handleSubmit}>
-          <TextField
+          <div>
+          <Typography variant='h4'>
+                Signup
+              </Typography>
+          </div>
+ <div>
+ <TextField
+                className={classes.input}
+
             error={this.state.badFirstName && this.state.clicked}
             helperText={
               this.state.badFirstName && this.state.clicked ? "Required" : ""
@@ -157,7 +199,11 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
               })
             }
           />
+ </div>
+          <div>
           <TextField
+                className={classes.input}
+
             error={this.state.badLastName && this.state.clicked}
             helperText={
               this.state.badLastName && this.state.clicked ? "Required" : ""
@@ -171,7 +217,11 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
               })
             }
           />
+          </div>
+          <div>
           <TextField
+                className={classes.input}
+
             error={this.state.badZip && this.state.clicked}
             helperText={
               this.state.badZip && this.state.clicked
@@ -189,7 +239,12 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
               })
             }
           />
+          </div>
+          <div>
+
           <TextField
+                className={classes.input}
+
             error={this.state.badEmail && this.state.clicked}
             helperText={
               this.state.badEmail && this.state.clicked
@@ -205,7 +260,9 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
               })
             }
           />
-          <FormControl className="textField">
+          </div>
+          <div>
+          <FormControl  className={classes.input}>
             <InputLabel
               error={this.state.badPassword && this.state.clicked}
               htmlFor="standard-adornment-password"
@@ -213,6 +270,8 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
               Password
             </InputLabel>
             <Input
+               
+
               error={this.state.badPassword && this.state.clicked}
               id="standard-adornment-password"
               type={this.state.showPassword ? "text" : "password"}
@@ -247,12 +306,16 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
                 : ""}
             </FormHelperText>
           </FormControl>
+          </div>
+         
 
-          <Button type="submit" variant="contained" color="primary">
+          <Button className={classes.button} type="submit" variant="contained" color="primary">
             Submit
           </Button>
         </form>
+        </Paper>
       </div>
     );
   }
 }
+export default withStyles(styles)(Signup);

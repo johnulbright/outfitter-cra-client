@@ -9,14 +9,32 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 
 import Icon from "../clothes/Icon";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import ReactSpeedometer from "react-d3-speedometer";
 import { Weather, ChildKeys, Clothes, Event, HourlyWeather } from "../../types";
 import APIURL from "../../helpers/environment";
 
-interface OutfitProps {
+const styles = createStyles({
+  gauge: {
+    height: "100px",
+  },
+});
+
+interface ChildOutfitProps extends WithStyles<typeof styles> {
   weather: Weather;
   child: ChildKeys;
+  classes: {
+    gauge: string;
+  };
 }
-interface OutfitState {
+interface ChildOutfitState {
   currentTime: Date;
   clothes: Clothes[];
   events: Event[];
@@ -43,9 +61,8 @@ interface OutfitState {
   todaysClothes: { clothes: Clothes; points: number }[];
   tomorrowsClothes: { clothes: Clothes; points: number }[];
 }
-
-export default class Outfit extends React.Component<OutfitProps, OutfitState> {
-  constructor(props: OutfitProps) {
+ class ChildOutfit extends React.Component<ChildOutfitProps, ChildOutfitState> {
+  constructor(props: ChildOutfitProps) {
     super(props);
     this.state = {
       currentTime: new Date(),
@@ -273,7 +290,6 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
         return b.points - a.points;
       }
     );
-    console.log(outfits);
     this.setState({ todaysClothes: outfits });
   };
 
@@ -350,71 +366,113 @@ export default class Outfit extends React.Component<OutfitProps, OutfitState> {
         return b.points - a.points;
       }
     );
-    console.log(outfits);
     this.setState({ tomorrowsClothes: outfits });
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
-        <h1>Child Outfit: {this.props.child.name}</h1>
-        <Grid container>
-          <Grid item xs={6}>
-            <Paper>
-              <Typography variant="h5">Today's Clothes:</Typography>
+      <Typography variant='h3'>Hello, {this.props.child.name}!</Typography>
+      <Grid container>
 
-              <List>
-                {this.state.todaysClothes?.map((item) => {
-                  return (
-                    <ListItem>
-                      <ListItemIcon>
-                        {item.clothes.icon !== null &&
-                          item.clothes.icon !== "" && (
-                            <Icon
-                              size={2 * item.points}
-                              isSelected={false}
-                              setIcon={() => {}}
-                              icon={item.clothes.icon}
-                            />
-                          )}
-                      </ListItemIcon>
-                      <ListItemText>
-                        {item.clothes.name} {item.points}
-                      </ListItemText>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper>
-              <Typography variant="h5">Tomorrow's Clothes:</Typography>
+<Grid item>
+  <Card style={{margin:'10px'}}>
+  <Typography variant="h5">Today's Clothes:</Typography>
 
-              <List>
-                {this.state.tomorrowsClothes?.map((item) => {
-                  return (
-                    <ListItem>
-                      <ListItemIcon>
-                        {item.clothes.icon !== null &&
-                          item.clothes.icon !== "" && (
-                            <Icon
-                              size={2 * item.points}
-                              isSelected={false}
-                              setIcon={() => {}}
-                              icon={item.clothes.icon}
-                            />
-                          )}
-                      </ListItemIcon>
-                      <ListItemText>{item.clothes.name}</ListItemText>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </Paper>
-          </Grid>
-        </Grid>
+<Table size="small">
+<TableBody>
+{this.state.todaysClothes?.map((item) => {
+return (
+<TableRow key={item.clothes.id}>
+  <TableCell>{item.clothes.name}</TableCell>
+  <TableCell>
+    {item.clothes.icon !== null &&
+      item.clothes.icon !== "" && (
+        <Icon
+          size={1.3}
+          isSelected={false}
+          setIcon={() => {}}
+          icon={item.clothes.icon}
+        />
+      )}
+  </TableCell>
+  <TableCell>
+    <ReactSpeedometer
+      width={160}
+      height={80}
+      minValue={0}
+      maxValue={1}
+      maxSegmentLabels={0}
+      segments={20}
+      ringWidth={30}
+      textColor="black"
+      startColor="red"
+      needleHeightRatio={0.7}
+      needleColor="black"
+      endColor="green"
+      valueTextFontSize="0px"
+      value={item.points}
+    />
+  </TableCell>
+</TableRow>
+);
+})}
+</TableBody>
+</Table>
+  </Card>
+  
+</Grid>
+<Grid item>
+<Card style={{margin:'10px'}}>
+  <Typography variant="h5">Tomorrow's Clothes:</Typography>
+
+  <Table size="small">
+    <TableBody>
+      {this.state.tomorrowsClothes?.map((item) => {
+        return (
+          <TableRow key={item.clothes.id}>
+            <TableCell>{item.clothes.name}</TableCell>
+            <TableCell>
+              {item.clothes.icon !== null &&
+                item.clothes.icon !== "" && (
+                  <Icon
+                    size={1.3}
+                    isSelected={false}
+                    setIcon={() => {}}
+                    icon={item.clothes.icon}
+                  />
+                )}
+            </TableCell>
+            <TableCell>
+              <ReactSpeedometer
+                width={160}
+                height={80}
+                minValue={0}
+                maxValue={1}
+                maxSegmentLabels={0}
+                segments={20}
+                ringWidth={30}
+                textColor="black"
+                startColor="red"
+                needleHeightRatio={0.7}
+                needleColor="black"
+                endColor="green"
+                valueTextFontSize="0px"
+                value={item.points}
+              />
+            </TableCell>
+          </TableRow>
+        );
+      })}
+    </TableBody>
+  </Table>
+  </Card>
+</Grid>
+</Grid>
       </div>
+      
     );
   }
 }
+export default withStyles(styles)(ChildOutfit);
