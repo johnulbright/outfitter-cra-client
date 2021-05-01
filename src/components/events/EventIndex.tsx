@@ -11,6 +11,7 @@ interface EventIndexProps{
         username:string|null,
         deviceId?:string,
         parentId:number|null
+        underwearRemind:boolean|null,
     };
     sessionToken:string;
     showEdit:boolean

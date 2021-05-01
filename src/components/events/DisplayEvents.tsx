@@ -136,7 +136,6 @@ export default class DisplayEvents extends React.Component<DisplayEventsProps, D
         console.log(this.props.child.name, this.props.events)
         return (
             <div>
-                DisplayEvents
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>

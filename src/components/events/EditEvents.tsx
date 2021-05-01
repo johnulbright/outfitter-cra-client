@@ -61,12 +61,11 @@ export default class EditEvents extends React.Component<EditEventsProps,EditEven
     render(){
         return(
             <div>
-                Edit Events
-                <Card onClick={() => this.setState({ openNewEvent: true })}>
-                            <CardContent>
+                <div style={{display:'inline-block'}} onClick={() => this.setState({ openNewEvent: true })}>
+                            <CardContent style={{color:'#96bb7c'}}>
                                 <Add fontSize='large' /><EventIcon fontSize='large' />
                             </CardContent>
-                        </Card>
+                        </div>
                 <Dialog open={this.state.openNewEvent}>
                     <NewEvent 
                         sessionToken={this.props.sessionToken} 

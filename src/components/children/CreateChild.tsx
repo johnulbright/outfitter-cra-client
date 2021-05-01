@@ -53,6 +53,7 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
         name: null,
         username: null,
         parentId: null,
+        underwearRemind:false
       },
     };
     this.setChild=this.setChild.bind(this)

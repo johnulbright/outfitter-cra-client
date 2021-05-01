@@ -83,7 +83,6 @@ handlePencilClick=(event:any,clothes:Clothes): void=>{
           </TableHead>
           <TableBody>
         {this.props.clothes?.map((item) => {
-          console.log("item",item)
           const requiredLow = item.optionalMin===null||(item.requiredMin!==null&&item.requiredMin<item.optionalMin);
           const requiredProportion = item.requiredMin&&item.requiredMax?Math.floor(100 * (item.requiredMax - item.requiredMin) / 140):0
           const optionalProportion = item.optionalMin&&item.optionalMax?Math.floor(100 * (item.optionalMax - item.optionalMin) / 140):0

@@ -2,6 +2,7 @@ export interface ChildKeys{
     id:number|null;
     name:string|null;
     username:string|null;
+    underwearRemind:boolean|null;
     deviceId?:string;
     parentId:number|null;
 }

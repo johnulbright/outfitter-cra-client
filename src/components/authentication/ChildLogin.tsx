@@ -60,6 +60,7 @@ class ChildLogin extends React.Component<ChildLoginProps, ChildLoginState>{
           name:null,
           username:null,
           parentId: null,
+          underwearRemind: false,
       },
       username: '',
       badUsername: false,

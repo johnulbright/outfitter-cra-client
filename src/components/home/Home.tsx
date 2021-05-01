@@ -50,7 +50,8 @@ class Home extends React.Component<HomeProps, HomeState> {
             id:-1,
             username:'',
             name:'',
-            parentId:-1
+            parentId:-1,
+            underwearRemind:false,
         },
         takenUsernames:[],
         children:[],
@@ -111,7 +112,7 @@ class Home extends React.Component<HomeProps, HomeState> {
               <CreateChild getMyChildren={this.getMyChildren} getAllUsernames={this.getAllUsernames} takenUsernames={this.state.takenUsernames} sessionToken={this.props.sessionToken} />
             </Route>
             <Route path="/editchild">
-              <EditChild sessionToken={this.props.sessionToken} child={this.state.activeChild}/>
+              <EditChild clearToken={this.props.clearToken}sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} child={this.state.activeChild}/>
             </Route>
           </Switch>
         </Router>
