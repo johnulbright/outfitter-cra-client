@@ -52,7 +52,8 @@ export default class ChangeChild extends React.Component<ChangeChildProps, Chang
   render() {
     return (
       <div>
-        <Delete onClick={(event: React.MouseEvent) =>
+        <Link to="/editchild"><Pencil style={{color:'#3a5e25'}} onClick={() => this.props.setActiveChild(this.props.child)} /></Link>
+        <Delete style={{color:'#3a5e25'}} onClick={(event: React.MouseEvent) =>
           this.setState({ deleteOpen: true })} />
         <Dialog
           open={this.state.deleteOpen}
@@ -71,7 +72,7 @@ export default class ChangeChild extends React.Component<ChangeChildProps, Chang
             </Button>
           </DialogActions>
         </Dialog>
-        <Link to="/editchild"><Pencil onClick={() => this.props.setActiveChild(this.props.child)} /></Link>
+        
       </div>
     )
   }

@@ -15,7 +15,7 @@ const styles = createStyles({
     justifyContent:'center',
     width:'100vw',
     textAlign:'center',
-    backgroundColor: '#fff8e1',
+    backgroundColor: '#f5f1da',
     margin:'0px'
 
   },

@@ -33,31 +33,35 @@ const barHeight = 70;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+      card:{
+        backgroundColor:'#F5F5F6',width: "100%", textAlign: "center" 
+      },
     root: {
       display: "flex",
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
-        marginTop: 500,
+        // marginTop: 500,
         width: drawerWidth,
         flexShrink: 0,
 
       },
     },
     appBar: {
+      backgroundColor:"#eebb4d",
+      height: barHeight,
+
       [theme.breakpoints.up("sm")]: {
         zIndex: theme.zIndex.drawer + 1,
         // width: `calc(100% - ${drawerWidth}px)`,
         // marginLeft: drawerWidth,
         width: "100%",
         marginLeft: "0px",
-        height: barHeight,
-      backgroundColor:"#ffca28"
 
       },
     },
     logoutButton:{
-        // float:'right',
+        // margin:'70vw',
         // color:'pink',
     },
     menuButton: {
@@ -105,14 +109,15 @@ export default function HeaderWithCollapse(props: Props) {
   };
 
   const drawer = (
-    <div style={{backgroundColor:'#e0e0e0', zIndex: 0, marginTop: `${barHeight}px` }}>
+    <div style={{backgroundColor:'#e3dfc8', zIndex: 0, marginTop: !mobileOpen?`${barHeight}px`:'0px' }}>
       {/* <div className={classes.toolbar} /> */}
 
       {/* <Divider /> */}
+      <br/>
       <Typography variant="h6">{props.city} weather:</Typography>
       <List>
         <ListItem>
-          <Card style={{ width: "100%", textAlign: "center" }}>
+          <Card className={classes.card}>
             <h4>Currently</h4>
             <p>
               {props.weather.current.temp !== 999 &&
@@ -126,7 +131,7 @@ export default function HeaderWithCollapse(props: Props) {
           </Card>
         </ListItem>
         <ListItem>
-          <Card style={{ width: "100%", textAlign: "center" }}>
+          <Card className={classes.card}>
             <h4>Today</h4>
             <p>
               {Math.round(
@@ -145,7 +150,7 @@ export default function HeaderWithCollapse(props: Props) {
           </Card>
         </ListItem>
         <ListItem>
-          <Card style={{ width: "100%", textAlign: "center" }}>
+          <Card  className={classes.card}>
             <h4>Tomorrow</h4>
             <p>
               {Math.round(
@@ -184,10 +189,8 @@ export default function HeaderWithCollapse(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-         <img style={{height:'40px'}}src={outfitterLogo} alt='outfitter logo'/>
-          <IconButton edge='end'>
+         <img style={{width:'135px'}} src={outfitterLogo} alt='outfitter logo'/>
           <Button  className={classes.logoutButton} onClick={props.clearToken}>Logout</Button>
-          </IconButton>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

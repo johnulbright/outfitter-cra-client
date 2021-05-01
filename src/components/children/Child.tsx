@@ -29,9 +29,9 @@ export default class Child extends React.Component<ChildProps,ChildState>{
     render(){
         return(
             
-            <Paper style={{marginTop:'20px'}}>
-            <Typography variant="h2">{this.props.child.name}</Typography>
-            <div style={{alignItems:'left',justifyContent:'center',flexWrap:"wrap"}}>
+            <Paper style={{backgroundColor:'#e3dfc8',marginTop:'20px'}}>
+            <Typography style={{color:'#3a5e25'}} variant="h3">{this.props.child.name}</Typography>
+            <div style={{justifyContent:'center',flexWrap:"wrap"}}>
             <ChangeChild 
                 sessionToken={this.props.sessionToken} 
                 child={this.props.child}

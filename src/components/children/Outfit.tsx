@@ -17,6 +17,10 @@ const styles = createStyles({
   gauge: {
     height: "100px",
   },
+  card:{
+    backgroundColor: '#F5F5F6',
+    margin: '5px'
+  }
 });
 
 interface OutfitProps extends WithStyles<typeof styles> {
@@ -25,8 +29,10 @@ interface OutfitProps extends WithStyles<typeof styles> {
   child: ChildKeys;
   classes: {
     gauge: string;
-  };
+    card:string;
+  }   
 }
+
 interface OutfitState {
   currentTime: Date;
   clothes: Clothes[];
@@ -81,7 +87,6 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
     };
   }
   componentDidMount() {
-    this.getAllClothes();
     this.getAllEvents();
     const d = new Date();
     this.setState({
@@ -115,7 +120,8 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
       }
     );
     const clothes = await result.json();
-    this.setState({ clothes: clothes });
+    this.setState({ clothes: clothes },()=>{this.getTodaysOutfits();
+    this.getTomorrowsOutfits()});
   };
   getRelevantWeather = (): void => {
     let todaysEvents = [];
@@ -205,8 +211,9 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
         },
       },
       (): void => {
-        this.getTodaysOutfits();
-        this.getTomorrowsOutfits();
+    this.getAllClothes();
+
+        
       }
     );
   };
@@ -366,9 +373,10 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
   render() {
     const { classes } = this.props;
     return (
-      <Grid container>
+      <div>
+<Grid justify="center" container>
         <Grid item>
-          <Card style={{ margin: '10px' }}>
+          <Card className={classes.card}>
             <Typography variant="h5">Today's Clothes:</Typography>
 
             <Table size="small">
@@ -415,7 +423,7 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
 
         </Grid>
         <Grid item>
-          <Card style={{ margin: '10px' }}>
+          <Card className={classes.card}>
             <Typography variant="h5">Tomorrow's Clothes:</Typography>
 
             <Table size="small">
@@ -461,6 +469,8 @@ class Outfit extends React.Component<OutfitProps, OutfitState> {
           </Card>
         </Grid>
       </Grid>
+      </div>
+      
     );
   }
 }
