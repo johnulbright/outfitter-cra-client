@@ -56,7 +56,7 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
             />
           )}
           <Button
-            color="primary"
+            style={{color:'#3a5e25',textDecoration:'none'}}
             onClick={() =>
               this.setState({ hasAccount: !this.state.hasAccount })
             }
@@ -65,13 +65,13 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
           </Button>
         </div>
         <Button >
-        <Link style={{color:'primary',textDecoration:'none'}} to="/child">Child login</Link>
+        <Link style={{color:'#3a5e25',textDecoration:'none'}} to="/child">Child login</Link>
           </Button>
         </Route>
         <Route path="/child">
           <ChildLogin/>
           <Button >
-        <Link style={{color:'primary',textDecoration:'none'}} to="/">Parent login</Link>
+        <Link style={{color:'#3a5e25',textDecoration:'none'}} to="/">Parent login</Link>
           </Button>
 
         </Route>

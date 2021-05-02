@@ -34,7 +34,8 @@ const styles = createStyles({
   },
   button: {
     marginTop:'10px',
-    marginBottom:'10px'
+    marginBottom:'10px',
+    backgroundColor:'#3a5e25'
   },
 });
 

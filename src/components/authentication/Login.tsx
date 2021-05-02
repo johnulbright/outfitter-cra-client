@@ -19,11 +19,13 @@ import APIURL from "../../helpers/environment.js";
 const styles = createStyles({
   root: {
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
+    color:'#3a5e25',
+
   },
   input: {
     width:'300px',
-    marginTop:'10px'
+    marginTop:'10px',
   },
   paper: {
     margin:'auto',
@@ -33,7 +35,9 @@ const styles = createStyles({
   },
   button: {
     marginTop:'10px',
-    marginBottom:'10px'
+    marginBottom:'10px',
+    backgroundColor:'#3a5e25'
+
   },
 });
 
@@ -150,12 +154,14 @@ class Login extends React.Component<LoginProps, LoginState> {
             <div>
               <FormControl className={classes.input}>
                 <InputLabel
+
                   error={this.state.badPassword && this.state.clicked}
                   htmlFor="standard-adornment-password"
                 >
                   Password
                 </InputLabel>
                 <Input
+
                   error={this.state.badPassword && this.state.clicked}
                   id="standard-adornment-password"
                   type={this.state.showPassword ? "text" : "password"}
@@ -167,6 +173,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                         aria-label="toggle password visibility"
                         onClick={this.handleClickShowPassword}
                         onMouseDown={this.handleMouseDownPassword}
+    
                       >
                         {this.state.showPassword ? (
                           <Visibility />
@@ -187,7 +194,7 @@ class Login extends React.Component<LoginProps, LoginState> {
               </FormControl>
             </div>
 
-            <Button className={classes.button} type="submit" variant="contained" color="primary">
+            <Button className={classes.button} type="submit" variant="contained">
               Submit
             </Button>
           </form>
