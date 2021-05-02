@@ -1,19 +1,52 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+import Paper from "@material-ui/core/Paper";
 import APIURL from "../../helpers/environment.js";
 import { ChildKeys } from "../../types.js";
 
-interface NewChildProps {
+const styles = createStyles({
+  root: {
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  input: {
+    width:'300px',
+    marginTop:'10px'
+  },
+  paper: {
+    margin:'auto',
+    display: "flex",
+    justifyContent: "center",
+    width: "400px",
+  },
+  button: {
+    marginTop:'10px',
+    marginBottom:'10px',
+    backgroundColor:'#96bb7c',
+    color:'black',
+    '&:hover': {
+      backgroundColor: '#678b4f',
+      color: '#black',
+  },
+  },
+});
+interface NewChildProps  extends WithStyles<typeof styles> {
   sessionToken: string;
   handleNext: () => void;
   setChild: (child:ChildKeys) => void;
   getAllUsernames: () => void;
   takenUsernames: string[];
+  classes: {
+    root: string;
+    input: string;
+    paper: string;
+    button: string;
+  };
 }
 
 interface NewChildState {
@@ -26,7 +59,7 @@ interface NewChildState {
   clicked: boolean;
 }
 
-export default class NewChild extends React.Component<
+class NewChild extends React.Component<
   NewChildProps,
   NewChildState
 > {
@@ -94,13 +127,20 @@ export default class NewChild extends React.Component<
   }
  
   render(): JSX.Element {
+    const { classes } = this.props;
+
     return (
-      <div>
-        <List style={{width:'100%'}}>
-        <h1>New child</h1>
+      <div className={classes.root}>
+      <Paper className={classes.paper}>
+       
         <form autoComplete="off">
-          <ListItem>
+        <div>
+        <Typography variant="h4">New child</Typography>
+
+        </div>
+          <div>
           <TextField
+          className={classes.input}
             value={this.state.name}
             error={this.state.badName && this.state.clicked}
             helperText={
@@ -114,17 +154,18 @@ export default class NewChild extends React.Component<
               });
             }}
           />
-          </ListItem>
-         <ListItem>
+          </div>
+         <div>
          <TextField
-            value={this.state.username}
+className={classes.input}
+value={this.state.username}
             error={this.state.badUsername && this.state.clicked}
             helperText={
               this.state.badUsername && this.state.clicked
                 ? "Username is not available"
                 : ""
             }
-            label="User name"
+            label="Username"
             defaultValue=""
             onChange={(e): void => {
               this.setState({
@@ -133,11 +174,13 @@ export default class NewChild extends React.Component<
               });
             }}
           />
-         </ListItem>
-          <ListItem>
+         </div>
+          <div>
           <FormControlLabel
+          style={{marginTop:"20px",marginBottom:"05px"}}
             control={
               <Checkbox
+              
                 checked={this.state.underwearRemind}
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
@@ -150,9 +193,11 @@ export default class NewChild extends React.Component<
             }
             label="Remind to change underwear"
           />
-          </ListItem>
-          <ListItem>
+          </div>
+          <div>
           <Button
+          className={classes.button}
+
             onClick={(e) => this.handleSubmit(e)}
             type="submit"
             variant="contained"
@@ -160,13 +205,13 @@ export default class NewChild extends React.Component<
           >
             Next
           </Button>
-            </ListItem>
+            </div>
 
          
         </form>
-        </List>
-        
+        </Paper>
       </div>
     );
   }
 }
+export default withStyles(styles)(NewChild);

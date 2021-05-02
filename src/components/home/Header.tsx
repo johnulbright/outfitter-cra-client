@@ -34,7 +34,7 @@ const barHeight = 70;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
       card:{
-        backgroundColor:'#F5F5F6',width: "100%", textAlign: "center" 
+        backgroundColor:'#96bb7c',width: "100%", textAlign: "center" 
       },
     root: {
       display: "flex",

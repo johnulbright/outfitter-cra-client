@@ -5,33 +5,52 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+import Paper from "@material-ui/core/Paper";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 
 import {ChildKeys} from '../../types'
 import NewChild from "./NewChild";
 import EventIndex from "../events/EventIndex";
 import NewClothes from '../clothes/NewClothes'
 import APIURL from '../../helpers/environment'
+import outfitterLogo from '../../assets/outfitter-logo.png'
 
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     root: {
-//       width: '100%',
-//     },
-//     backButton: {
-//       marginRight: theme.spacing(1),
-//     },
-//     instructions: {
-//       marginTop: theme.spacing(1),
-//       marginBottom: theme.spacing(1),
-//     },
-//   }),
-// );
+const styles = createStyles({
+  appBar: {
+      backgroundColor: "#eebb4d",
+      height: 70,
 
-interface CreateChildProps {
+      width: "100%",
+      marginLeft: "0px",
+  },
+
+  paper:{
+
+  },
+  button:{
+
+  },
+  logoutButton: {
+    // margin:'70vw',
+    // color:'pink',
+},
+})
+
+interface CreateChildProps extends WithStyles<typeof styles> {
   sessionToken: string;
   getMyChildren: () => void;
   getAllUsernames: () => void;
+  clearToken: () => void;
+
   takenUsernames: string[];
+  classes: {
+    appBar:string;
+    paper: string;
+    button: string;
+    logoutButton:string;
+}
 }
 
 interface CreateChildState {
@@ -41,7 +60,7 @@ interface CreateChildState {
   submitted:boolean;
 }
 
-export default class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
+class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
   constructor(props: CreateChildProps) {
     super(props);
     this.state = {
@@ -134,15 +153,28 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
   }
   
   render() {
+    const { classes } = this.props;
+
     return (
-      <div style={{width:'400px'}}>
-          <Stepper activeStep={this.state.activeStep} alternativeLabel>
+      <div>
+         <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+
+                        <img style={{ width: '135px' }} src={outfitterLogo} alt='outfitter logo' />
+                        <Button className={classes.logoutButton} onClick={this.props.clearToken}>Logout</Button>
+                    </Toolbar>
+                </AppBar>
+      <div style={{marginTop:'100px',width:'400px'}}>
+        <Paper>
+        <Stepper activeStep={this.state.activeStep} alternativeLabel>
             {this.getSteps().map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
+        </Paper>
+          
           <div>
             {this.state.activeStep === this.getSteps().length ? (
               <div>
@@ -150,7 +182,7 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
                 <Button onClick={this.handleReset}>Reset</Button>
               </div>
             ) : (
-              <div style={{margin:"20px"}}>
+              <div style={{marginTop:"20px"}}>
                   {this.getStepContent(this.state.activeStep)}
                 
                   <Link to="/"><Button onClick={this.handleClose}>Cancel</Button></Link>
@@ -167,6 +199,10 @@ export default class CreateChild extends React.Component<CreateChildProps,Create
             )}
           </div>
       </div>
+      </div>
+
     );
   }
 }
+
+export default withStyles(styles)(CreateChild);

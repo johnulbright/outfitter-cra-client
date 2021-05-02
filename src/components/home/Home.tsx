@@ -109,7 +109,7 @@ class Home extends React.Component<HomeProps, HomeState> {
           
             </Route>
             <Route path="/addchild">
-              <CreateChild getMyChildren={this.getMyChildren} getAllUsernames={this.getAllUsernames} takenUsernames={this.state.takenUsernames} sessionToken={this.props.sessionToken} />
+              <CreateChild clearToken={this.props.clearToken} getMyChildren={this.getMyChildren} getAllUsernames={this.getAllUsernames} takenUsernames={this.state.takenUsernames} sessionToken={this.props.sessionToken} />
             </Route>
             <Route path="/editchild">
               <EditChild clearToken={this.props.clearToken}sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} child={this.state.activeChild}/>

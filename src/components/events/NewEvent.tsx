@@ -3,17 +3,51 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { KeyboardTimePicker,MuiPickersUtilsProvider } from "@material-ui/pickers";
+import Paper from "@material-ui/core/Paper";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+
 import DateFnsUtils from '@date-io/date-fns';
 import DateFnsAdapter from "@date-io/date-fns";
 import APIURL from "../../helpers/environment.js";
 import {ChildKeys} from '../../types'
 
-
-interface NewEventProps {
+const styles = createStyles({
+  root: {
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  input: {
+    width:'300px',
+    marginTop:'10px'
+  },
+  paper: {
+    margin:'auto',
+    display: "flex",
+    justifyContent: "center",
+    width: "400px",
+  },
+  button: {
+    marginTop:'10px',
+    marginBottom:'10px',
+    backgroundColor:'#96bb7c',
+    color:'black',
+    '&:hover': {
+      backgroundColor: '#678b4f',
+      color: '#black',
+  },
+  },
+});
+interface NewEventProps extends WithStyles<typeof styles> {
   sessionToken: string;
   getEvents: () => void;
   child: ChildKeys;
   setOpenNewEvent:(TorF:boolean)=>void;
+  classes: {
+    root: string;
+    input: string;
+    paper: string;
+    button: string;
+  };
 }
 
 interface NewEventState {
@@ -24,7 +58,7 @@ interface NewEventState {
   clicked: boolean;
 }
 
-export default class NewEvent extends React.Component<
+class NewEvent extends React.Component<
   NewEventProps,
   NewEventState
 > {
@@ -84,13 +118,23 @@ export default class NewEvent extends React.Component<
   };
 
   render(): JSX.Element {
+    const { classes } = this.props;
+
     return (
       <div>
-        <Typography variant='body1'>
+        <Paper>
+        
+      
+        <form autoComplete="off">
+        <div>
+              <Typography variant='body1'>
           Enter the events that take place outside for your child 
         </Typography>
-        <form autoComplete="off">
+          </div>
+          <div>
           <TextField
+          className={classes.input}
+
             value={this.state.eventName}
             error={this.state.badName && this.state.clicked}
             helperText={
@@ -104,6 +148,8 @@ export default class NewEvent extends React.Component<
               });
             }}
           />
+          </div>
+          
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
              <KeyboardTimePicker
             label="What time?"
@@ -128,7 +174,10 @@ export default class NewEvent extends React.Component<
             Submit
           </Button>
         </form>
+        </Paper>
+       
       </div>
     );
   }
 }
+export default withStyles(styles)(NewEvent);

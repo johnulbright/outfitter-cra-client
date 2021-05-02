@@ -36,8 +36,12 @@ const styles = createStyles({
   button: {
     marginTop:'10px',
     marginBottom:'10px',
-    backgroundColor:'#3a5e25'
-
+    backgroundColor:'#96bb7c',
+    color:'black',
+    '&:hover': {
+      backgroundColor: '#678b4f',
+      color: '#black',
+  },
   },
 });
 

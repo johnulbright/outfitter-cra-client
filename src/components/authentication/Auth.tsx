@@ -71,7 +71,7 @@ export default class Auth extends React.Component<AuthProps, AuthState> {
         <Route path="/child">
           <ChildLogin/>
           <Button >
-        <Link style={{color:'#3a5e25',textDecoration:'none'}} to="/">Parent login</Link>
+        <Link style={{color:'#3a5e25',textDecoration:'none'}} onClick={()=>this.setState({hasAccount:true})} to="/">Parent login</Link>
           </Button>
 
         </Route>

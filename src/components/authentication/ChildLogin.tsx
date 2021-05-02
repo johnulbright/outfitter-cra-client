@@ -16,7 +16,12 @@ const styles = createStyles({
   },
   input: {
     width:'300px',
-    marginTop:'10px'
+    marginTop:'10px',
+    color:'pink',
+    '&:focused': {
+      boxShadow: 'none',
+      backgroundColor: '#3c52b2',
+    },
   },
   paper: {
     margin:'auto',
@@ -26,7 +31,13 @@ const styles = createStyles({
   },
   button: {
     marginTop:'10px',
-    marginBottom:'10px'
+    marginBottom:'10px',
+    backgroundColor:'#96bb7c',
+    color:'black',
+    '&:hover': {
+      backgroundColor: '#678b4f',
+      color: '#black',
+  },
   },
 });
 
