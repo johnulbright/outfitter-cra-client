@@ -13,7 +13,7 @@ interface IconProps{
      constructor(props:IconProps){
          super(props)
      }
-    backgroundColor=()=>this.props.isSelected?'#ffa000':'none';
+    backgroundColor=()=>this.props.isSelected?'#96bb7c':'none';
      render(){
          return(
             <img

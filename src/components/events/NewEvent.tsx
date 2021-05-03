@@ -2,46 +2,54 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { KeyboardTimePicker,MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import Paper from "@material-ui/core/Paper";
 import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
 
-import DateFnsUtils from '@date-io/date-fns';
+import DateFnsUtils from "@date-io/date-fns";
 import DateFnsAdapter from "@date-io/date-fns";
 import APIURL from "../../helpers/environment.js";
-import {ChildKeys} from '../../types'
+import { ChildKeys } from "../../types";
 
 const styles = createStyles({
   root: {
-    alignItems:'center',
-    justifyContent:'center'
+    display:'flex',
+    alignItems: "center",
+    justifyContent: "center",
+    
   },
   input: {
-    width:'300px',
-    marginTop:'10px'
+    width: "300px",
+    marginTop: "10px",
+    // marginLeft: "50px",
+
   },
   paper: {
-    margin:'auto',
     display: "flex",
     justifyContent: "center",
-    width: "400px",
+    width: '450px',
+    padding:"10px"
   },
   button: {
-    marginTop:'10px',
-    marginBottom:'10px',
-    backgroundColor:'#96bb7c',
-    color:'black',
-    '&:hover': {
-      backgroundColor: '#678b4f',
-      color: '#black',
-  },
+    marginTop: "10px",
+    marginBottom: "10px",
+    backgroundColor: "#96bb7c",
+    color: "black",
+    "&:hover": {
+      backgroundColor: "#678b4f",
+      color: "#black",
+    },
   },
 });
 interface NewEventProps extends WithStyles<typeof styles> {
+  showCancel:boolean
   sessionToken: string;
   getEvents: () => void;
   child: ChildKeys;
-  setOpenNewEvent:(TorF:boolean)=>void;
+  setOpenNewEvent: (TorF: boolean) => void;
   classes: {
     root: string;
     input: string;
@@ -58,10 +66,7 @@ interface NewEventState {
   clicked: boolean;
 }
 
-class NewEvent extends React.Component<
-  NewEventProps,
-  NewEventState
-> {
+class NewEvent extends React.Component<NewEventProps, NewEventState> {
   constructor(props: NewEventProps) {
     super(props);
     this.state = {
@@ -73,49 +78,67 @@ class NewEvent extends React.Component<
     };
   }
 
-  createEvent = async (hours:number,minutes:number): Promise<void> => {
-    console.log(this.props.child)
-    const result =await fetch(`${APIURL}/event/create/${this.props.child.id}`, {
-      method: "POST",
-      body: JSON.stringify({
-        event: {
-          name: this.state.eventName,
-          hours: hours,
-          minutes:minutes,
-          eventTime:this.state.eventTime,
-        },
-      }),
-      headers: new Headers({
-        "Content-Type": "application/json",
-        "Authorization": this.props.sessionToken,
-      }),
-    });
-    const json=result.json()
-    console.log(json)
+  createEvent = async (hours: number, minutes: number): Promise<void> => {
+    console.log(this.props.child);
+    const result = await fetch(
+      `${APIURL}/event/create/${this.props.child.id}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          event: {
+            name: this.state.eventName,
+            hours: hours,
+            minutes: minutes,
+            eventTime: this.state.eventTime,
+          },
+        }),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: this.props.sessionToken,
+        }),
+      }
+    );
+    const json = result.json();
+    console.log(json);
     this.props.getEvents();
     this.setState({
       eventName: "",
       eventTime: null,
-      clicked:false,
-      badName:true,
-      badTime:true
+      clicked: false,
+      badName: true,
+      badTime: true,
     });
     this.props.setOpenNewEvent(false);
   };
-
+  handleCancel = (e:any): void => {
+    e.preventDefault();
+    this.props.getEvents();
+    this.setState({
+      eventName: "",
+      eventTime: null,
+      clicked: false,
+      badName: true,
+      badTime: true,
+    });
+    this.props.setOpenNewEvent(false);
+  }
   handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    this.setState({ clicked: true,badTime:this.state.eventTime===undefined||this.state.eventTime===null});
-    
-    console.log(this.state.badName,this.state.badTime,this.state.clicked)
+    this.setState({
+      clicked: true,
+      badTime:
+        this.state.eventTime === undefined || this.state.eventTime === null,
+    });
+
+    console.log(this.state.badName, this.state.badTime, this.state.clicked);
     let ready = !this.state.badName && this.state.eventTime;
     if (ready) {
-      console.log('create')
-      const dateFns=new DateFnsAdapter();
-    const initialDateFnsDate = dateFns.date(this.state.eventTime);
-    const hh=dateFns.getHours(initialDateFnsDate)
-    const mm=dateFns.getMinutes(initialDateFnsDate)
-      this.createEvent(hh,mm);
+      console.log("create");
+      const dateFns = new DateFnsAdapter();
+      const initialDateFnsDate = dateFns.date(this.state.eventTime);
+      const hh = dateFns.getHours(initialDateFnsDate);
+      const mm = dateFns.getMinutes(initialDateFnsDate);
+      this.createEvent(hh, mm);
     }
   };
 
@@ -123,70 +146,82 @@ class NewEvent extends React.Component<
     const { classes } = this.props;
 
     return (
-      <div>
-        <Paper>
-        
-      
-        <form autoComplete="off">
-        <div>
-              <Typography variant='body1'>
-          Enter the events that take place outside for your child 
-        </Typography>
-          </div>
-          <div>
-          <TextField
-          className={classes.input}
-
-            value={this.state.eventName}
-            error={this.state.badName && this.state.clicked}
-            helperText={
-              this.state.badName && this.state.clicked ? "Required" : ""
-            }
-            label="What's happening?"
-            onChange={(e) => {
-              this.setState({
-                eventName: e.target.value,
-                badName: e.target.value.length === 0,
-              });
-            }}
-          />
-          </div>
-          <div>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-             <KeyboardTimePicker
-          className={classes.input}
-
-            label="What time?"
-            error={this.state.badTime&&this.state.clicked}
-            helperText={
-              this.state.eventTime===null && this.state.clicked ? "Required" : ""
-            }
-            placeholder="08:00 AM"
-            mask="__:__ _M"
-            value={this.state.eventTime}
-            onChange={(date) => this.setState({ eventTime: date })}
-          />
-          </MuiPickersUtilsProvider>
-          </div>
-          <div>
-             <Button
-          className={classes.button}
-
-            onClick={(e) => this.handleSubmit(e)}
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Submit
-          </Button>
-          </div>
-         
-
-         
-        </form>
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <form autoComplete="off">
+              <div>
+                <Typography align="center" variant="h5">
+    Let's add {this.props.showCancel?'an event':'some events'} to {this.props.child.name}'s day
+                </Typography>
+              </div>
+              <div >
+                <Typography  align="center" variant="caption">
+                Just list the things that that are impacted by the weather, so
+                probably things that happen outside.
+              </Typography>
+              </div>
+              
+              <div style={{display:'flex',justifyContent:'center'}}>
+                <TextField
+                  className={classes.input}
+                  value={this.state.eventName}
+                  error={this.state.badName && this.state.clicked}
+                  helperText={
+                    this.state.badName && this.state.clicked ? "Required" : ""
+                  }
+                  label="What's happening?"
+                  onChange={(e) => {
+                    this.setState({
+                      eventName: e.target.value,
+                      badName: e.target.value.length === 0,
+                    });
+                  }}
+                />
+              </div>
+              <div style={{display:'flex',justifyContent:'center'}}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardTimePicker
+                    className={classes.input}
+                    label="What time?"
+                    error={this.state.badTime && this.state.clicked}
+                    helperText={
+                      this.state.eventTime === null && this.state.clicked
+                        ? "Required"
+                        : ""
+                    }
+                    placeholder="08:00 AM"
+                    mask="__:__ _M"
+                    value={this.state.eventTime}
+                    onChange={(date) => this.setState({ eventTime: date })}
+                  />
+                </MuiPickersUtilsProvider>
+              </div>
+              <div style={{display:'flex',justifyContent:'center'}}>
+                <Button
+                  className={classes.button}
+                  onClick={(e) => this.handleSubmit(e)}
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                >
+                  Submit
+                </Button>
+               </div>
+                {this.props.showCancel&&
+                  <div style={{display:'flex',justifyContent:'center'}}>
+                  <Button
+                    variant='text'
+                    style={{color:"#678b4f"}}
+                    onClick={(e) => this.handleCancel(e)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+                }
+                
+          </form>
         </Paper>
-       
-      </div>
+       </div>
     );
   }
 }

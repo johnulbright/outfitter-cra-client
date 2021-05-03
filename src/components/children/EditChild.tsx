@@ -204,7 +204,7 @@ class EditChild extends React.Component<EditChildProps, EditChildState>{
                 </AppBar>
                 <div style={{ marginTop: '100px', marginBottom: '30px' }}>
 
-                    <Typography variant='h3'>Editing {this.props.child.name}<Pencil style={{color:'#96bb7c'}}onClick={this.handleNameOpen} /></Typography>
+                    <Typography variant='h3'>Editing {this.props.child.name}<Pencil style={{color:"#678b4f"}}onClick={this.handleNameOpen} /></Typography>
                     <Link style={{textDecoration: 'none' }}to="/"><Button variant='contained' style={{marginTop:'10px', backgroundColor:'#96bb7c'}}>Done</Button></Link>
                 </div>
 
@@ -285,13 +285,13 @@ class EditChild extends React.Component<EditChildProps, EditChildState>{
                         />
                         </div>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item>
                         <div style={{marginTop:'5px',display:'inline-block'}}onClick={() => this.setState({ openNewClothes: true })}>
-                            <CardContent style={{color:'#96bb7c'}}>
+                            <CardContent style={{color:"#678b4f"}}>
                                 <Add fontSize='large' /><GiClothes size={'2.5em'} />
                             </CardContent>
                         </div>
-                        <Dialog fullWidth open={this.state.openNewClothes} onClose={this.handleCloseNewClothes}>
+                        <Dialog open={this.state.openNewClothes} onClose={this.handleCloseNewClothes}>
                                 <NewClothes closeNewClothes={this.closeNewClothes} getAllClothes={this.getAllClothes} child={this.props.child} sessionToken={this.props.sessionToken} showClothes={false} />
                         </Dialog>
                         <ShowClothes setActiveClothes={this.setActiveClothes} setOpenClothes={this.setOpenClothes} clothes={this.state.clothes} sessionToken={this.props.sessionToken} delete={true} child={this.props.child} getAllClothes={this.getAllClothes} />

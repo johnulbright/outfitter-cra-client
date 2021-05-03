@@ -139,7 +139,7 @@ class NewChild extends React.Component<NewChildProps, NewChildState> {
         <Paper className={classes.paper}>
           <form autoComplete="off">
             <div>
-              <Typography variant="h4">New child</Typography>
+              <Typography variant="h5">New child</Typography>
             </div>
             <div>
               <TextField

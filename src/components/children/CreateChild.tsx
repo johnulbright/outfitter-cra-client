@@ -27,7 +27,9 @@ const styles = createStyles({
   },
 
   paper:{
-
+    width:'500px',
+    justifyContent:'center',
+    margin:'auto'
   },
   button:{
     marginTop: "10px",
@@ -171,8 +173,8 @@ class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
                         <Button className={classes.logoutButton} onClick={this.props.clearToken}>Logout</Button>
                     </Toolbar>
                 </AppBar>
-      <div style={{marginTop:'100px',width:'400px'}}>
-        <Paper>
+      <div style={{marginTop:'100px'}}>
+        <Paper className={classes.paper}>
         <Stepper activeStep={this.state.activeStep} alternativeLabel>
             {this.getSteps().map((label) => (
               <Step key={label}>
@@ -196,19 +198,20 @@ class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
                   <Button className={classes.button} variant="contained" color="primary" onClick={this.handleNext}>Next</Button>
                   }
                 </div>
-                <div>
-                <Link style={{color: "#678b4f",textDecoration:'none'}} to="/"><Button onClick={this.handleClose}>Cancel</Button></Link>
-                </div>
-                  
-                 
-                  {this.state.activeStep===2&&
+                {this.state.activeStep===2&&
                   <div>
-                     <Link to="/">
+                     <Link  style={{textDecoration:'none'}}to="/">
                     <Button className={classes.button} variant="contained" color="primary" onClick={this.handleFinish}>Finish</Button>
                     </Link>
                   </div>
                  
                   }
+                <div>
+                <Link style={{textDecoration:'none'}} to="/"><Button style={{color: "#678b4f"}} onClick={this.handleClose}>Cancel</Button></Link>
+                </div>
+                  
+                 
+                  
                 
               </div>
             )}

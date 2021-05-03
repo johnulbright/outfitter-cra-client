@@ -1,5 +1,6 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 
 import {Event} from '../../types'
 import DisplayEvents from './DisplayEvents'
@@ -47,17 +48,25 @@ export default class EventIndex extends React.Component<EventIndexProps,EventInd
         this.setState({ events: events });
       };
       componentDidMount(){
-        //   this.getEvents();
+           this.getEvents();
         // revisit this for editing children
       }
     render(){
         return(
             <div>
-                <NewEvent setOpenNewEvent={(TorF:boolean)=>{}} sessionToken={this.props.sessionToken} child={this.props.child} getEvents={this.getEvents}/>
+                <Grid container justify='center'>
+                    <Grid style={{margin:'10px'}} item>
+                    <NewEvent showCancel={false} setOpenNewEvent={(TorF:boolean)=>{}} sessionToken={this.props.sessionToken} child={this.props.child} getEvents={this.getEvents}/>
+                    </Grid>
                 {this.state.events.length>0&&
-                <Paper style={{marginTop:'10px'}}>
+                <Grid item>
+                    <Paper style={{margin:'10px'}}>
                     <DisplayEvents getEvents={this.getEvents} sessionToken={this.props.sessionToken} showEdit={this.props.showEdit} child={this.props.child} events={this.state.events}/>
-                    </Paper>}
+                    </Paper>
+                </Grid>
+    }
+                </Grid>
+                
             </div>
         )
     }
