@@ -9,9 +9,7 @@ interface ChildIndexProps {
   sessionToken: string;
   weather: Weather;
   children: ChildKeys[];
-  // takenUsernames: string[];
   getMyChildren:()=>void
-  getAllUsernames:()=>void
   setActiveChild:(child:ChildKeys)=>void
 }
 interface ChildIndexState {
@@ -43,7 +41,6 @@ export default class ChildIndex extends React.Component<ChildIndexProps,ChildInd
             key={child.id} 
             child={child}
             getMyChildren={this.props.getMyChildren}
-            getAllUsernames={this.props.getAllUsernames}
             setActiveChild={this.props.setActiveChild}
           />
         ))}

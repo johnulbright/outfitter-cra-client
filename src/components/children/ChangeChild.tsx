@@ -15,7 +15,6 @@ interface ChangeChildProps {
   child: ChildKeys;
   sessionToken: string;
   getMyChildren: () => void;
-  getAllUsernames: () => void;
   setActiveChild: (child: ChildKeys) => void
 
 
@@ -41,7 +40,6 @@ export default class ChangeChild extends React.Component<ChangeChildProps, Chang
     });
     this.handleDeleteClose();
     this.props.getMyChildren();
-    this.props.getAllUsernames();
   }
 
 

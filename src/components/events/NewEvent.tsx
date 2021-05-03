@@ -96,7 +96,9 @@ class NewEvent extends React.Component<
     this.setState({
       eventName: "",
       eventTime: null,
-      clicked:false
+      clicked:false,
+      badName:true,
+      badTime:true
     });
     this.props.setOpenNewEvent(false);
   };
@@ -149,9 +151,11 @@ class NewEvent extends React.Component<
             }}
           />
           </div>
-          
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <div>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
              <KeyboardTimePicker
+          className={classes.input}
+
             label="What time?"
             error={this.state.badTime&&this.state.clicked}
             helperText={
@@ -163,9 +167,11 @@ class NewEvent extends React.Component<
             onChange={(date) => this.setState({ eventTime: date })}
           />
           </MuiPickersUtilsProvider>
-         
+          </div>
+          <div>
+             <Button
+          className={classes.button}
 
-          <Button
             onClick={(e) => this.handleSubmit(e)}
             type="submit"
             variant="contained"
@@ -173,6 +179,10 @@ class NewEvent extends React.Component<
           >
             Submit
           </Button>
+          </div>
+         
+
+         
         </form>
         </Paper>
        

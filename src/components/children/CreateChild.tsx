@@ -30,8 +30,16 @@ const styles = createStyles({
 
   },
   button:{
-
+    marginTop: "10px",
+    marginBottom: "10px",
+    backgroundColor: "#96bb7c",
+    color: "black",
+    "&:hover": {
+      backgroundColor: "#678b4f",
+      color: "#black",
+    },
   },
+
   logoutButton: {
     // margin:'70vw',
     // color:'pink',
@@ -41,15 +49,14 @@ const styles = createStyles({
 interface CreateChildProps extends WithStyles<typeof styles> {
   sessionToken: string;
   getMyChildren: () => void;
-  getAllUsernames: () => void;
   clearToken: () => void;
 
-  takenUsernames: string[];
   classes: {
     appBar:string;
     paper: string;
     button: string;
     logoutButton:string;
+   
 }
 }
 
@@ -89,6 +96,8 @@ class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
           Authorization: this.props.sessionToken,
         }),
       });
+    this.props.getMyChildren();
+
     }
   
   setChild(childObject: ChildKeys): void {
@@ -115,8 +124,6 @@ class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
         return (
           <NewChild
             sessionToken={this.props.sessionToken}
-            takenUsernames={this.props.takenUsernames}
-            getAllUsernames={this.props.getAllUsernames}
             handleNext={this.handleNext}
             setChild={this.setChild}
           />
@@ -179,20 +186,28 @@ class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
             {this.state.activeStep === this.getSteps().length ? (
               <div>
                 <Typography>All steps completed</Typography>
-                <Button onClick={this.handleReset}>Reset</Button>
+                <Button className={classes.button} onClick={this.handleReset}>Reset</Button>
               </div>
             ) : (
               <div style={{marginTop:"20px"}}>
                   {this.getStepContent(this.state.activeStep)}
-                
-                  <Link to="/"><Button onClick={this.handleClose}>Cancel</Button></Link>
-                  {this.state.activeStep===1&&
-                  <Button variant="contained" color="primary" onClick={this.handleNext}>Next</Button>
+                <div>
+                {this.state.activeStep===1&&
+                  <Button className={classes.button} variant="contained" color="primary" onClick={this.handleNext}>Next</Button>
                   }
+                </div>
+                <div>
+                <Link style={{color: "#678b4f",textDecoration:'none'}} to="/"><Button onClick={this.handleClose}>Cancel</Button></Link>
+                </div>
+                  
+                 
                   {this.state.activeStep===2&&
-                  <Link to="/">
-                    <Button variant="contained" color="primary" onClick={this.handleFinish}>Finish</Button>
+                  <div>
+                     <Link to="/">
+                    <Button className={classes.button} variant="contained" color="primary" onClick={this.handleFinish}>Finish</Button>
                     </Link>
+                  </div>
+                 
                   }
                 
               </div>

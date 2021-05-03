@@ -19,7 +19,7 @@ export default class IconDialog extends React.Component<IconProps, IconState> {
   constructor(props: IconProps) {
     super(props);
     this.state = {
-        open:true
+        open:false
     };
   }
   handleOpen=()=>{

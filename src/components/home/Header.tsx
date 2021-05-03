@@ -84,7 +84,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   clearToken: () => void;
-  getAllUsernames: () => void;
   getMyChildren: () => void;
   setActiveChild: (child: ChildKeys) => void;
   weather: Weather;
@@ -227,7 +226,6 @@ export default function HeaderWithCollapse(props: Props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <ChildIndex
-          getAllUsernames={props.getAllUsernames}
           weather={props.weather}
           getMyChildren={props.getMyChildren}
           sessionToken={props.sessionToken}

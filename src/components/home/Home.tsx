@@ -38,7 +38,6 @@ interface HomeProps extends WithStyles<typeof styles> {
 interface HomeState {
     activeChild:ChildKeys;
     children: ChildKeys[];
-    takenUsernames: string[];
     }
 
 
@@ -53,7 +52,6 @@ class Home extends React.Component<HomeProps, HomeState> {
             parentId:-1,
             underwearRemind:false,
         },
-        takenUsernames:[],
         children:[],
     };
   }
@@ -72,20 +70,7 @@ class Home extends React.Component<HomeProps, HomeState> {
     this.setState({ children: allChildren });
   };
 
-  getAllUsernames = async () => {
-    const result = await fetch(`${APIURL}/child/all`, {
-       method: "GET",
-       headers: new Headers({
-         "Content-Type": "application/json",
-         Authorization: this.props.sessionToken,
-       }),
-     });
-     const allChildren = await result.json();
-     let usernamesOnly=allChildren.map((child:any)=>child.username)
-     // Is this a problem? Better soln?-------^^^
-     this.setState({ takenUsernames: usernamesOnly });
-   };
-
+  
    componentDidMount(): void{
     this.getMyChildren()
    }
@@ -102,17 +87,16 @@ class Home extends React.Component<HomeProps, HomeState> {
               clearToken={this.props.clearToken}
               city={this.props.city}
               weather={this.props.weather}
-              getAllUsernames={this.getAllUsernames}
               getMyChildren={this.getMyChildren} 
               sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} 
               children={this.state.children}/>
           
             </Route>
             <Route path="/addchild">
-              <CreateChild clearToken={this.props.clearToken} getMyChildren={this.getMyChildren} getAllUsernames={this.getAllUsernames} takenUsernames={this.state.takenUsernames} sessionToken={this.props.sessionToken} />
+              <CreateChild clearToken={this.props.clearToken} getMyChildren={this.getMyChildren} sessionToken={this.props.sessionToken} />
             </Route>
             <Route path="/editchild">
-              <EditChild clearToken={this.props.clearToken}sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} child={this.state.activeChild}/>
+              <EditChild clearToken={this.props.clearToken} sessionToken={this.props.sessionToken} setActiveChild={this.setActiveChild} child={this.state.activeChild}/>
             </Route>
           </Switch>
         </Router>

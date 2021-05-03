@@ -11,36 +11,34 @@ import { ChildKeys } from "../../types.js";
 
 const styles = createStyles({
   root: {
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
-    width:'300px',
-    marginTop:'10px'
+    width: "300px",
+    marginTop: "10px",
   },
   paper: {
-    margin:'auto',
+    margin: "auto",
     display: "flex",
     justifyContent: "center",
     width: "400px",
   },
   button: {
-    marginTop:'10px',
-    marginBottom:'10px',
-    backgroundColor:'#96bb7c',
-    color:'black',
-    '&:hover': {
-      backgroundColor: '#678b4f',
-      color: '#black',
-  },
+    marginTop: "10px",
+    marginBottom: "10px",
+    backgroundColor: "#96bb7c",
+    color: "black",
+    "&:hover": {
+      backgroundColor: "#678b4f",
+      color: "#black",
+    },
   },
 });
-interface NewChildProps  extends WithStyles<typeof styles> {
+interface NewChildProps extends WithStyles<typeof styles> {
   sessionToken: string;
   handleNext: () => void;
-  setChild: (child:ChildKeys) => void;
-  getAllUsernames: () => void;
-  takenUsernames: string[];
+  setChild: (child: ChildKeys) => void;
   classes: {
     root: string;
     input: string;
@@ -57,12 +55,10 @@ interface NewChildState {
   badName: boolean;
   badUsername: boolean;
   clicked: boolean;
+  noUsername:boolean;
 }
 
-class NewChild extends React.Component<
-  NewChildProps,
-  NewChildState
-> {
+class NewChild extends React.Component<NewChildProps, NewChildState> {
   constructor(props: NewChildProps) {
     super(props);
     this.state = {
@@ -71,12 +67,12 @@ class NewChild extends React.Component<
       deviceId: "",
       underwearRemind: false,
       badName: true,
-      badUsername: true,
+      badUsername: false,
       clicked: false,
+      noUsername:true,
     };
     this.createChild = this.createChild.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.goodUsername = this.goodUsername.bind(this);
   }
 
   createChild = async (): Promise<void> => {
@@ -95,121 +91,121 @@ class NewChild extends React.Component<
         Authorization: this.props.sessionToken,
       }),
     });
-    const child=await result.json()
-    this.props.setChild(child.result)
-    this.props.getAllUsernames();
-    this.setState({
-      name: "",
-      username: "",
-      underwearRemind: false,
-      clicked: false,
-    });
+    const child = await result.json();
+    console.log('child',child);
+    if(child.error){
+      if(child.error.name==="SequelizeUniqueConstraintError"){
+        this.setState({badUsername:true})
+      }
+    } else{
+      this.props.setChild(child.result)
+      this.props.handleNext();
+
+      // this.setState({
+      //   name: "",
+      //   username: "",
+      //   underwearRemind: false,
+      //   clicked: false,
+      // });
+    }
   };
 
   handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     this.setState({ clicked: true });
-    let ready = !this.state.badName && !this.state.badUsername;
+    let ready = !this.state.badName&&!this.state.noUsername
     if (ready) {
       this.createChild();
-      this.props.handleNext();
     }
   };
-
-  goodUsername(text: string): boolean {
-    let unique = true;
-    this.props.takenUsernames?.map((i: string): void => {
-      if (i === text) {
-        unique = false;
+  usernameHelperText=()=>{
+    if(this.state.clicked){
+      if(this.state.noUsername){
+        return 'Required'
+      } else if (this.state.badUsername){
+        return 'Username not available'
+      } else {
+        return ''
       }
-    });
-    return unique;
+    } else {
+      return ''
+    }
   }
- 
   render(): JSX.Element {
     const { classes } = this.props;
 
     return (
       <div className={classes.root}>
-      <Paper className={classes.paper}>
-       
-        <form autoComplete="off">
-        <div>
-        <Typography variant="h4">New child</Typography>
-
-        </div>
-          <div>
-          <TextField
-          className={classes.input}
-            value={this.state.name}
-            error={this.state.badName && this.state.clicked}
-            helperText={
-              this.state.badName && this.state.clicked ? "Required" : ""
-            }
-            label="Name"
-            onChange={(e) => {
-              this.setState({
-                name: e.target.value,
-                badName: e.target.value.length === 0,
-              });
-            }}
-          />
-          </div>
-         <div>
-         <TextField
-className={classes.input}
-value={this.state.username}
-            error={this.state.badUsername && this.state.clicked}
-            helperText={
-              this.state.badUsername && this.state.clicked
-                ? "Username is not available"
-                : ""
-            }
-            label="Username"
-            defaultValue=""
-            onChange={(e): void => {
-              this.setState({
-                username: e.target.value,
-                badUsername: !this.goodUsername(e.target.value),
-              });
-            }}
-          />
-         </div>
-          <div>
-          <FormControlLabel
-          style={{marginTop:"20px",marginBottom:"05px"}}
-            control={
-              <Checkbox
-              
-                checked={this.state.underwearRemind}
-                color="primary"
-                inputProps={{ "aria-label": "secondary checkbox" }}
-                onChange={(event): void =>
-                  {
-                    return this.setState({ underwearRemind: event.target.checked });
-                  }
-                }
-              />
-            }
-            label="Remind to change underwear"
-          />
-          </div>
-          <div>
-          <Button
-          className={classes.button}
-
-            onClick={(e) => this.handleSubmit(e)}
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Next
-          </Button>
+        <Paper className={classes.paper}>
+          <form autoComplete="off">
+            <div>
+              <Typography variant="h4">New child</Typography>
             </div>
-
-         
-        </form>
+            <div>
+              <TextField
+                className={classes.input}
+                value={this.state.name}
+                error={this.state.badName && this.state.clicked}
+                helperText={
+                  this.state.badName && this.state.clicked ? "Required" : ""
+                }
+                label="Name"
+                onChange={(e) => {
+                  this.setState({
+                    name: e.target.value,
+                    badName: e.target.value.length === 0,
+                  });
+                }}
+              />
+            </div>
+            <div>
+              <TextField
+                className={classes.input}
+                value={this.state.username}
+                error={(this.state.badUsername||this.state.noUsername) && this.state.clicked}
+                helperText={this.usernameHelperText()}
+                label="Username"
+                defaultValue=""
+                onChange={(e): void => {
+                  this.setState({
+                    username: e.target.value,
+                    noUsername:e.target.value.length===0
+                  });
+                }}
+              />
+            </div>
+            <div>
+              <FormControlLabel
+                style={{ marginTop: "20px", marginBottom: "05px" }}
+                control={
+                  <Checkbox
+                    checked={this.state.underwearRemind}
+                    color="primary"
+                    inputProps={{ "aria-label": "secondary checkbox" }}
+                    onChange={(event): void => {
+                      return this.setState({
+                        underwearRemind: event.target.checked,
+                      });
+                    }}
+                  />
+                }
+                label="Remind to change underwear"
+              />
+            </div>
+            
+          </form>
         </Paper>
+        <div>
+              <Button
+                className={classes.button}
+                onClick={(e) => this.handleSubmit(e)}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Next
+              </Button>
+            </div>
       </div>
     );
   }
