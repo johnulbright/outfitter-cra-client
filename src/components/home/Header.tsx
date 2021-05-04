@@ -1,20 +1,14 @@
 import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 
@@ -26,43 +20,43 @@ import {
 } from "@material-ui/core/styles";
 import ChildIndex from "../children/ChildIndex";
 import { Weather, ChildKeys } from "../../types";
-import outfitterLogo from '../../assets/outfitter-logo.png'
+import outfitterLogo from "../../assets/outfitter-logo.png";
 
 const drawerWidth = 200;
 const barHeight = 70;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-      card:{
-        backgroundColor:'#96bb7c',width: "100%", textAlign: "center" 
-      },
+    card: {
+      backgroundColor: "#96bb7c",
+      width: "100%",
+      textAlign: "center",
+    },
     root: {
       display: "flex",
+      width: "100%",
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
-        // marginTop: 500,
         width: drawerWidth,
         flexShrink: 0,
-
       },
     },
     appBar: {
-      backgroundColor:"#eebb4d",
+      backgroundColor: "#eebb4d",
       height: barHeight,
 
       [theme.breakpoints.up("sm")]: {
         zIndex: theme.zIndex.drawer + 1,
-        // width: `calc(100% - ${drawerWidth}px)`,
-        // marginLeft: drawerWidth,
         width: "100%",
         marginLeft: "0px",
-
       },
     },
-    logoutButton:{
-        // margin:'70vw',
-        // color:'pink',
+    logoutButton: {
+      margin: "calc(100% - 260px)",
+      [theme.breakpoints.up("sm")]: {
+        margin: "calc(100% - 200px)",
+      },
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -90,15 +84,9 @@ interface Props {
   city: string | null;
   sessionToken: string;
   children: ChildKeys[];
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
 }
 
 export default function HeaderWithCollapse(props: Props) {
-  const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -108,31 +96,36 @@ export default function HeaderWithCollapse(props: Props) {
   };
 
   const drawer = (
-    <div style={{backgroundColor:'#e3dfc8', zIndex: 0, marginTop: !mobileOpen?`${barHeight}px`:'0px' }}>
-      {/* <div className={classes.toolbar} /> */}
-
-      {/* <Divider /> */}
-      <br/>
+    <div
+      style={{
+        backgroundColor: "#e3dfc8",
+        zIndex: 0,
+        marginTop: !mobileOpen ? `${barHeight}px` : "0px",
+      }}
+    >
+      <br />
       <Typography variant="h6">{props.city} weather:</Typography>
       <List>
         <ListItem>
           <Card className={classes.card}>
             <h4>Currently</h4>
-            <p>
+            <p style={{ marginBottom: "0px" }}>
               {props.weather.current.temp !== 999 &&
                 Math.round((props.weather.current.temp - 273.15) * 1.8 + 32)}
               °{" "}
             </p>
-            <img
+            <img alt='current-weather-icon'
               src={`http://openweathermap.org/img/wn/${props.weather.current.weather[0].icon}@2x.png`}
             />
-            <p>{props.weather.current.weather[0].description}</p>
+            <p style={{ marginTop: "0px" }}>
+              {props.weather.current.weather[0].description}
+            </p>
           </Card>
         </ListItem>
         <ListItem>
           <Card className={classes.card}>
             <h4>Today</h4>
-            <p>
+            <p style={{ marginBottom: "0px" }}>
               {Math.round(
                 (props.weather.daily[0].temp.max - 273.15) * 1.8 + 32
               )}
@@ -142,16 +135,18 @@ export default function HeaderWithCollapse(props: Props) {
               )}
               °{" "}
             </p>
-            <img
+            <img alt='todays-weather-icon'
               src={`http://openweathermap.org/img/wn/${props.weather.daily[0].weather[0].icon}@2x.png`}
             />
-            <p>{props.weather.daily[0].weather[0].description}</p>
+            <p style={{ marginTop: "0px" }}>
+              {props.weather.daily[0].weather[0].description}
+            </p>
           </Card>
         </ListItem>
         <ListItem>
-          <Card  className={classes.card}>
+          <Card className={classes.card}>
             <h4>Tomorrow</h4>
-            <p>
+            <p style={{ marginBottom: "0px" }}>
               {Math.round(
                 (props.weather.daily[1].temp.max - 273.15) * 1.8 + 32
               )}
@@ -161,18 +156,17 @@ export default function HeaderWithCollapse(props: Props) {
               )}
               °{" "}
             </p>
-            <img
+            <img alt='tomorrows-weather-icon'
               src={`http://openweathermap.org/img/wn/${props.weather.daily[1].weather[0].icon}@2x.png`}
             />
-            <p>{props.weather.daily[1].weather[0].description}</p>
+            <p style={{ marginTop: "0px" }}>
+              {props.weather.daily[1].weather[0].description}
+            </p>
           </Card>
         </ListItem>
       </List>
     </div>
   );
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <div className={classes.root}>
@@ -188,15 +182,19 @@ export default function HeaderWithCollapse(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-         <img style={{width:'135px'}} src={outfitterLogo} alt='outfitter logo'/>
-          <Button  className={classes.logoutButton} onClick={props.clearToken}>Logout</Button>
+          <img
+            style={{ width: "135px" }}
+            src={outfitterLogo}
+            alt="outfitter logo"
+          />
+          <Button className={classes.logoutButton} onClick={props.clearToken}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
-            container={container}
             variant="temporary"
             anchor={theme.direction === "rtl" ? "right" : "left"}
             open={mobileOpen}

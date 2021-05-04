@@ -1,51 +1,65 @@
 import React from "react";
-import {Link} from 'react-router-dom'
-import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
+import { Link } from "react-router-dom";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+import Grid from "@material-ui/core/Grid";
+import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import Child from "../children/Child";
-import APIURL from "../../helpers/environment.js";
-import {ChildKeys,Weather} from '../../types'
+import { ChildKeys, Weather } from "../../types";
 
-interface ChildIndexProps {
+const styles = createStyles({
+  icon: {
+    color: "#678b4f",
+    "&:hover": {
+      color: "#96bb7c",
+      cursor: "pointer",
+    },
+  },
+});
+interface ChildIndexProps extends WithStyles<typeof styles> {
   sessionToken: string;
   weather: Weather;
   children: ChildKeys[];
-  getMyChildren:()=>void
-  setActiveChild:(child:ChildKeys)=>void
-}
-interface ChildIndexState {
+  getMyChildren: () => void;
+  setActiveChild: (child: ChildKeys) => void;
+  classes: {
+    icon: string;
+  };
 }
 
-export default class ChildIndex extends React.Component<ChildIndexProps,ChildIndexState> {
-  constructor(props: ChildIndexProps) {
-    super(props);
-    this.state = {
-    };
-  }
-
+class ChildIndex extends React.Component<ChildIndexProps, {}> {
 
   componentDidMount() {
     this.props.getMyChildren();
   }
 
-  
   render() {
-    return (
-      <div >
-        <Link to="/addchild"><PersonAddOutlinedIcon style={{color:'#3a5e25'}} fontSize="large" type="button"/></Link>
-        <div style={{flexWrap:"wrap"}}>
-        {this.props.children?.map((child:ChildKeys) => (
+    const { classes } = this.props;
 
-          <Child 
-            weather={this.props.weather}
-            sessionToken={this.props.sessionToken} 
-            key={child.id} 
-            child={child}
-            getMyChildren={this.props.getMyChildren}
-            setActiveChild={this.props.setActiveChild}
+    return (
+      <div>
+        <Link to="/addchild">
+          <PersonAddOutlinedIcon
+            className={classes.icon}
+            fontSize="large"
+            type="button"
           />
-        ))}
-        </div>
+        </Link>
+        <Grid container justify="center">
+          {this.props.children?.map((child: ChildKeys) => (
+            <Grid item>
+              <Child
+                weather={this.props.weather}
+                sessionToken={this.props.sessionToken}
+                key={child.id}
+                child={child}
+                getMyChildren={this.props.getMyChildren}
+                setActiveChild={this.props.setActiveChild}
+              />
+            </Grid>
+          ))}
+        </Grid>
       </div>
     );
   }
 }
+export default withStyles(styles)(ChildIndex);

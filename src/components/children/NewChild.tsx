@@ -55,7 +55,7 @@ interface NewChildState {
   badName: boolean;
   badUsername: boolean;
   clicked: boolean;
-  noUsername:boolean;
+  noUsername: boolean;
 }
 
 class NewChild extends React.Component<NewChildProps, NewChildState> {
@@ -69,7 +69,7 @@ class NewChild extends React.Component<NewChildProps, NewChildState> {
       badName: true,
       badUsername: false,
       clicked: false,
-      noUsername:true,
+      noUsername: true,
     };
     this.createChild = this.createChild.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -92,45 +92,37 @@ class NewChild extends React.Component<NewChildProps, NewChildState> {
       }),
     });
     const child = await result.json();
-    console.log('child',child);
-    if(child.error){
-      if(child.error.name==="SequelizeUniqueConstraintError"){
-        this.setState({badUsername:true})
+    if (child.error) {
+      if (child.error.name === "SequelizeUniqueConstraintError") {
+        this.setState({ badUsername: true });
       }
-    } else{
-      this.props.setChild(child.result)
+    } else {
+      this.props.setChild(child.result);
       this.props.handleNext();
-
-      // this.setState({
-      //   name: "",
-      //   username: "",
-      //   underwearRemind: false,
-      //   clicked: false,
-      // });
     }
   };
 
   handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     this.setState({ clicked: true });
-    let ready = !this.state.badName&&!this.state.noUsername
+    let ready = !this.state.badName && !this.state.noUsername;
     if (ready) {
       this.createChild();
     }
   };
-  usernameHelperText=()=>{
-    if(this.state.clicked){
-      if(this.state.noUsername){
-        return 'Required'
-      } else if (this.state.badUsername){
-        return 'Username not available'
+  usernameHelperText = () => {
+    if (this.state.clicked) {
+      if (this.state.noUsername) {
+        return "Required";
+      } else if (this.state.badUsername) {
+        return "Username not available";
       } else {
-        return ''
+        return "";
       }
     } else {
-      return ''
+      return "";
     }
-  }
+  };
   render(): JSX.Element {
     const { classes } = this.props;
 
@@ -162,14 +154,17 @@ class NewChild extends React.Component<NewChildProps, NewChildState> {
               <TextField
                 className={classes.input}
                 value={this.state.username}
-                error={(this.state.badUsername||this.state.noUsername) && this.state.clicked}
+                error={
+                  (this.state.badUsername || this.state.noUsername) &&
+                  this.state.clicked
+                }
                 helperText={this.usernameHelperText()}
                 label="Username"
                 defaultValue=""
                 onChange={(e): void => {
                   this.setState({
                     username: e.target.value,
-                    noUsername:e.target.value.length===0
+                    noUsername: e.target.value.length === 0,
                   });
                 }}
               />
@@ -192,20 +187,19 @@ class NewChild extends React.Component<NewChildProps, NewChildState> {
                 label="Remind to change underwear"
               />
             </div>
-            
           </form>
         </Paper>
         <div>
-              <Button
-                className={classes.button}
-                onClick={(e) => this.handleSubmit(e)}
-                type="submit"
-                variant="contained"
-                color="primary"
-              >
-                Next
-              </Button>
-            </div>
+          <Button
+            className={classes.button}
+            onClick={(e) => this.handleSubmit(e)}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Next
+          </Button>
+        </div>
       </div>
     );
   }

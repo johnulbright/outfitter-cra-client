@@ -18,7 +18,6 @@ const styles = createStyles({
   root: {
     alignItems: "center",
     justifyContent: "center",
-    // width: "600px",
   },
   input: {
     width: "300px",
@@ -31,7 +30,6 @@ const styles = createStyles({
     width: "600px",
     alignItems: "center",
     textAlign: "center",
-    marginBottom:'10px'
   },
   track: {
     color: "red",
@@ -54,7 +52,6 @@ const styles = createStyles({
   slider: {
     width: "80%",
     marginTop: "40px",
-    fontSize:'40px'
   },
 });
 interface NewClothesProps extends WithStyles<typeof styles> {
@@ -248,17 +245,26 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState> {
       }
     );
     const clothes = await result.json();
-    this.setState({ clothes: clothes,badName:true });
+    this.setState({ clothes: clothes, badName: true });
   };
-
+  marginBottom = () => {
+    if (this.props.showClothes) {
+      return "10px";
+    } else {
+      return "0px";
+    }
+  };
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
         <Grid justify="center" container>
           <Grid item>
-            <Paper className={classes.paper}>
-              {this.state.step == -1 && (
+            <Paper
+              className={classes.paper}
+              style={{ marginBottom: this.marginBottom() }}
+            >
+              {this.state.step === -1 && (
                 <div>
                   <div>
                     <Typography variant="h5">
@@ -270,34 +276,38 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState> {
                       The more items you add, the better
                     </Typography>
                   </div>
-<div>
-<TextField
-                    className={classes.input}
-                    error={this.state.badName && this.state.clicked}
-                    helperText={
-                      this.state.badName && this.state.clicked ? "Required" : ""
-                    }
-                    id="standard-basic"
-                    label="Item of clothing"
-                    placeholder={`like "pants"`}
-                    onChange={(e): void =>
-                      this.setState({
-                        clicked: false,
-                        badName: e.target.value.length === 0,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-</div>
-                  <div style={{height:'50px'}}>
-                  <IconDialog icon={this.state.icon} setIcon={this.setIcon} />
-
+                  <div>
+                    <TextField
+                      className={classes.input}
+                      error={this.state.badName && this.state.clicked}
+                      helperText={
+                        this.state.badName && this.state.clicked
+                          ? "Required"
+                          : ""
+                      }
+                      id="standard-basic"
+                      label="Item of clothing"
+                      placeholder={`like "pants"`}
+                      onChange={(e): void =>
+                        this.setState({
+                          clicked: false,
+                          badName: e.target.value.length === 0,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div style={{ height: "50px" }}>
+                    <IconDialog icon={this.state.icon} setIcon={this.setIcon} />
                   </div>
                   <div>
-                <Button className={classes.button} onClick={this.handleSubmit}>
-            Next
-          </Button>
-              </div>
+                    <Button
+                      className={classes.button}
+                      onClick={this.handleSubmit}
+                    >
+                      Next
+                    </Button>
+                  </div>
                 </div>
               )}
               {this.state.step === 0 && (
@@ -319,31 +329,35 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState> {
                     max={110}
                     defaultValue={[30, 70]}
                   />
-                   <div>
-                <Button className={classes.button} onClick={this.handleSubmit}>
-            Next
-          </Button>
-              </div>
+                  <div>
+                    <Button
+                      className={classes.button}
+                      onClick={this.handleSubmit}
+                    >
+                      Next
+                    </Button>
+                  </div>
                 </div>
               )}
-              {this.state.step == 1 && (
+              {this.state.step === 1 && (
                 <div style={{ width: "100%" }}>
                   <div>
                     <Typography id="range-slider" gutterBottom>
-                    In what ranges should {this.state.name} be{" "}
-                    <span style={{ fontWeight: "bold", color: "red" }}>
-                      required
-                    </span>{" "}
-                    or{" "}
-                    <span style={{ fontWeight: "bold", color: "green" }}>
-                      optional
-                    </span>
-                    ?:
-                  </Typography>
+                      In what ranges should {this.state.name} be{" "}
+                      <span style={{ fontWeight: "bold", color: "red" }}>
+                        required
+                      </span>{" "}
+                      or{" "}
+                      <span style={{ fontWeight: "bold", color: "green" }}>
+                        optional
+                      </span>
+                      ?:
+                    </Typography>
                   </div>
                   <div>
                     <Typography variant="caption">
-                      Click the slider to toggle the position of required/optional
+                      Click the slider to toggle the position of
+                      required/optional
                     </Typography>
                   </div>
                   <Slider
@@ -388,19 +402,19 @@ class NewClothes extends React.Component<NewClothesProps, NewClothesState> {
                     max={this.state.maxTemp}
                     // defaultValue={}
                   />
-                   <div>
-                <Button className={classes.button} onClick={this.handleSubmit}>
-            Submit
-          </Button>
-              </div>
+                  <div>
+                    <Button
+                      className={classes.button}
+                      onClick={this.handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </div>
                 </div>
               )}
-             
-              
             </Paper>
           </Grid>
 
-          
           <Grid item>
             {this.state.clothes.length > 0 && this.props.showClothes && (
               <ShowClothes

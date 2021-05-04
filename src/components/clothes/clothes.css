@@ -1,20 +1,19 @@
-.clothesLine{
-    height:5px;
-    width:90%;
-    display: flex;
+.clothesLine {
+  height: 5px;
+  width: 90%;
+  display: flex;
 }
 
-.clothesLineSegment{
-    height:5px;
-
+.clothesLineSegment {
+  height: 5px;
 }
 
-.unused{
-    background-color: darkgray;
+.unused {
+  background-color: darkgray;
 }
-.required{
-    background-color: red;
+.required {
+  background-color: red;
 }
-.optional{
-    background-color: green;
+.optional {
+  background-color: green;
 }

@@ -35,8 +35,6 @@ import sandals from "../../assets/icons/049-sandals.png";
 import flipFlips from "../../assets/icons/051-flip-flops.png";
 
 const ClothesDictionary: any = {
-
-
     tankTop,
     tshirt,
     polo,
@@ -47,29 +45,24 @@ const ClothesDictionary: any = {
     cardigan,
     buttonedshirt,
     vest,
-
     skirt,
     shorts,
     pants,
     leggings,
     sweatPants,
     joggers,
-
     dress,
     sari,
     overall,
     jumpsuit,
     safetySuit,
-
     raincoat,
     jacket,
-
     gloves,
     winterHat,
     winterScarf,
     balaclava,
     headscarf,
-
     socks,
     shoes,
     hightops,
@@ -77,7 +70,6 @@ const ClothesDictionary: any = {
     flipFlips,
     sandals,
     boot,
-
 };
 
 export const clothesArray = Object.keys(ClothesDictionary);

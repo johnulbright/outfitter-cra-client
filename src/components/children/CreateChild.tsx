@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -10,28 +10,28 @@ import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 
-import {ChildKeys} from '../../types'
+import { ChildKeys } from "../../types";
 import NewChild from "./NewChild";
 import EventIndex from "../events/EventIndex";
-import NewClothes from '../clothes/NewClothes'
-import APIURL from '../../helpers/environment'
-import outfitterLogo from '../../assets/outfitter-logo.png'
+import NewClothes from "../clothes/NewClothes";
+import APIURL from "../../helpers/environment";
+import outfitterLogo from "../../assets/outfitter-logo.png";
 
 const styles = createStyles({
   appBar: {
-      backgroundColor: "#eebb4d",
-      height: 70,
+    backgroundColor: "#eebb4d",
+    height: 70,
 
-      width: "100%",
-      marginLeft: "0px",
+    width: "100%",
+    marginLeft: "0px",
   },
 
-  paper:{
-    width:'500px',
-    justifyContent:'center',
-    margin:'auto'
+  paper: {
+    width: "500px",
+    justifyContent: "center",
+    margin: "auto",
   },
-  button:{
+  button: {
     marginTop: "10px",
     marginBottom: "10px",
     backgroundColor: "#96bb7c",
@@ -43,10 +43,9 @@ const styles = createStyles({
   },
 
   logoutButton: {
-    // margin:'70vw',
-    // color:'pink',
-},
-})
+    margin: "calc(100% - 200px)",
+  },
+});
 
 interface CreateChildProps extends WithStyles<typeof styles> {
   sessionToken: string;
@@ -54,26 +53,25 @@ interface CreateChildProps extends WithStyles<typeof styles> {
   clearToken: () => void;
 
   classes: {
-    appBar:string;
+    appBar: string;
     paper: string;
     button: string;
-    logoutButton:string;
-   
-}
+    logoutButton: string;
+  };
 }
 
 interface CreateChildState {
   activeStep: number;
   open: boolean;
   child: ChildKeys;
-  submitted:boolean;
+  submitted: boolean;
 }
 
-class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
+class CreateChild extends React.Component<CreateChildProps, CreateChildState> {
   constructor(props: CreateChildProps) {
     super(props);
     this.state = {
-      submitted:false,
+      submitted: false,
       activeStep: 0,
       open: false,
       child: {
@@ -81,27 +79,25 @@ class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
         name: null,
         username: null,
         parentId: null,
-        underwearRemind:false
+        underwearRemind: false,
       },
     };
-    this.setChild=this.setChild.bind(this)
-    this.deleteChild=this.deleteChild.bind(this)
-    this.handleClose=this.handleClose.bind(this)
-    this.handleFinish=this.handleFinish.bind(this)
-    
+    this.setChild = this.setChild.bind(this);
+    this.deleteChild = this.deleteChild.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleFinish = this.handleFinish.bind(this);
   }
-  deleteChild=async():Promise<void>=>{
+  deleteChild = async (): Promise<void> => {
     await fetch(`${APIURL}/child/delete/${this.state.child.id}`, {
-        method: "DELETE",
-        headers: new Headers({
-          "Content-Type": "application/json",
-          Authorization: this.props.sessionToken,
-        }),
-      });
+      method: "DELETE",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Authorization: this.props.sessionToken,
+      }),
+    });
     this.props.getMyChildren();
+  };
 
-    }
-  
   setChild(childObject: ChildKeys): void {
     this.setState({ child: childObject });
   }
@@ -132,93 +128,125 @@ class CreateChild extends React.Component<CreateChildProps,CreateChildState> {
         );
       case 1:
         return (
-          <EventIndex showEdit={false}
+          <EventIndex
+            showEdit={false}
             sessionToken={this.props.sessionToken}
             child={this.state.child}
           />
         );
       case 2:
-        return <NewClothes getAllClothes={()=>{}} closeNewClothes={()=>{}} showClothes={true} sessionToken={this.props.sessionToken} child = {this.state.child}/>;
+        return (
+          <NewClothes
+            getAllClothes={() => {}}
+            closeNewClothes={() => {}}
+            showClothes={true}
+            sessionToken={this.props.sessionToken}
+            child={this.state.child}
+          />
+        );
       default:
         return "Unknown stepIndex";
     }
   }
 
-  handleOpen = ():void => {
-    this.setState({ open: true, activeStep: 0 ,submitted:false});
+  handleOpen = (): void => {
+    this.setState({ open: true, activeStep: 0, submitted: false });
   };
 
-  handleClose = ():void => {
-    console.log('close and submitted state',this.state.submitted)
-    if (!this.state.submitted&&this.state.activeStep>0){
+  handleClose = (): void => {
+    if (!this.state.submitted && this.state.activeStep > 0) {
       this.deleteChild();
-      console.log(this.state.child.name,"deleted")
     }
     this.setState({ open: false, activeStep: 0 });
     this.props.getMyChildren();
   };
-  handleFinish=():void=>{
-    this.setState({submitted:true},this.handleClose)
-  }
-  
+  handleFinish = (): void => {
+    this.setState({ submitted: true }, this.handleClose);
+  };
+
   render() {
     const { classes } = this.props;
 
     return (
       <div>
-         <AppBar position="fixed" className={classes.appBar}>
-                    <Toolbar>
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <img
+              style={{ width: "135px" }}
+              src={outfitterLogo}
+              alt="outfitter logo"
+            />
+            <Button
+              className={classes.logoutButton}
+              onClick={this.props.clearToken}
+            >
+              Logout
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <div style={{ marginTop: "100px" }}>
+          <Paper className={classes.paper}>
+            <Stepper activeStep={this.state.activeStep} alternativeLabel>
+              {this.getSteps().map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </Paper>
 
-                        <img style={{ width: '135px' }} src={outfitterLogo} alt='outfitter logo' />
-                        <Button className={classes.logoutButton} onClick={this.props.clearToken}>Logout</Button>
-                    </Toolbar>
-                </AppBar>
-      <div style={{marginTop:'100px'}}>
-        <Paper className={classes.paper}>
-        <Stepper activeStep={this.state.activeStep} alternativeLabel>
-            {this.getSteps().map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </Paper>
-          
           <div>
             {this.state.activeStep === this.getSteps().length ? (
               <div>
                 <Typography>All steps completed</Typography>
-                <Button className={classes.button} onClick={this.handleReset}>Reset</Button>
+                <Button className={classes.button} onClick={this.handleReset}>
+                  Reset
+                </Button>
               </div>
             ) : (
-              <div style={{marginTop:"20px"}}>
-                  {this.getStepContent(this.state.activeStep)}
+              <div style={{ marginTop: "20px" }}>
+                {this.getStepContent(this.state.activeStep)}
                 <div>
-                {this.state.activeStep===1&&
-                  <Button className={classes.button} variant="contained" color="primary" onClick={this.handleNext}>Next</Button>
-                  }
+                  {this.state.activeStep === 1 && (
+                    <Button
+                      className={classes.button}
+                      variant="contained"
+                      color="primary"
+                      onClick={this.handleNext}
+                    >
+                      Next
+                    </Button>
+                  )}
                 </div>
-                {this.state.activeStep===2&&
+                {this.state.activeStep === 2 && (
                   <div>
-                     <Link  style={{textDecoration:'none'}}to="/">
-                    <Button className={classes.button} variant="contained" color="primary" onClick={this.handleFinish}>Finish</Button>
+                    <Link style={{ textDecoration: "none" }} to="/">
+                      <Button
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        onClick={this.handleFinish}
+                      >
+                        Finish
+                      </Button>
                     </Link>
                   </div>
-                 
-                  }
+                )}
                 <div>
-                <Link style={{textDecoration:'none'}} to="/"><Button style={{color: "#678b4f"}} onClick={this.handleClose}>Cancel</Button></Link>
+                  <Link style={{ textDecoration: "none" }} to="/">
+                    <Button
+                      style={{ color: "#678b4f" }}
+                      onClick={this.handleClose}
+                    >
+                      Cancel
+                    </Button>
+                  </Link>
                 </div>
-                  
-                 
-                  
-                
               </div>
             )}
           </div>
+        </div>
       </div>
-      </div>
-
     );
   }
 }

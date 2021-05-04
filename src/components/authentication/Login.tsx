@@ -32,6 +32,7 @@ const styles = createStyles({
     display: "flex",
     justifyContent: "center",
     width: "400px",
+    backgroundColor: '#F5F5F6',
   },
   button: {
     marginTop:'10px',
@@ -105,7 +106,6 @@ class Login extends React.Component<LoginProps, LoginState> {
     });
     if (result.status === 200) {
       const { result: res, sessionToken: token } = await result.json();
-      console.log(result);
       this.getWeather(res.lat, res.lon, token);
       this.props.setCity(res.city);
     } else if (result.status === 404) {

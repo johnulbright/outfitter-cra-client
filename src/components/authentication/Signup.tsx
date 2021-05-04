@@ -1,6 +1,5 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
-
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
@@ -31,6 +30,7 @@ const styles = createStyles({
     display: "flex",
     justifyContent: "center",
     width: "400px",
+    backgroundColor: "#F5F5F6",
   },
   button: {
     marginTop: "10px",
@@ -114,7 +114,6 @@ class Signup extends React.Component<SignupProps, SignupState> {
     )
       .then((res) => res.json())
       .then((json) => {
-        console.log("nhits", json.nhits);
         if (json.nhits === 1) {
           this.setState(
             {
@@ -126,13 +125,12 @@ class Signup extends React.Component<SignupProps, SignupState> {
             () => this.createParent()
           );
         } else {
-          this.setState({badZip:true})
+          this.setState({ badZip: true });
         }
       });
-  }
+  };
 
   createParent = async () => {
-    console.log('got here')
     const result = await fetch(`${APIURL}/parent/signup`, {
       method: "POST",
       body: JSON.stringify({
@@ -152,14 +150,16 @@ class Signup extends React.Component<SignupProps, SignupState> {
         "Content-Type": "application/json",
       }),
     });
-    const { result: res, sessionToken: token,error:err } = await result.json();
-    console.log("parent res", res);
-    console.log("parent error", err);
-    if (err){
-      if (err.name==="SequelizeUniqueConstraintError"){
-        this.setState({takenEmail:true})
+    const {
+      result: res,
+      sessionToken: token,
+      error: err,
+    } = await result.json();
+    if (err) {
+      if (err.name === "SequelizeUniqueConstraintError") {
+        this.setState({ takenEmail: true });
       }
-    } else{
+    } else {
       this.props.setCity(res.city);
       this.getWeather(res.lat, res.lon, token);
     }
@@ -184,19 +184,19 @@ class Signup extends React.Component<SignupProps, SignupState> {
       this.getLatLong();
     }
   };
-  emailHelperText=()=>{
-    if(this.state.clicked){
-      if(this.state.badEmail){
-        return 'Must be a valid email'
-      } else if (this.state.takenEmail){
-        return 'This email already has an account'
+  emailHelperText = () => {
+    if (this.state.clicked) {
+      if (this.state.badEmail) {
+        return "Must be a valid email";
+      } else if (this.state.takenEmail) {
+        return "This email already has an account";
       } else {
-        return ''
+        return "";
       }
     } else {
-      return ''
+      return "";
     }
-  }
+  };
   validateEmail(email: string): boolean {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -271,7 +271,10 @@ class Signup extends React.Component<SignupProps, SignupState> {
             <div>
               <TextField
                 className={classes.input}
-                error={(this.state.badEmail||this.state.takenEmail) && this.state.clicked}
+                error={
+                  (this.state.badEmail || this.state.takenEmail) &&
+                  this.state.clicked
+                }
                 helperText={this.emailHelperText()}
                 id="standard-basic"
                 label="Email"
