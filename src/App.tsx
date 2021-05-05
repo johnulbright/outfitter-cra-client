@@ -84,8 +84,7 @@ class App extends React.Component<AppProps, AppState> {
     }
   };
   getWeather = async (lat: number, lon: number, token: string) => {
-    const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${process.env.REACT_APP_WEATHER_API_KEY}
-  `);
+    const result = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=c2845afc3766e0d9e612589838737941`);
     const json = await result.json();
     this.setWeather(json);
     this.updateToken(token);
