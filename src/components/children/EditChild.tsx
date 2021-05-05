@@ -310,7 +310,7 @@ class EditChild extends React.Component<EditChildProps, EditChildState> {
             </Grid>
             <Grid item>
               <div
-                style={{ marginTop: "5px", display: "inline-block" }}
+                style={{ marginTop: "0px", display: "inline-block" }}
                 onClick={() => this.setState({ openNewClothes: true })}
               >
                 <CardContent className={classes.icon}>
