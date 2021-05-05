@@ -5,8 +5,8 @@ switch (window.location.hostname) {
     case '127.0.0.1':
         APIURL = 'http://localhost:3001'
         break
-    case 'eventual heroku app':
-        APIURL = ''
+    case 'jru-outfitter-client.herokuapp.com':
+        APIURL = 'https://jeru-outfitter.herokuapp.com'
 }
 
 export default APIURL
