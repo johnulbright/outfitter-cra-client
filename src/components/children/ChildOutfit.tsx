@@ -9,6 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import ReactSpeedometer from "react-d3-speedometer";
 
 import Icon from "../clothes/Icon";
+import OutfitSpeech from './OutfitSpeech'
 import { Weather, ChildKeys, Clothes, Event, HourlyWeather } from "../../types";
 import APIURL from "../../helpers/environment";
 import underwear from "../../assets/icons/underwear.png";
@@ -71,6 +72,7 @@ export default class ChildOutfit extends React.Component<ChildOutfitProps, Child
     };
   }
   componentDidMount() {
+    console.log(this.props.weather)
     const d = new Date();
     this.setState(
       {
@@ -360,7 +362,7 @@ export default class ChildOutfit extends React.Component<ChildOutfitProps, Child
           <Grid item>
             <Card style={{ backgroundColor: "#F5F5F6", margin: "10px" }}>
               <Typography variant="h5">Today's Clothes:</Typography>
-
+              <OutfitSpeech underwearRemind={this.props.child.underwearRemind} clothes={this.state.todaysClothes} weather={this.props.weather.daily[0]} day='Today'/>
               <Table size="small">
                 <TableBody>
                   {this.props.child.underwearRemind && (
