@@ -438,7 +438,7 @@ export default class ChildOutfit extends React.Component<ChildOutfitProps, Child
           <Grid item>
             <Card style={{ backgroundColor: "#F5F5F6", margin: "10px" }}>
               <Typography variant="h5">Tomorrow's Clothes:</Typography>
-
+              <OutfitSpeech underwearRemind={this.props.child.underwearRemind} clothes={this.state.todaysClothes} weather={this.props.weather.daily[0]} day='Tomorrow'/>
               <Table size="small">
                 <TableBody>
                   {this.props.child.underwearRemind && (
