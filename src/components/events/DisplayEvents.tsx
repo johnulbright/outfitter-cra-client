@@ -189,7 +189,7 @@ class DisplayEvents extends React.Component<
                   AorP = "A";
                 }
                 return (
-                  <TableRow>
+                  <TableRow key={event.id}>
                     <TableCell>{event.name}</TableCell>
                     <TableCell>
                       {displayHours}:{displayMinutes} {AorP}M

@@ -46,7 +46,7 @@ class ChildIndex extends React.Component<ChildIndexProps, {}> {
         </Link>
         <Grid container justify="center">
           {this.props.children?.map((child: ChildKeys) => (
-            <Grid item>
+            <Grid item key={child.id}>
               <Child
                 weather={this.props.weather}
                 sessionToken={this.props.sessionToken}

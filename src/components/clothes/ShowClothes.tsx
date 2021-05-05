@@ -66,19 +66,20 @@ class ShowClothes extends React.Component<ShowClothesProps, ShowClothesState> {
     this.props.setOpenClothes(true);
     this.props.setActiveClothes(clothes);
   };
-  marginHelp = () => {
-    if (this.props.delete) {
-      return "0px";
+  marginHelp = (YN:boolean) => {
+    if (YN) {
+      return "5px";
     } else {
-      return "10px";
+      return "0px";
     }
   };
   render() {
     const { classes } = this.props;
 
     return (
-      <div style={{ marginLeft: this.marginHelp() }}>
+      <div style={{ marginRight: this.marginHelp(this.props.delete),marginLeft:this.marginHelp(!this.props.delete) }}>
         <TableContainer component={Paper}>
+          {this.props.clothes.length>0&&
           <Table>
             <TableHead>
               <TableRow>
@@ -193,6 +194,7 @@ class ShowClothes extends React.Component<ShowClothesProps, ShowClothesState> {
               })}
             </TableBody>
           </Table>
+  }
         </TableContainer>
       </div>
     );
