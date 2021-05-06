@@ -12,6 +12,7 @@ Here's how it works:
 You can always come back and edit these things later.  Now when you login with your account, you'll see recommended outfits for each child you set up, as well as some weather information.
 
 How it works (continued):
+
 6) Logout of your parent account.
 7) Click "child login" and login with the child username you created in step 3. Now you'll see a simplified view consisting of just the information for this child.
 8) Click the PLAY button to hear the outfit recommendation read to you.
